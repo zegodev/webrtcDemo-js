@@ -4,7 +4,7 @@
   "description": "demo",
   "main": "index.js",
   "scripts": {
-    "start": "http-server ./src -p 9090 -S -C cert.pem -K key.pem"
+    "start": "http-server ./docs -p 9090 -S -C cert.pem -K key.pem"
   },
   "author": "choui",
   "license": "ISC",
