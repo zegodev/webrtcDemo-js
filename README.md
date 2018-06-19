@@ -4,6 +4,7 @@
  - 创建/退出房间
  - 推送/拉取流
  - 开启/关闭 音视频
+ - [更多用法](https://www.zego.im/html/document/#Live_Room/API_Instructions:web)
  
  
  ## 准备条件
