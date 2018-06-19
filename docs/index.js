@@ -59,7 +59,10 @@ function enumDevices() {
 
 function openRoom(roomId) {
 
-    if (!roomId) alert('请输入房间号');
+    if (!roomId) {
+        alert('请输入房间号');
+        return;
+    }
 
     //get token
     $.get("https://wsliveroom229059616-api.zego.im:8282/token", {app_id: _config.appid, id_name: _config.idName},
@@ -120,9 +123,9 @@ function openRoom(roomId) {
     function doPreviewPublish() {
         var previewConfig = {
             "audio": true,
-            "audioInput": null,
+            "audioInput":$('#audioList').val()||null ,
             "video": true,
-            "videoInput": null,
+            "videoInput": $('#videoList').val()||null,
             "videoQuality": 2,
             "horizontal": true
         };
