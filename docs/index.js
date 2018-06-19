@@ -1,19 +1,3 @@
-$(function () {
-
-    previewVideo = $('#previewVideo')[0];
-    //初始化sdk
-    init();
-
-    $('#openRoom').click(function () {
-        openRoom($('#roomId').val());
-    })
-
-    $('#leaveRoom').click(function () {
-        leaveRoom();
-    })
-});
-
-
 var zg,
     _config = {
         "appid": 229059616,
@@ -34,7 +18,42 @@ function init() {
 
     console.log("config param:" + JSON.stringify(_config));
 
-   zg.config(_config);
+    zg.config(_config);
+
+    enumDevices();
+}
+
+
+function enumDevices() {
+    var  audioInputList = [],videoInputList = [];
+    zg.enumDevices(deviceInfo => {
+        console.log('enumDevices' + JSON.stringify(deviceInfo));
+        if (deviceInfo.microphones) {
+            for (let i = 0; i < deviceInfo.microphones.length; i++) {
+
+                if (!deviceInfo.microphones[i].label) {
+                    deviceInfo.microphones[i].label = 'microphone' + i;
+                }
+                audioInputList.push(' <option value="'+deviceInfo.microphones[i].deviceId+'">'+deviceInfo.microphones[i].label+'</option>');
+                console.log("microphone: " + deviceInfo.microphones[i].label);
+            }
+        }
+
+        if (deviceInfo.cameras) {
+            for (let i = 0; i < deviceInfo.cameras.length; i++) {
+                if (!deviceInfo.cameras[i].label) {
+                    deviceInfo.cameras[i].label = 'camera' + i;
+                }
+                videoInputList.push('<option value="'+deviceInfo.cameras[i].deviceId+'">'+deviceInfo.cameras[i].label+'</option>');
+                console.log("camera: " + deviceInfo.cameras[i].label);
+            }
+        }
+
+        $('#audioList').html(audioInputList.join(''));
+        $('#videoList').html(videoInputList.join(''));
+    }, function (error) {
+        console.error("enum device error: " + error);
+    });
 }
 
 
@@ -110,6 +129,8 @@ function openRoom(roomId) {
         var result = zg.startPreview(previewVideo, previewConfig, function () {
             console.log('preview success');
             publish();
+            //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
+            enumDevices();
         }, function (err) {
             console.error('preview failed', err);
         });
@@ -272,3 +293,19 @@ function leaveRoom() {
     $('.remoteVideo').html('');
     zg.logout();
 }
+
+$(function () {
+
+    previewVideo = $('#previewVideo')[0];
+
+    //初始化sdk
+    init();
+
+    $('#openRoom').click(function () {
+        openRoom($('#roomId').val());
+    })
+
+    $('#leaveRoom').click(function () {
+        leaveRoom();
+    });
+});
