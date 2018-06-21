@@ -297,23 +297,39 @@ function leaveRoom() {
     zg.logout();
 }
 
+//判断浏览器是否支持webrtc功能（充分判断）
+// 次方法为不严谨判断，只判断了浏览器对api的支持，根据我们的测试，在手机上情况会比较复杂，有些手机浏览器尽管api支持，但是不支持音视频h264编码，导致仍旧不支持推拉流,同一款浏览器不同手机也会出现不一致情况；
+// 浏览器支持度目前处于不端完善中，具体哪些浏览器支持会在官方文档中公布 官方文档https://www.zego.im/html/document/#Live_Room/SDK_Integration_Guide:web
+function isSupports(){
+    var e = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection
+        , t = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+        , n = window.WebSocket
+       return !!e && !!t && !!n;
+}
+
 $(function () {
 
-    previewVideo = $('#previewVideo')[0];
+    if(isSupports()){
+        previewVideo = $('#previewVideo')[0];
 
-    //初始化sdk
-    init();
+        //初始化sdk
+        init();
 
-    $('#openRoom').click(function () {
-        openRoom($('#roomId').val());
-    })
+        $('#openRoom').click(function () {
+            openRoom($('#roomId').val());
+        })
 
-    $('#leaveRoom').click(function () {
-        leaveRoom();
-    });
+        $('#leaveRoom').click(function () {
+            leaveRoom();
+        });
 
-    //防止，暴力退出（关闭或刷新页面）
-    window.onbeforeunload=function(){
-        leaveRoom();
-    };
+        //防止，暴力退出（关闭或刷新页面）
+        window.onbeforeunload=function(){
+            leaveRoom();
+        };
+    }else{
+        alert('浏览器不支持webrtc,换一个浏览器试试吧');
+    }
+
+
 });
