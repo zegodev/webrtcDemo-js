@@ -70,6 +70,7 @@ function openRoom(roomId) {
             if (!token) {
                 alert('get token failed')
             } else {
+                console.log('gettoken success');
                 startLogin(token)
             }
         }, 'text');
@@ -78,6 +79,7 @@ function openRoom(roomId) {
     //login
     function startLogin(token) {
         zg.login(roomId, 2, token, function (streamList) {
+            console.log('login success');
             loginSuccess(streamList);
         }, function (err) {
             loginFailed(err);
@@ -166,7 +168,7 @@ function openRoom(roomId) {
                     console.info('play  success');
                 }
                 else if (type == 2) {
-                    console.info(` play retry`);
+                    console.info('play retry');
                 } else {
 
                     console.error("play error " + error.msg);
@@ -188,13 +190,11 @@ function openRoom(roomId) {
             },
             onPublishStateUpdate: function (type, streamid, error) {
                 if (type == 0) {
-                    console.info(` publish  success`);
+                    console.info(' publish  success');
                 } else if (type == 2) {
-                    console.info(` publish  retry`);
+                    console.info(' publish  retry');
                 } else {
-                    // trace("publish " + streamid + "error " + error.code);
-
-                    console.errors(` publish error ${error.msg}`);
+                    console.error('publish error '+error.msg);
                     var _msg = error.msg;
                     if (error.msg.indexOf('server session closed, reason: ') > -1) {
                         var code = error.msg.replace('server session closed, reason: ', '');
@@ -283,7 +283,7 @@ function openRoom(roomId) {
 
 
 function leaveRoom() {
-   console.info('leave room  and close stream');
+     console.info('leave room  and close stream');
 
     zg.stopPreview(previewVideo);
 
@@ -311,4 +311,9 @@ $(function () {
     $('#leaveRoom').click(function () {
         leaveRoom();
     });
+
+    //防止，暴力退出（关闭或刷新页面）
+    window.onbeforeunload=function(){
+        leaveRoom();
+    };
 });
