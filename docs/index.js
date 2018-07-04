@@ -324,9 +324,12 @@ $(function () {
         });
 
         //防止，暴力退出（关闭或刷新页面）
-        window.onbeforeunload=function(){
+        const isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
+        const eventName = isOnIOS ? "pagehide" : "beforeunload";
+        window.addEventListener (eventName, function(event)  {
+            window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
             leaveRoom();
-        };
+        });
     }else{
         alert('浏览器不支持webrtc,换一个浏览器试试吧');
     }
