@@ -154,6 +154,7 @@ function leaveRoom() {
     zg.logout();
 }
 ```
- 
+ ## 常见问题列表
+* [X] 如何判断推拉流成功？
  
  
