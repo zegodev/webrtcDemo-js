@@ -220,7 +220,7 @@ function openRoom(roomId) {
             },
 
             onDisconnect: function (error) {
-                console.errors("onDisconnect " + JSON.stringify(error));
+                console.error("onDisconnect " + JSON.stringify(error));
                 alert('网络连接已断开' + JSON.stringify(error));
                 leaveRooom();
             },
