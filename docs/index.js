@@ -103,9 +103,11 @@ function openRoom(roomId) {
 
         useLocalStreamList = streamList;
 
-        $('.remoteVideo').html('')
+        $('.remoteVideo').html('');
+        $('#memberList').html('');
         for(var index=0;index<useLocalStreamList.length;index++){
             $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
+            $('#memberList').append('<option value="'+useLocalStreamList[index].anchor_id_name+'">'+useLocalStreamList[index].anchor_nick_name+'</option>');
             play(useLocalStreamList[index].stream_id,$('.remoteVideo video:eq('+index+')')[0]);
         }
         console.log(`login success`);
@@ -133,6 +135,7 @@ function openRoom(roomId) {
         };
         var result = zg.startPreview(previewVideo, previewConfig, function () {
             console.log('preview success');
+            $('#previewLabel').html(_config.nickName);
             publish();
             //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
             enumDevices();
@@ -222,7 +225,7 @@ function openRoom(roomId) {
             onDisconnect: function (error) {
                 console.error("onDisconnect " + JSON.stringify(error));
                 alert('网络连接已断开' + JSON.stringify(error));
-                leaveRooom();
+                leaveRoom();
             },
 
             onKickOut: function (error) {
@@ -242,6 +245,7 @@ function openRoom(roomId) {
                     for (var i = 0; i < streamList.length; i++) {
                         console.info(streamList[i].stream_id + ' was added');
                         useLocalStreamList.push(streamList[i]);
+                        $('#memberList').append('<option value="'+streamList[i].anchor_id_name+'">'+streamList[i].anchor_nick_name+'</option>');
                         $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
                         play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
                     }
@@ -261,6 +265,7 @@ function openRoom(roomId) {
                                 useLocalStreamList.splice(k, 1);
 
                                 $('.remoteVideo video:eq('+k+')').remove();
+                                $('#memberList option:eq('+k+')').remove();
 
                                 break;
                             }
@@ -271,6 +276,10 @@ function openRoom(roomId) {
             },
             onUserStateUpdate: function (roomId, userList) {
                 console.info("onUserStateUpdate = " + roomId + JSON.stringify(userList));
+            },
+            onRecvCustomCommand:function(from_userid, from_idname, custom_content){
+                  console.log('onRecvCustomCommand: '+from_userid);
+                  console.log(from_userid,from_idname,custom_content);
             }
         }
 
@@ -321,6 +330,19 @@ $(function () {
 
         $('#leaveRoom').click(function () {
             leaveRoom();
+        });
+
+        $('#customCommand').click(function () {
+            var content = {
+                "from_userid": _config.idName,
+                "from_username": _config.nickName,
+                "custom_content": 'test'
+            };
+            zg.sendCustomCommand([$('#memberList').val()],JSON.stringify(content) , function (seq, customContent) {
+                console.log(seq, customContent);
+            }, function (err,seq, customContent) {
+                console.log(err,seq, customContent);
+            });
         });
 
         //防止，暴力退出（关闭或刷新页面）

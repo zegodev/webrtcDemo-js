@@ -12,6 +12,12 @@
             width: 320px;
             height: auto;
         }
+        .videoRow{
+            margin-top: 30px;
+        }
+        #previewLabel{
+            display: block;
+        }
     </style>
     <title>zego jssdk demo</title>
 </head>
@@ -48,14 +54,28 @@
             </div>
         </div>
 
+
         <div class="col-sm">
-            <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
-            <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+            <div class="form-group">
+                <label for="videoList">房间人员</label>
+                <select  class="form-control d-inline" id="memberList" style="width: 65%">
+
+                </select>
+            </div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm">
+            <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
+            <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+            <button type="button" id="customCommand" class="btn btn-primary btn-sm">发送消息test</button>
+        </div>
+    </div>
+
+    <div class="row videoRow">
+        <div class="col-sm">
+            <label id="previewLabel"></label>
             <video id="previewVideo" autoplay muted playsinline></video>
         </div>
         <div class="col-sm remoteVideo">
