@@ -302,6 +302,7 @@ function leaveRoom() {
          zg.stopPlayingStream(useLocalStreamList[i].stream_id);
     }
 
+    useLocalStreamList = [];
     $('.remoteVideo').html('');
     zg.logout();
 }
