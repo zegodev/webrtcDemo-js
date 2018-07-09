@@ -333,12 +333,12 @@ $(function () {
         });
 
         $('#customCommand').click(function () {
-            var content = {
-                "from_userid": _config.idName,
-                "from_username": _config.nickName,
-                "custom_content": 'test'
+            var customContent = 'test';
+            customContent = {
+                data:'test',
+                cmd:'test'
             };
-            zg.sendCustomCommand([$('#memberList').val()],JSON.stringify(content) , function (seq, customContent) {
+            zg.sendCustomCommand([$('#memberList').val()], customContent , function (seq, customContent) {
                 console.log(seq, customContent);
             }, function (err,seq, customContent) {
                 console.log(err,seq, customContent);
