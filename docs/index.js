@@ -123,171 +123,173 @@ function openRoom(roomId) {
     }
 
 
-    //预览
-    function doPreviewPublish() {
-        var previewConfig = {
-            "audio": true,
-            "audioInput":$('#audioList').val()||null ,
-            "video": true,
-            "videoInput": $('#videoList').val()||null,
-            "videoQuality": 2,
-            "horizontal": true
-        };
-        var result = zg.startPreview(previewVideo, previewConfig, function () {
-            console.log('preview success');
-            $('#previewLabel').html(_config.nickName);
-            publish();
-            //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
-            enumDevices();
-        }, function (err) {
-            console.error('preview failed', err);
-        });
 
-        if (!result) alert('预览失败！')
+}
+
+//预览
+function doPreviewPublish() {
+    var previewConfig = {
+        "audio": true,
+        "audioInput":$('#audioList').val()||null ,
+        "video": true,
+        "videoInput": $('#videoList').val()||null,
+        "videoQuality": 2,
+        "horizontal": true
+    };
+    var result = zg.startPreview(previewVideo, previewConfig, function () {
+        console.log('preview success');
+        $('#previewLabel').html(_config.nickName);
+        publish();
+        //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
+        enumDevices();
+    }, function (err) {
+        console.error('preview failed', err);
+    });
+
+    if (!result) alert('预览失败！')
+}
+
+//推流
+function publish() {
+    zg.startPublishingStream(_config.idName, previewVideo);
+}
+
+function play(streamId, video) {
+    var result = zg.startPlayingStream(streamId, video);
+
+    video.muted = false;
+    if (!result) {
+        alert('哎呀，播放失败啦');
+        video.style = 'display:none';
+        console.error("play " + el.nativeElement.id + " return " + result);
+
     }
-
-    //推流
-    function publish() {
-        zg.startPublishingStream(_config.idName, previewVideo);
-    }
-
-    function play(streamId, video) {
-        var result = zg.startPlayingStream(streamId, video);
+}
 
 
-        if (!result) {
-            alert('哎呀，播放失败啦');
-            video.style = 'display:none';
-            console.error("play " + el.nativeElement.id + " return " + result);
-
-        }
-    }
-
-
-    function listen() {
-        var _config = {
-            onPlayStateUpdate: function (type, streamid, error) {
-                if (type == 0) {
-                    console.info('play  success');
-                }
-                else if (type == 2) {
-                    console.info('play retry');
-                } else {
-
-                    console.error("play error " + error.msg);
-
-                    var _msg = error.msg;
-                    if (error.msg.indexOf('server session closed, reason: ') > -1) {
-                        var code = error.msg.replace('server session closed, reason: ', '');
-                        if (code == 21) {
-                            _msg = '音频编解码不支持(opus)';
-                        } else if (code == 22) {
-                            _msg = '视频编解码不支持(H264)'
-                        } else if (code == 20) {
-                            _msg = 'sdp 解释错误';
-                        }
-                    }
-                    alert('拉流失败,reason = ' + _msg);
-                }
-
-            },
-            onPublishStateUpdate: function (type, streamid, error) {
-                if (type == 0) {
-                    console.info(' publish  success');
-                } else if (type == 2) {
-                    console.info(' publish  retry');
-                } else {
-                    console.error('publish error '+error.msg);
-                    var _msg = error.msg;
-                    if (error.msg.indexOf('server session closed, reason: ') > -1) {
-                        var code = error.msg.replace('server session closed, reason: ', '');
-                        if (code == 21) {
-                            _msg = '音频编解码不支持(opus)';
-                        } else if (code == 22) {
-                            _msg = '视频编解码不支持(H264)'
-                        } else if (code == 20) {
-                            _msg = 'sdp 解释错误';
-                        }
-                    }
-                    alert('推流失败,reason = ' + _msg);
-
-                }
-
-            },
-            onPublishQualityUpdate: function (streamid, quality) {
-                console.info("#" + streamid + "#" + "publish " + " audio: " + quality.audioBitrate + " video: " + quality.videoBitrate + " fps: " + quality.videoFPS);
-            },
-
-            onPlayQualityUpdate: function (streamid, quality) {
-                console.info("#" + streamid + "#" + "play " + " audio: " + quality.audioBitrate + " video: " + quality.videoBitrate + " fps: " + quality.videoFPS);
-            },
-
-            onDisconnect: function (error) {
-                console.error("onDisconnect " + JSON.stringify(error));
-                alert('网络连接已断开' + JSON.stringify(error));
-                leaveRoom();
-            },
-
-            onKickOut: function (error) {
-                console.error("onKickOut " + JSON.stringify(error));
-            },
-
-            onStreamExtraInfoUpdated: function (streamList) {
-
-            },
-
-            onVideoSizeChanged: function (streamid, videoWidth, videoHeight) {
-                console.info("#" + streamid + "#" + "play " + " : " + videoWidth + "x" + videoHeight);
-            },
-
-            onStreamUpdated: function (type, streamList) {
-                if (type == 0) {
-                    for (var i = 0; i < streamList.length; i++) {
-                        console.info(streamList[i].stream_id + ' was added');
-                        useLocalStreamList.push(streamList[i]);
-                        $('#memberList').append('<option value="'+streamList[i].anchor_id_name+'">'+streamList[i].anchor_nick_name+'</option>');
-                        $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
-                        play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
-                    }
-
-                } else if (type == 1) {
-
-                    for (var k = 0; k < useLocalStreamList.length; k++) {
-
-                        for (var j = 0; j < streamList.length; j++) {
-
-                            if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
-
-                                zg.stopPlayingStream(useLocalStreamList[k].stream_id);
-
-                                console.info(useLocalStreamList[k].stream_id + 'was devared');
-
-                                useLocalStreamList.splice(k, 1);
-
-                                $('.remoteVideo video:eq('+k+')').remove();
-                                $('#memberList option:eq('+k+')').remove();
-
-                                break;
-                            }
-                        }
-                    }
-                }
-
-            },
-            onUserStateUpdate: function (roomId, userList) {
-                console.info("onUserStateUpdate = " + roomId + JSON.stringify(userList));
-            },
-            onRecvCustomCommand:function(from_userid, from_idname, custom_content){
-                  console.log('onRecvCustomCommand: '+from_userid);
-                  console.log(from_userid,from_idname,custom_content);
+function listen() {
+    var _config = {
+        onPlayStateUpdate: function (type, streamid, error) {
+            if (type == 0) {
+                console.info('play  success');
             }
-        }
+            else if (type == 2) {
+                console.info('play retry');
+            } else {
 
-        for (var key in _config) {
-            zg[key] = _config[key]
-        }
+                console.error("play error " + error.msg);
 
+                var _msg = error.msg;
+                if (error.msg.indexOf('server session closed, reason: ') > -1) {
+                    var code = error.msg.replace('server session closed, reason: ', '');
+                    if (code == 21) {
+                        _msg = '音频编解码不支持(opus)';
+                    } else if (code == 22) {
+                        _msg = '视频编解码不支持(H264)'
+                    } else if (code == 20) {
+                        _msg = 'sdp 解释错误';
+                    }
+                }
+                alert('拉流失败,reason = ' + _msg);
+            }
+
+        },
+        onPublishStateUpdate: function (type, streamid, error) {
+            if (type == 0) {
+                console.info(' publish  success');
+            } else if (type == 2) {
+                console.info(' publish  retry');
+            } else {
+                console.error('publish error '+error.msg);
+                var _msg = error.msg;
+                if (error.msg.indexOf('server session closed, reason: ') > -1) {
+                    var code = error.msg.replace('server session closed, reason: ', '');
+                    if (code == 21) {
+                        _msg = '音频编解码不支持(opus)';
+                    } else if (code == 22) {
+                        _msg = '视频编解码不支持(H264)'
+                    } else if (code == 20) {
+                        _msg = 'sdp 解释错误';
+                    }
+                }
+                alert('推流失败,reason = ' + _msg);
+
+            }
+
+        },
+        onPublishQualityUpdate: function (streamid, quality) {
+            console.info("#" + streamid + "#" + "publish " + " audio: " + quality.audioBitrate + " video: " + quality.videoBitrate + " fps: " + quality.videoFPS);
+        },
+
+        onPlayQualityUpdate: function (streamid, quality) {
+            console.info("#" + streamid + "#" + "play " + " audio: " + quality.audioBitrate + " video: " + quality.videoBitrate + " fps: " + quality.videoFPS);
+        },
+
+        onDisconnect: function (error) {
+            console.error("onDisconnect " + JSON.stringify(error));
+            alert('网络连接已断开' + JSON.stringify(error));
+            leaveRoom();
+        },
+
+        onKickOut: function (error) {
+            console.error("onKickOut " + JSON.stringify(error));
+        },
+
+        onStreamExtraInfoUpdated: function (streamList) {
+
+        },
+
+        onVideoSizeChanged: function (streamid, videoWidth, videoHeight) {
+            console.info("#" + streamid + "#" + "play " + " : " + videoWidth + "x" + videoHeight);
+        },
+
+        onStreamUpdated: function (type, streamList) {
+            if (type == 0) {
+                for (var i = 0; i < streamList.length; i++) {
+                    console.info(streamList[i].stream_id + ' was added');
+                    useLocalStreamList.push(streamList[i]);
+                    $('#memberList').append('<option value="'+streamList[i].anchor_id_name+'">'+streamList[i].anchor_nick_name+'</option>');
+                    $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
+                    play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
+                }
+
+            } else if (type == 1) {
+
+                for (var k = 0; k < useLocalStreamList.length; k++) {
+
+                    for (var j = 0; j < streamList.length; j++) {
+
+                        if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
+
+                            zg.stopPlayingStream(useLocalStreamList[k].stream_id);
+
+                            console.info(useLocalStreamList[k].stream_id + 'was devared');
+
+                            useLocalStreamList.splice(k, 1);
+
+                            $('.remoteVideo video:eq('+k+')').remove();
+                            $('#memberList option:eq('+k+')').remove();
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+        },
+        onUserStateUpdate: function (roomId, userList) {
+            console.info("onUserStateUpdate = " + roomId + JSON.stringify(userList));
+        },
+        onRecvCustomCommand:function(from_userid, from_idname, custom_content){
+            console.log('onRecvCustomCommand: '+from_userid);
+            console.log(from_userid,from_idname,custom_content);
+        }
     }
+
+    for (var key in _config) {
+        zg[key] = _config[key]
+    }
+
 }
 
 
