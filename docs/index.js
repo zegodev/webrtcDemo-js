@@ -319,7 +319,46 @@ function isSupports(){
        return !!e && !!t && !!n;
 }
 
-$(function () {
+
+function getBrowser() {
+    var ua = window.navigator.userAgent;
+    var isIE = window.ActiveXObject != undefined && ua.indexOf("MSIE") != -1;
+    var isFirefox = ua.indexOf("Firefox") != -1;
+    var isOpera = window.opr != undefined;
+    var isChrome = ua.indexOf("Chrome") && window.chrome;
+    var isSafari = ua.indexOf("Safari") != -1 && ua.indexOf("Version") != -1;
+    if (isIE) {
+        return "IE";
+    } else if (isFirefox) {
+        return "Firefox";
+    } else if (isOpera) {
+        return "Opera";
+    } else if (isChrome) {
+        return "Chrome";
+    } else if (isSafari) {
+        return "Safari";
+    } else {
+        return "Unkown";
+    }
+}
+
+
+function IsPC() {
+    var userAgentInfo = navigator.userAgent;
+    var Agents = new Array("Android", "iPhone", "SymbianOS", "Windows Phone", "iPad", "iPod");
+    var flag = true;
+    for (var v = 0; v < Agents.length; v++) {
+        if (userAgentInfo.indexOf(Agents[v]) > 0) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
+
+
+
+    $(function () {
 
     if(isSupports()){
         previewVideo = $('#previewVideo')[0];
@@ -346,6 +385,27 @@ $(function () {
             }, function (err,seq, customContent) {
                 console.log(err,seq, customContent);
             });
+        });
+
+        $('#screenShot').click(function () {
+
+            if(IsPC()){
+                getBrowser() === 'Firefox' && zg.startScreenShotFirFox('screen',function (suc,mediastream) {
+                    console.log('startScreenShot:'+suc);
+                    previewVideo.srcObject = mediastream;
+                });
+
+                getBrowser() === 'Chrome' && zg.startScreenShotChome(function (suc,mediastream) {
+                    console.log('startScreenShot:'+suc);
+                    previewVideo.srcObject = mediastream;
+                })
+            }
+        });
+
+        $('#stopScreenShot').click(function () {
+            if(IsPC()){
+                zg.stopScreenShot();
+            }
         });
 
         //防止，暴力退出（关闭或刷新页面）

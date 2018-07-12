@@ -26,6 +26,8 @@
  `` <script src="lib/jZego-rtc-1.0.3.js"></script>
  ``
  
+ 如有录屏需求，使用chrome浏览器时需另外下载[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)
+ 
  ### <a id="demoStep">使用示例</a>
  
  1 创建，配置实列对象；配置对象_config请参考[api文档](https://www.zego.im/html/document/#Live_Room/API_Instructions:web)或[demo](https://zegodev.github.io/webrtcDemo-js/)
@@ -154,6 +156,26 @@ function leaveRoom() {
     zg.logout();
 }
 ```
+
+7 录屏功能:web端目前只有pc的Chrome和火狐浏览器支持该功能，chrome需要安装[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)，火狐不需要
+
+> chrome: 首先打开你的 Chrome 浏览器，点击屏幕右上方的扩展按钮，选择 更多工具 > 扩展程序。打开开发者模式 > 加载已解压的扩展程序 > 选择下载并解压的zego-Chrome录屏插件
+>
+```js
+
+            if(IsPC()){
+                getBrowser() === 'Firefox' && zg.startScreenShotFirFox('screen',function (suc,mediastream) {
+                    console.log('startScreenShot:'+suc);
+                    previewVideo.srcObject = mediastream;
+                });
+
+                getBrowser() === 'Chrome' && zg.startScreenShotChome(function (suc,mediastream) {
+                    console.log('startScreenShot:'+suc);
+                    previewVideo.srcObject = mediastream;
+                })
+            }
+```
+>  **录屏返回得到的mediastream 是媒体流，是否播放或者推流，自由发挥**
  ## 常见问题列表
 * [X] 如何判断推拉流成功？
  
