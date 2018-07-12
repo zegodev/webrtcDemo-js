@@ -8,8 +8,9 @@ var zg,
         "logUrl": "",
         "remoteLogLevel": 0
     },
-    loginRoom = false;
+    loginRoom = false,
     previewVideo,
+    screenCaptrue,
     useLocalStreamList = [];
 
 function init() {
@@ -63,6 +64,8 @@ function openRoom(roomId) {
         alert('请输入房间号');
         return;
     }
+
+    screenCaptrue && zg.stopScreenShot();
 
     //get token
     $.get("https://wsliveroom229059616-api.zego.im:8282/token", {app_id: _config.appid, id_name: _config.idName},
@@ -127,14 +130,15 @@ function openRoom(roomId) {
 }
 
 //预览
-function doPreviewPublish() {
+function doPreviewPublish(externalCapture) {
     var previewConfig = {
         "audio": true,
         "audioInput":$('#audioList').val()||null ,
         "video": true,
         "videoInput": $('#videoList').val()||null,
         "videoQuality": 2,
-        "horizontal": true
+        "horizontal": true,
+        "externalCapture":externalCapture?true:false
     };
     var result = zg.startPreview(previewVideo, previewConfig, function () {
         console.log('preview success');
@@ -390,14 +394,27 @@ function IsPC() {
         $('#screenShot').click(function () {
 
             if(IsPC()){
+
+                loginRoom && zg.stopPublishingStream(_config.idName);
+                loginRoom && zg.stopPreview(previewVideo);
+
+
                 getBrowser() === 'Firefox' && zg.startScreenShotFirFox('screen',function (suc,mediastream) {
                     console.log('startScreenShot:'+suc);
+                    screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                    if(loginRoom) {
+                        doPreviewPublish(true);
+                    }
                 });
 
                 getBrowser() === 'Chrome' && zg.startScreenShotChome(function (suc,mediastream) {
                     console.log('startScreenShot:'+suc);
+                    screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                    if(loginRoom) {
+                        doPreviewPublish(true);
+                    }
                 })
             }
         });
@@ -405,6 +422,7 @@ function IsPC() {
         $('#stopScreenShot').click(function () {
             if(IsPC()){
                 zg.stopScreenShot();
+                screenCaptrue = false;
             }
         });
 
