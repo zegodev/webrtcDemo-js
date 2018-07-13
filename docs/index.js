@@ -20,6 +20,7 @@ function init() {
     console.log("config param:" + JSON.stringify(_config));
 
     zg.config(_config);
+    //zg.setCustomSignalUrl('wss://webrtctest.zego.im/ws?a=webrtc-demo');
 
     enumDevices();
 }
@@ -49,6 +50,9 @@ function enumDevices() {
                 console.log("camera: " + deviceInfo.cameras[i].label);
             }
         }
+
+        audioInputList.push(' <option value="0">禁止</option>');
+        videoInputList.push('<option value="0">禁止</option>');
 
         $('#audioList').html(audioInputList.join(''));
         $('#videoList').html(videoInputList.join(''));
@@ -130,16 +134,19 @@ function openRoom(roomId) {
 }
 
 //预览
-function doPreviewPublish(externalCapture) {
+function doPreviewPublish(config) {
     var previewConfig = {
-        "audio": true,
+        "audio": $('#audioList').val() === '0'? false:true,
         "audioInput":$('#audioList').val()||null ,
-        "video": true,
+        "video":  $('#videoList').val() === '0' ? false:true,
         "videoInput": $('#videoList').val()||null,
         "videoQuality": 2,
         "horizontal": true,
-        "externalCapture":externalCapture?true:false
+        "externalCapture":false,
+        "externalMediaStream":null
     };
+    previewConfig = $.extend(previewConfig,config);
+    console.log('previewConfig',previewConfig);
     var result = zg.startPreview(previewVideo, previewConfig, function () {
         console.log('preview success');
         $('#previewLabel').html(_config.nickName);
@@ -398,13 +405,21 @@ function IsPC() {
                 loginRoom && zg.stopPublishingStream(_config.idName);
                 loginRoom && zg.stopPreview(previewVideo);
 
+                var config = {
+                    externalMediaStream:null,
+                    width:640,
+                    height:480,
+                    frameRate:15,
+                    bitRate:1000
+                }
 
                 getBrowser() === 'Firefox' && zg.startScreenShotFirFox('screen',function (suc,mediastream) {
                     console.log('startScreenShot:'+suc);
                     screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                    config.externalMediaStream = mediastream;
                     if(loginRoom) {
-                        doPreviewPublish(true);
+                        doPreviewPublish(config);
                     }
                 });
 
@@ -412,8 +427,9 @@ function IsPC() {
                     console.log('startScreenShot:'+suc);
                     screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                    config.externalMediaStream = mediastream;
                     if(loginRoom) {
-                        doPreviewPublish(true);
+                        doPreviewPublish(config);
                     }
                 })
             }

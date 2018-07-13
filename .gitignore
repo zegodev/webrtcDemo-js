@@ -40,3 +40,4 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+/docs/lib/jZego-rtc-1.0.5-test.js
