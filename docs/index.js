@@ -411,12 +411,13 @@ function IsPC() {
                     height:480,
                     frameRate:15,
                     bitRate:1000
-                }
+                };
 
-                getBrowser() === 'Firefox' && zg.startScreenShotFirFox('screen',function (suc,mediastream) {
+                getBrowser() === 'Firefox' && zg.startScreenShotFirFox('window',false,function (suc,mediastream) {
                     console.log('startScreenShot:'+suc);
                     screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                   // config.externalCapture = true;
                     config.externalMediaStream = mediastream;
                     if(loginRoom) {
                         doPreviewPublish(config);
@@ -427,6 +428,7 @@ function IsPC() {
                     console.log('startScreenShot:'+suc);
                     screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
+                    // config.externalCapture = true;
                     config.externalMediaStream = mediastream;
                     if(loginRoom) {
                         doPreviewPublish(config);
