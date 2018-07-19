@@ -424,7 +424,7 @@ function IsPC() {
                     }
                 });
 
-                getBrowser() === 'Chrome' && zg.startScreenShotChome(function (suc,mediastream) {
+                getBrowser() === 'Chrome' && zg.startScreenShotChrome(function (suc,mediastream) {
                     console.log('startScreenShot:'+suc);
                     screenCaptrue = suc;
                     previewVideo.srcObject = mediastream;
