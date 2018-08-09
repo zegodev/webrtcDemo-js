@@ -31,7 +31,7 @@ function enumDevices() {
     zg.enumDevices(deviceInfo => {
         console.log('enumDevices' + JSON.stringify(deviceInfo));
         if (deviceInfo.microphones) {
-            for (let i = 0; i < deviceInfo.microphones.length; i++) {
+            for (var i = 0; i < deviceInfo.microphones.length; i++) {
 
                 if (!deviceInfo.microphones[i].label) {
                     deviceInfo.microphones[i].label = 'microphone' + i;
@@ -42,7 +42,7 @@ function enumDevices() {
         }
 
         if (deviceInfo.cameras) {
-            for (let i = 0; i < deviceInfo.cameras.length; i++) {
+            for (var i = 0; i < deviceInfo.cameras.length; i++) {
                 if (!deviceInfo.cameras[i].label) {
                     deviceInfo.cameras[i].label = 'camera' + i;
                 }
@@ -445,8 +445,8 @@ function IsPC() {
         });
 
         //防止，暴力退出（关闭或刷新页面）
-        const isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
-        const eventName = isOnIOS ? "pagehide" : "beforeunload";
+        var isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
+        var eventName = isOnIOS ? "pagehide" : "beforeunload";
         window.addEventListener (eventName, function(event)  {
             window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
             leaveRoom();
