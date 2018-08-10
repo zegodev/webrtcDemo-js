@@ -176,7 +176,7 @@ function leaveRoom() {
             }
 ```
 >  **录屏返回得到的mediastream 是媒体流，是否播放或者推流，自由发挥**
- ## 常见问题列表
-* [X] 如何判断推拉流成功？
+ ## [常见问题](https://github.com/zegodev/webrtcDemo-js/issues)
+
  
  
