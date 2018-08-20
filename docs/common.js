@@ -152,12 +152,14 @@ function loginSuccess(streamList,type) {
 
 //预览
 function doPreviewPublish(config) {
+    var quality = ($('#videoQuality')&&$('#videoQuality').val())||2;
+
     var previewConfig = {
         "audio": $('#audioList').val() === '0'? false:true,
         "audioInput":$('#audioList').val()||null ,
         "video":  $('#videoList').val() === '0' ? false:true,
         "videoInput": $('#videoList').val()||null,
-        "videoQuality": 2,
+        "videoQuality": quality*1,
         "horizontal": true,
         "externalCapture":false,
         "externalMediaStream":null
