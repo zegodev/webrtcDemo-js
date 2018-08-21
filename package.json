@@ -9,7 +9,6 @@
   "author": "choui",
   "license": "ISC",
   "dependencies": {
-    "choui-zego-rtc": "^0.1.0",
     "http-server": "^0.11.1"
   }
 }
