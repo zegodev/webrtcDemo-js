@@ -1,14 +1,3 @@
-//判断浏览器是否支持webrtc功能（充分判断）
-// 次方法为不严谨判断，只判断了浏览器对api的支持，根据我们的测试，在手机上情况会比较复杂，有些手机浏览器尽管api支持，但是不支持音视频h264编码，导致仍旧不支持推拉流,同一款浏览器不同手机也会出现不一致情况；
-// 浏览器支持度目前处于不端完善中，具体哪些浏览器支持会在官方文档中公布 官方文档https://www.zego.im/html/document/#Live_Room/SDK_Integration_Guide:web
-function isSupports(){
-    var e = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection
-        , t = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.msGetUserMedia || navigator.mozGetUserMedia || navigator.mediaDevices && navigator.mediaDevices.getUserMedia
-        , n = window.WebSocket
-    return !!e && !!t && !!n;
-}
-
-
 function getBrowser() {
     var ua = window.navigator.userAgent;
     var isIE = window.ActiveXObject != undefined && ua.indexOf("MSIE") != -1;
@@ -362,39 +351,54 @@ function init() {
 }
 
 
+function bindEvent(){
+    previewVideo = $('#previewVideo')[0];
+
+    //初始化sdk
+    init();
+
+    $('#createRoom').click(function () {
+        openRoom($('#roomId').val(), 1);
+    });
+
+    $('#openRoom').click(function () {
+        openRoom($('#roomId').val(), 2);
+    });
+
+
+
+    $('#leaveRoom').click(function () {
+        leaveRoom();
+    });
+
+
+    //防止，暴力退出（关闭或刷新页面）
+    var isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
+    var eventName = isOnIOS ? "pagehide" : "beforeunload";
+    window.addEventListener (eventName, function(event)  {
+        window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
+        leaveRoom();
+    });
+
+}
 
 $(function () {
-    if(isSupports()){
-        previewVideo = $('#previewVideo')[0];
-
-        //初始化sdk
-        init();
-
-        $('#createRoom').click(function () {
-            openRoom($('#roomId').val(), 1);
-        });
-
-        $('#openRoom').click(function () {
-            openRoom($('#roomId').val(), 2);
-        });
-
-
-
-        $('#leaveRoom').click(function () {
-            leaveRoom();
-        });
-
-
-        //防止，暴力退出（关闭或刷新页面）
-        var isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
-        var eventName = isOnIOS ? "pagehide" : "beforeunload";
-        window.addEventListener (eventName, function(event)  {
-            window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
-            leaveRoom();
-        });
+    if(ZegoClient.isSupportWebrtc()){
+         ZegoClient.isSupportH264(result=>{
+             bindEvent();
+             if(!result){
+                 alert('浏览器不支持视频h264编码，不能推拉音频流');
+             }
+         },err=>{
+             console.error(err);
+         })
     }else{
-        alert('浏览器不支持webrtc,换一个浏览器试试吧');
+        alert('浏览器不支持webrtc，换一个浏览器试试吧');
     }
+
+
+
+
 
 
 });
