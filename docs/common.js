@@ -35,7 +35,7 @@ function IsPC() {
 }
 
 function enumDevices() {
-    var  audioInputList = [],videoInputList = [];
+    var audioInputList = [], videoInputList = [];
     zg.enumDevices(deviceInfo => {
         console.log('enumDevices' + JSON.stringify(deviceInfo));
         if (deviceInfo.microphones) {
@@ -44,7 +44,7 @@ function enumDevices() {
                 if (!deviceInfo.microphones[i].label) {
                     deviceInfo.microphones[i].label = 'microphone' + i;
                 }
-                audioInputList.push(' <option value="'+deviceInfo.microphones[i].deviceId+'">'+deviceInfo.microphones[i].label+'</option>');
+                audioInputList.push(' <option value="' + deviceInfo.microphones[i].deviceId + '">' + deviceInfo.microphones[i].label + '</option>');
                 console.log("microphone: " + deviceInfo.microphones[i].label);
             }
         }
@@ -54,7 +54,7 @@ function enumDevices() {
                 if (!deviceInfo.cameras[i].label) {
                     deviceInfo.cameras[i].label = 'camera' + i;
                 }
-                videoInputList.push('<option value="'+deviceInfo.cameras[i].deviceId+'">'+deviceInfo.cameras[i].label+'</option>');
+                videoInputList.push('<option value="' + deviceInfo.cameras[i].deviceId + '">' + deviceInfo.cameras[i].label + '</option>');
                 console.log("camera: " + deviceInfo.cameras[i].label);
             }
         }
@@ -70,7 +70,7 @@ function enumDevices() {
 }
 
 
-function openRoom(roomId,type) {
+function openRoom(roomId, type) {
 
     if (!roomId) {
         alert('请输入房间号');
@@ -86,17 +86,17 @@ function openRoom(roomId,type) {
                 alert('get token failed')
             } else {
                 console.log('gettoken success');
-                startLogin(roomId,token,type)
+                startLogin(roomId, token, type)
             }
         }, 'text');
 }
 
 
 //login
-function startLogin(roomId,token,type) {
+function startLogin(roomId, token, type) {
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
-        loginSuccess(streamList,type);
+        loginSuccess(streamList, type);
     }, function (err) {
         loginFailed(err);
     })
@@ -108,8 +108,8 @@ function loginFailed(err) {
 
 }
 
-function loginSuccess(streamList,type) {
-    var maxNumber = ($('#maxPullNamber')&&$('#maxPullNamber').val())||4
+function loginSuccess(streamList, type) {
+    var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
 
     //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
     if (streamList.length >= maxNumber) {
@@ -122,10 +122,10 @@ function loginSuccess(streamList,type) {
 
     $('.remoteVideo').html('');
     $('#memberList').html('');
-    for(var index=0;index<useLocalStreamList.length;index++){
-        $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
-        $('#memberList').append('<option value="'+useLocalStreamList[index].anchor_id_name+'">'+useLocalStreamList[index].anchor_nick_name+'</option>');
-        play(useLocalStreamList[index].stream_id,$('.remoteVideo video:eq('+index+')')[0]);
+    for (var index = 0; index < useLocalStreamList.length; index++) {
+        $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
+        $('#memberList').append('<option value="' + useLocalStreamList[index].anchor_id_name + '">' + useLocalStreamList[index].anchor_nick_name + '</option>');
+        play(useLocalStreamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
     }
     console.log(`login success`);
 
@@ -141,20 +141,20 @@ function loginSuccess(streamList,type) {
 
 //预览
 function doPreviewPublish(config) {
-    var quality = ($('#videoQuality')&&$('#videoQuality').val())||2;
+    var quality = ($('#videoQuality') && $('#videoQuality').val()) || 2;
 
     var previewConfig = {
-        "audio": $('#audioList').val() === '0'? false:true,
-        "audioInput":$('#audioList').val()||null ,
-        "video":  $('#videoList').val() === '0' ? false:true,
-        "videoInput": $('#videoList').val()||null,
-        "videoQuality": quality*1,
+        "audio": $('#audioList').val() === '0' ? false : true,
+        "audioInput": $('#audioList').val() || null,
+        "video": $('#videoList').val() === '0' ? false : true,
+        "videoInput": $('#videoList').val() || null,
+        "videoQuality": quality * 1,
         "horizontal": true,
-        "externalCapture":false,
-        "externalMediaStream":null
+        "externalCapture": false,
+        "externalMediaStream": null
     };
-    previewConfig = $.extend(previewConfig,config);
-    console.log('previewConfig',previewConfig);
+    previewConfig = $.extend(previewConfig, config);
+    console.log('previewConfig', previewConfig);
     var result = zg.startPreview(previewVideo, previewConfig, function () {
         console.log('preview success');
         isPreviewed = true;
@@ -162,7 +162,7 @@ function doPreviewPublish(config) {
         publish();
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
         enumDevices();
-    }, function (err){
+    }, function (err) {
         alert(JSON.stringify(err));
         console.error('preview failed', err);
     });
@@ -221,7 +221,7 @@ function listen() {
             } else if (type == 2) {
                 console.info(' publish  retry');
             } else {
-                console.error('publish error '+error.msg);
+                console.error('publish error ' + error.msg);
                 var _msg = error.msg;
                 if (error.msg.indexOf('server session closed, reason: ') > -1) {
                     var code = error.msg.replace('server session closed, reason: ', '');
@@ -260,8 +260,8 @@ function listen() {
                 for (var i = 0; i < streamList.length; i++) {
                     console.info(streamList[i].stream_id + ' was added');
                     useLocalStreamList.push(streamList[i]);
-                    $('#memberList').append('<option value="'+streamList[i].anchor_id_name+'">'+streamList[i].anchor_nick_name+'</option>');
-                    $('.remoteVideo').append($('<video  autoplay muted playsinline></video>') );
+                    $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
+                    $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
                     play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
                 }
 
@@ -279,8 +279,8 @@ function listen() {
 
                             useLocalStreamList.splice(k, 1);
 
-                            $('.remoteVideo video:eq('+k+')').remove();
-                            $('#memberList option:eq('+k+')').remove();
+                            $('.remoteVideo video:eq(' + k + ')').remove();
+                            $('#memberList option:eq(' + k + ')').remove();
 
                             break;
                         }
@@ -295,7 +295,7 @@ function listen() {
         zg[key] = _config[key]
     }
 
-    if(typeof listenChild === 'function'){
+    if (typeof listenChild === 'function') {
         listenChild();
     }
 
@@ -305,9 +305,11 @@ function listen() {
 function leaveRoom() {
     console.info('leave room  and close stream');
 
-    zg.stopPreview(previewVideo);
-
-    zg.stopPublishingStream(_config.idName);
+    if(isPreviewed){
+        zg.stopPreview(previewVideo);
+        zg.stopPublishingStream(_config.idName);
+        isPreviewed = false;
+    }
 
     for (var i = 0; i < useLocalStreamList.length; i++) {
         zg.stopPlayingStream(useLocalStreamList[i].stream_id);
@@ -319,7 +321,6 @@ function leaveRoom() {
 }
 
 
-
 var zg,
     _config = {
         "appid": 229059616,
@@ -329,14 +330,14 @@ var zg,
         "logLevel": 0,
         "logUrl": "",
         "remoteLogLevel": 0,
-        "audienceCreateRoom":true
+        "audienceCreateRoom": true
     },
     loginRoom = false,
     previewVideo,
     screenCaptrue,
     isPreviewed = false,
     useLocalStreamList = [];
-    var anchor_userid = '',anchro_username = '';
+var anchor_userid = '', anchro_username = '';
 
 function init() {
 
@@ -351,7 +352,7 @@ function init() {
 }
 
 
-function bindEvent(){
+function bindEvent() {
     previewVideo = $('#previewVideo')[0];
 
     //初始化sdk
@@ -366,16 +367,15 @@ function bindEvent(){
     });
 
 
-
     $('#leaveRoom').click(function () {
         leaveRoom();
     });
 
 
     //防止，暴力退出（关闭或刷新页面）
-    var isOnIOS = navigator.userAgent.match (/iPad/i) || navigator.userAgent.match (/iPhone/i);
+    var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
     var eventName = isOnIOS ? "pagehide" : "beforeunload";
-    window.addEventListener (eventName, function(event)  {
+    window.addEventListener(eventName, function (event) {
         window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
         leaveRoom();
     });
@@ -383,22 +383,18 @@ function bindEvent(){
 }
 
 $(function () {
-    if(ZegoClient.isSupportWebrtc()){
-         ZegoClient.isSupportH264(result=>{
-             bindEvent();
-             if(!result){
-                 alert('浏览器不支持视频h264编码，不能推拉音频流');
-             }
-         },err=>{
-             console.error(err);
-         })
-    }else{
+    if (ZegoClient.isSupportWebrtc()) {
+        ZegoClient.isSupportH264(result => {
+            bindEvent();
+            if (!result) {
+                alert('浏览器不支持视频h264编码，不能推拉音频流');
+            }
+        }, err => {
+            console.error(err);
+        })
+    } else {
         alert('浏览器不支持webrtc，换一个浏览器试试吧');
     }
-
-
-
-
 
 
 });
