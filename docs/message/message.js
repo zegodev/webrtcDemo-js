@@ -63,7 +63,7 @@ $(function () {
 
 
     $('#sendRoomMsg').click(function () {
-        zg.sendRoomMsg(1, 2, "test", function(seq, msgId, msg_category, msg_type, msg_content){
+        zg.sendRoomMsg(1, 1, "test", function(seq, msgId, msg_category, msg_type, msg_content){
             console.log("sendRoomMsg suc:",seq, msgId, msg_category, msg_type, msg_content);
         }, function(err, seq, msg_category, msg_type, msg_content){
             console.log("sendRoomMsg err:",seq, msgId, msg_category, msg_type, msg_content);
@@ -79,15 +79,15 @@ $(function () {
     });
 
     $('#RelayMessage').click(function () {
-        zg.sendRelayMessage(1, 2, "sendRelayMessage test", function(seq){
-            console.log("sendRelayMessage suc:",seq);
-        }, function(err, seq){
-            console.log("sendRelayMessage err:",err,seq);
-        })
+        // zg.sendRelayMessage(1, 2, "sendRelayMessage test", function(seq){
+        //     console.log("sendRelayMessage suc:",seq);
+        // }, function(err, seq){
+        //     console.log("sendRelayMessage err:",err,seq);
+        // })
     });
 
     $('#BigRoomMessage').click(function () {
-        zg.sendBigRoomMessage(2, 1, "BigRoomMessage test", function(seq, messageId){
+        zg.sendBigRoomMessage(1, 1, "BigRoomMessage test", function(seq, messageId){
             console.log("BigRoomMessage suc:",seq, messageId);
         }, function(err, seq){
             console.log("BigRoomMessage err:",err, seq);
