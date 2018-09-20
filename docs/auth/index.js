@@ -95,7 +95,7 @@ function play(streamId, video) {
 function publish() {
     getToken(_config.idName,false,function (rsp, status, xhr) {
         zg.startPublishingStream(_config.idName, previewVideo,null,{
-            streamParams:`expired=${rsp.expired}&nonce=${rsp.nonce}&token=${rsp.token}`
+            streamParams:`zg_expired=${rsp.zg_expired}&zg_nonce=${rsp.zg_nonce}&zg_token=${rsp.zg_token}`
         });
     });
 }
