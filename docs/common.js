@@ -70,6 +70,20 @@ function enumDevices() {
 }
 
 
+function getParamByName(key) {
+    var search = location.search;
+
+    if(!search||search == '?')return null;
+    search = search.replace('?','');
+
+    var param_arr = search.split('&'),param_map = {};
+    param_arr.forEach(function (item){
+        var _key = item.split('=')[0], value = item.split('=')[1];
+        param_map[_key] = value;
+    });
+
+    return param_map[key];
+}
 function openRoom(roomId, type) {
 
     if (!roomId) {
@@ -322,11 +336,12 @@ function leaveRoom() {
 
 
 var zg,
+    appid = getParamByName('appid')||229059616,
     _config = {
-        appid: 229059616,
+        appid: appid,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom229059616-api.zego.im:8282/ws",
+        server: "wss://wsliveroom"+appid+"-api.zego.im:8282/ws",
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
@@ -336,7 +351,7 @@ var zg,
         cgi_token: '',
         roomlist: '',
         signal: '',
-        token: "https://wsliveroom229059616-api.zego.im:8282/token",
+        token: "https://wsliveroom"+appid+"-api.zego.im:8282/token",
     },
     loginRoom = false,
     previewVideo,
@@ -352,8 +367,8 @@ function init() {
     //测试用代码，客户请忽略  start
     if (location.search) {
         let _arr_config = location.search.substr(1).split('&');
-        _arr_config.forEach(item => {
-            let [key, value] = item.split('=');
+        _arr_config.forEach(function (item)  {
+            var key = item.split('=')[0], value = item.split('=')[1];
             if (value && _config.hasOwnProperty(key)) {
                 _config[key] = value;
             } else if (value && _otherConfig.hasOwnProperty(key)) {
