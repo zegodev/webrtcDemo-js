@@ -338,7 +338,7 @@ function leaveRoom() {
 var zg,
     appid = getParamByName('appid')||229059616,
     _config = {
-        appid: appid,
+        appid: appid*1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
         server: "wss://wsliveroom"+appid+"-api.zego.im:8282/ws",
@@ -369,6 +369,9 @@ function init() {
         let _arr_config = location.search.substr(1).split('&');
         _arr_config.forEach(function (item)  {
             var key = item.split('=')[0], value = item.split('=')[1];
+
+            if(key==='appid'&&value)value = value*1;
+
             if (value && _config.hasOwnProperty(key)) {
                 _config[key] = value;
             } else if (value && _otherConfig.hasOwnProperty(key)) {
