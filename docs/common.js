@@ -80,7 +80,7 @@ function openRoom(roomId, type) {
     screenCaptrue && zg.stopScreenShot();
 
     //get token
-    $.get("https://wsliveroom229059616-api.zego.im:8282/token", {app_id: _config.appid, id_name: _config.idName},
+    $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
         function (token) {
             if (!token) {
                 alert('get token failed')
@@ -305,7 +305,7 @@ function listen() {
 function leaveRoom() {
     console.info('leave room  and close stream');
 
-    if(isPreviewed){
+    if (isPreviewed) {
         zg.stopPreview(previewVideo);
         zg.stopPublishingStream(_config.idName);
         isPreviewed = false;
@@ -323,14 +323,20 @@ function leaveRoom() {
 
 var zg,
     _config = {
-        "appid": 229059616,
-        "idName": new Date().getTime() + '',
-        "nickName": 'u' + new Date().getTime(),
-        "server": "wss://wsliveroom229059616-api.zego.im:8282/ws",
-        "logLevel": 0,
-        "logUrl": "",
-        "remoteLogLevel": 0,
-        "audienceCreateRoom": true
+        appid: 229059616,
+        idName: new Date().getTime() + '',
+        nickName: 'u' + new Date().getTime(),
+        server: "wss://wsliveroom229059616-api.zego.im:8282/ws",
+        logLevel: 0,
+        logUrl: "",
+        remoteLogLevel: 0,
+        audienceCreateRoom: true
+    },
+    _otherConfig = {
+        cgi_token: '',
+        roomlist: '',
+        signal: '',
+        token: "https://wsliveroom229059616-api.zego.im:8282/token",
     },
     loginRoom = false,
     previewVideo,
@@ -343,9 +349,30 @@ function init() {
 
     zg = new ZegoClient();
 
+    //测试用代码，客户请忽略  start
+    if (location.search) {
+        let _arr_config = location.search.substr(1).split('&');
+        _arr_config.forEach(item => {
+            let [key, value] = item.split('=');
+            if (value && _config.hasOwnProperty(key)) {
+                _config[key] = value;
+            } else if (value && _otherConfig.hasOwnProperty(key)) {
+                _otherConfig[key] = value;
+            }
+        });
+    }
+    //测试用代码，客户请忽略  end
+
+
     console.log("config param:" + JSON.stringify(_config));
 
     zg.config(_config);
+
+    //测试用代码，客户请忽略  start
+    if(_otherConfig.signal){
+        zg.setCustomSignalUrl(_otherConfig.signal);
+    }
+    //测试用代码，客户请忽略  end
 
 
     enumDevices();
