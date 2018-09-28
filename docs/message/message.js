@@ -51,7 +51,9 @@ function listenChild(){
         onRecvBigRoomMessage:function(messageList, roomId){
             console.log('onRecvBigRoomMessage',messageList, roomId);
             alert('onRecvBigRoomMessage|'+JSON.stringify(messageList)+'|'+roomId);
-        }
+        }, onRecvCustomCommand: function (from_userid, from_idname, custom_content) {
+            console.log('onRecvCustomCommand', from_userid, from_idname, custom_content);
+        },
     };
     for (var key in listens) {
         zg[key] = listens[key]
@@ -84,6 +86,15 @@ $(function () {
         // }, function(err, seq){
         //     console.log("sendRelayMessage err:",err,seq);
         // })
+    });
+
+
+    $('#sendCustomrMsg').click(function () {
+        zg.sendCustomCommand([$('#memberList').val()], 'test', (seq, customContent) => {
+            console.log('sendCustomCommand suc', seq, customContent);
+        }, (err, seq, customContent) => {
+            console.log('sendCustomCommand err', err, seq, customContent);
+        });
     });
 
     $('#BigRoomMessage').click(function () {

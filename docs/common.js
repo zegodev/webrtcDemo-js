@@ -428,6 +428,7 @@ function bindEvent() {
 }
 
 $(function () {
+    console.log('sdk version is',ZegoClient.getCurrentVersion());
     if (ZegoClient.isSupportWebrtc()) {
         ZegoClient.isSupportH264(result => {
             bindEvent();

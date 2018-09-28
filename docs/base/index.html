@@ -55,11 +55,25 @@
         </div>
 
     </div>
+    <div class="row">
+
+        <div class="col-sm">
+            <div class="form-group">
+                <label for="roomId">cnd地址</label>
+                <input type="email" class="form-control d-inline" id="cdnUrl" style="width: 75%"
+                       aria-describedby="emailHelp" placeholder="请输入cnd地址">
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm">
             <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
+            <button type="button" id="createRoomCdn" class="btn btn-primary btn-sm">创建房间(转推cdn)</button>
             <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+
+            <button type="button" id="getAudioInfo" class="btn btn-primary btn-sm">获取推流音频信息</button>
+            <button type="button" id="stopgetAudioInfo" class="btn btn-primary btn-sm">stop获取推流音频信息</button>
         </div>
     </div>
 
@@ -82,4 +96,35 @@
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js?v=010"></script>
 <script src="../common.js?v=010"></script>
+<script>
+    $(function () {
+        $('#createRoomCdn').click(function () {
+            openRoom($('#roomId').val(), 1);
+        });
+    });
+
+    //推流
+    function publish() {
+        zg.startPublishingStream(_config.idName, previewVideo,null,{cdnUrl:$('#cdnUrl').val()||''});
+    }
+
+
+    //获取播放流音量
+    $('#getAudioInfo').click(function () {
+        window.souder = ZegoClient.getAudioInfo($('#previewVideo')[0], function (e) {
+            e && console.error(e);
+        });
+        window.souderTimer = setInterval(() => {
+            console.log(souder);
+        }, 2000);
+    });
+
+
+    $('#stopgetAudioInfo').click(function () {
+        if(window.souder ){
+            clearInterval(window.souderTimer);
+            window.souder.stop();
+        }
+    });
+</script>
 </html>
