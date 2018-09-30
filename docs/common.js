@@ -417,13 +417,13 @@ function bindEvent() {
     });
 
 
-    //防止，暴力退出（关闭或刷新页面）
-    var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
-    var eventName = isOnIOS ? "pagehide" : "beforeunload";
-    window.addEventListener(eventName, function (event) {
-        window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
-        leaveRoom();
-    });
+    //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要
+    // var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
+    // var eventName = isOnIOS ? "pagehide" : "beforeunload";
+    // window.addEventListener(eventName, function (event) {
+    //     window.event.cancelBubble = true; // Don't know if this works on iOS but it might!
+    //     leaveRoom();
+    // });
 
 }
 
