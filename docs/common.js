@@ -373,9 +373,9 @@ function init() {
             if(key==='appid'&&value)value = value*1;
 
             if (value && _config.hasOwnProperty(key)) {
-                _config[key] = value;
+                _config[key] = decodeURIComponent(value);
             } else if (value && _otherConfig.hasOwnProperty(key)) {
-                _otherConfig[key] = value;
+                _otherConfig[key] = decodeURIComponent(value);
             }
         });
     }
