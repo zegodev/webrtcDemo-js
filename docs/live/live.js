@@ -20,6 +20,8 @@ function init() {
 
     console.log("config param:" + JSON.stringify(_config));
     _config.audienceCreateRoom = true;
+    _config.appid = _config.appid*1;
+
     zg.config(_config);
 
 

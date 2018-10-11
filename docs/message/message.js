@@ -19,6 +19,7 @@ function init() {
     }
     //测试用代码，客户请忽略  end
 
+    _config.appid = _config.appid*1;
     zg.config(_config);
 
 
