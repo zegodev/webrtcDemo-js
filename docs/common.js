@@ -370,8 +370,6 @@ function init() {
         _arr_config.forEach(function (item)  {
             var key = item.split('=')[0], value = item.split('=')[1];
 
-            if(key==='appid'&&value)value = value*1;
-
             if (value && _config.hasOwnProperty(key)) {
                 _config[key] = decodeURIComponent(value);
             } else if (value && _otherConfig.hasOwnProperty(key)) {
@@ -384,6 +382,7 @@ function init() {
 
     console.log("config param:" + JSON.stringify(_config));
 
+    _config.appid = _config.appid*1;
     zg.config(_config);
 
     //测试用代码，客户请忽略  start
