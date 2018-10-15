@@ -1,3 +1,28 @@
+var  thirdToken = '';
+
+
+function getTirdToken(callBack) {
+    $.get($('#thirdTokenUrl').val(), function (response, status, xhr) {
+        callBack(response, status, xhr);
+    })
+}
+
+
+//覆盖公有中的 startLogin
+function startLogin(roomId, token, type) {
+
+    getTirdToken(function (response) {
+        thirdToken = response;
+        zg.loginWithAuthor(roomId, type, token,thirdToken, function (streamList) {
+            console.log('login success');
+            loginSuccess(streamList, type);
+        }, function (err) {
+            loginFailed(err);
+        })
+    });
+
+}
+
 //预览
 function doPreviewPublish(config) {
     var previewConfig = {
@@ -25,6 +50,8 @@ function doPreviewPublish(config) {
 
     if (!result) alert('预览失败！')
 }
+
+
 
 
 function loginSuccess(streamList, type) {
