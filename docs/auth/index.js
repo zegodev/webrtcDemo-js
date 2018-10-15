@@ -11,16 +11,28 @@ function getTirdToken(callBack) {
 //覆盖公有中的 startLogin
 function startLogin(roomId, token, type) {
 
-    getTirdToken(function (response) {
-        thirdToken = response;
-        zg.loginWithAuthor(roomId, type, token,thirdToken, function (streamList) {
-            console.log('login success');
-            loginSuccess(streamList, type);
-        }, function (err) {
-            loginFailed(err);
-        })
-    });
+    thirdToken = $('#thirdToken').val();
 
+    if(!thirdToken){
+        getTirdToken(function (response) {
+            thirdToken = response;
+            doStartLogin(roomId, token, type);
+        });
+    }else{
+        thirdToken = thirdToken;
+        doStartLogin(roomId, token, type);
+    }
+
+}
+
+
+function  doStartLogin(roomId, token, type){
+    zg.loginWithAuthor(roomId, type, token,thirdToken, function (streamList) {
+        console.log('login success');
+        loginSuccess(streamList, type);
+    }, function (err) {
+        loginFailed(err);
+    })
 }
 
 //预览
