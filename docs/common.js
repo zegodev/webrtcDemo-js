@@ -336,12 +336,12 @@ function leaveRoom() {
 
 
 var zg,
-    appid = getParamByName('appid')|| 229059616,
+    appid = getParamByName('appid')|| 1082937486,
     _config = {
         appid: appid*1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom-alpha.zego.im:8282/ws",//"wss://wsliveroom"+appid+"-api.zego.im:8282/ws",
+        server: "wss://wsliveroom"+appid+"-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,

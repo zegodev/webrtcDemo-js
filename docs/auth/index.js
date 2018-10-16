@@ -2,7 +2,10 @@ var  thirdToken = '';
 
 
 function getTirdToken(callBack) {
-    $.get($('#thirdTokenUrl').val(), function (response, status, xhr) {
+    $.get($('#thirdTokenUrl').val(),{
+       app_id:_config.appid,
+       id_name:_config.idName
+    } ,function (response, status, xhr) {
         callBack(response, status, xhr);
     })
 }
@@ -40,7 +43,7 @@ function doPreviewPublish(config) {
     var previewConfig = {
         "audio": $('#audioList').val() === '0' ? false : true,
         "audioInput": $('#audioList').val() || null,
-        "video": false,//$('#videoList').val() === '0' ? false:true,
+        "video": $('#videoList').val() === '0' ? false:true,
         "videoInput": $('#videoList').val() || null,
         "videoQuality": 2,
         "horizontal": true,
@@ -132,11 +135,16 @@ function play(streamId, video) {
 
 //推流
 function publish() {
-    getToken(_config.idName,false,function (rsp, status, xhr) {
-        zg.startPublishingStream(_config.idName, previewVideo,null,{
-            streamParams:`zg_expired=${rsp.zg_expired}&zg_nonce=${rsp.zg_nonce}&zg_token=${rsp.zg_token}`
+    if($('#authTokenUrl').val()){
+        getToken(_config.idName,false,function (rsp, status, xhr) {
+            zg.startPublishingStream(_config.idName, previewVideo,null,{
+                streamParams:`zg_expired=${rsp.zg_expired}&zg_nonce=${rsp.zg_nonce}&zg_token=${rsp.zg_token}`
+            });
         });
-    });
+    }else{
+        zg.startPublishingStream(_config.idName, previewVideo);
+    }
+
 }
 
 
