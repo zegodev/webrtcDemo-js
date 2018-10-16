@@ -114,13 +114,26 @@ function loginSuccess(streamList, type) {
 
 
 function play(streamId, video) {
-    getToken(streamId,true,function (rsp, status, xhr) {
-        var result = zg.startPlayingStream(streamId, video, null,
-            {
-                playType: "audio",
-                streamParams:`expired=${rsp.expired}&nonce=${rsp.nonce}&token=${rsp.token}`
-            }
+
+    if($('#authTokenUrl').val()){
+        getToken(streamId,true,function (rsp, status, xhr) {
+            var result = zg.startPlayingStream(streamId, video, null,
+                {
+                    playType: "audio",
+                    streamParams:`expired=${rsp.expired}&nonce=${rsp.nonce}&token=${rsp.token}`
+                }
             );
+
+            video.muted = false;
+            if (!result) {
+                alert('哎呀，播放失败啦');
+                video.style = 'display:none';
+                console.error("play " + el.nativeElement.id + " return " + result);
+
+            }
+        })
+    }else{
+        var result = zg.startPlayingStream(streamId, video);
 
         video.muted = false;
         if (!result) {
@@ -129,7 +142,8 @@ function play(streamId, video) {
             console.error("play " + el.nativeElement.id + " return " + result);
 
         }
-    })
+    }
+
 }
 
 
