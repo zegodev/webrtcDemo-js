@@ -16,7 +16,7 @@ function startLogin(roomId, token, type) {
 
     thirdToken = $('#thirdToken').val();
 
-    if(!thirdToken&&$('#thirdTokenUrl').val()){
+    if(!thirdToken && $('#thirdTokenUrl').val()){
         getTirdToken(function (response) {
             thirdToken = response;
             doStartLogin(roomId, token, type);
