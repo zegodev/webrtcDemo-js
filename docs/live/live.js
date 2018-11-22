@@ -1,6 +1,6 @@
 //覆盖index.js 中的init
 function init() {
-    zg = new ZegoClient();
+    zg = new ZegoClient(); 
     zg.setUserStateUpdate(true);//重要  启动用户变化监听
 
     //测试用代码，客户请忽略  start
