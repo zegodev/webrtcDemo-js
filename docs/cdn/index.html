@@ -49,7 +49,7 @@
               <div class="form-group">
                   <label for="roomId">房间号</label>
                   <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
-                        aria-describedby="emailHelp" placeholder="请输入房间号">
+                      value="zego_869703025507186"  aria-describedby="emailHelp" placeholder="请输入房间号">
               </div>
           </div>
   
@@ -139,11 +139,9 @@ function loginSuccess(streamList, type) {
   }
 
   if(browser == "Safari"){
-
-    videoElement.src = streamList[0].urls_m3u8[0]
-  
+    videoElement.src = streamList[0].urls_hls[0]
   }else if(streamList.length !== 0){
-    
+    console.log(streamList)
     var flvUrl = streamList[0].urls_https_flv[0] ;
     //若支持flv.js
     if (flvjs.isSupported()) {
