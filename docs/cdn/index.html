@@ -140,11 +140,11 @@ function loginSuccess(streamList, type) {
 
   if(browser == "Safari"){
 
-    videoElement.src = streamList[0].urls_hls[0]
+    videoElement.src = streamList[0].urls_m3u8[0]
   
   }else if(streamList.length !== 0){
     
-    var flvUrl = streamList[0].urls_flv[0] ;
+    var flvUrl = streamList[0].urls_https_flv[0] ;
     //若支持flv.js
     if (flvjs.isSupported()) {
     var flvPlayer = flvjs.createPlayer({
