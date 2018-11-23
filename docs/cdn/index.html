@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,shrink-to-fit=no ">
+
+  <!--Bootstrap CSS-->
+  <link rel="stylesheet" href="../lib/bootstrap.min.css" >
+    <style>
+        video{
+            width: 900px;
+            height: auto;
+        }
+        .videoRow{
+            margin-top: 30px;
+        }
+        #previewLabel{
+            display: block;
+        }
+    </style>
+  <title>cdn拉流</title>
+</head>
+<body>  
+ 
+  <div class="container" style="margin-top: 1%;">
+
+      <div class="row">
+  
+          <div class="col-sm">
+              <div class="form-group">
+                  <label for="audioList">音频设备</label>
+                  <select  class="form-control d-inline" id="audioList" style="width: 70%">
+  
+                  </select>
+              </div>
+          </div>
+  
+  
+          <div class="col-sm">
+              <div class="form-group">
+                  <label for="videoList">视频设备</label>
+                  <select  class="form-control d-inline" id="videoList" style="width: 70%">
+  
+                  </select>
+              </div>
+          </div>
+  
+          <div class="col-sm">
+              <div class="form-group">
+                  <label for="roomId">房间号</label>
+                  <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
+                         value="zego_869703025507186" aria-describedby="emailHelp" placeholder="请输入房间号">
+              </div>
+          </div>
+  
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(CDN拉流)</button>
+        </div>       
+      </div>
+
+      <div class="row videoRow">
+          <div class="col-sm">
+            <video id="test" autoplay muted playsinline></video>
+          </div>
+      </div>
+
+
+</body>
+<script src="../lib/jquery-3.3.1.min.js"></script>
+<script src="../lib/popper.min.js"></script>
+<script src="../lib/bootstrap.min.js" ></script>
+<!-- zego js sdk -->
+<script src="../lib/jZego-rtc.js"></script>
+<script src="../common.js?v=011"></script>
+<script src="./flv.min.js"></script>
+<script>
+
+  var videoElement = document.getElementById('test');
+
+  function init() {
+
+  zg = new ZegoClient();
+
+  //测试用代码，客户请忽略  start
+  if (location.search) {
+      let _arr_config = location.search.substr(1).split('&');
+      _arr_config.forEach(function (item)  {
+          var key = item.split('=')[0], value = item.split('=')[1];
+
+          if (value && _config.hasOwnProperty(key)) {
+              _config[key] = decodeURIComponent(value);
+          } else if (value && _otherConfig.hasOwnProperty(key)) {
+              _otherConfig[key] = decodeURIComponent(value);
+          }
+      });
+  }
+  //测试用代码，客户请忽略  end
+
+
+  console.log("config param:" + JSON.stringify(_config));
+
+  _config.appid = 1739272706;
+  zg.config(_config);
+
+  //测试用代码，客户请忽略  start
+  if(_otherConfig.signal){
+      zg.setCustomSignalUrl(_otherConfig.signal);
+  }
+  //测试用代码，客户请忽略  end
+
+
+  enumDevices();
+}
+
+//覆盖common.js中的loginSuccess
+function loginSuccess(streamList, type) {
+
+
+  var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
+
+  //获取当前浏览器类型
+  var browser = getBrowser ();
+
+  //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
+  if (streamList.length >= maxNumber) {
+    alert('房间太拥挤，换一个吧！');
+    leaveRoom();
+    return;
+  }
+
+  if(browser == "Safari"){
+
+    videoElement.src = streamList[0].urls_hls[0]
+    videoElement.play().catch(function(err){
+      alert(err)
+    })
+  
+  }else if(streamList.length !== 0){
+    
+    var flvUrl = streamList[0].urls_flv[0] ;
+    //若支持flv.js
+    if (flvjs.isSupported()) {
+    var flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: flvUrl
+    });
+    flvPlayer.attachMediaElement(videoElement);
+    flvPlayer.load();
+    flvPlayer.play().catch(function(error){
+      alert(err)
+    });
+    }
+    
+  }else {
+    alert("未找到流");
+  }
+  
+  
+
+  console.log(`login success`);
+
+  loginRoom = true;
+
+  // 监听sdk回掉
+  listen();
+
+  //开始预览本地视频
+  type === 1 && doPreviewPublish();
+}
+
+</script>
+</html>
