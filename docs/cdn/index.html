@@ -49,7 +49,7 @@
               <div class="form-group">
                   <label for="roomId">房间号</label>
                   <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
-                         value="zego_869703025507186" aria-describedby="emailHelp" placeholder="请输入房间号">
+                        aria-describedby="emailHelp" placeholder="请输入房间号">
               </div>
           </div>
   
@@ -63,7 +63,7 @@
 
       <div class="row videoRow">
           <div class="col-sm">
-            <video id="test" autoplay muted playsinline></video>
+            <video id="test" autoplay playsinline></video>
           </div>
       </div>
 
@@ -79,6 +79,13 @@
 <script>
 
   var videoElement = document.getElementById('test');
+
+  $('#openRoom').click(function(){
+    openRoom($('#roomId').val(), 2)
+    videoElement.play()             //解决移动端无法自动播放
+  })
+
+
 
   function init() {
 
@@ -134,9 +141,6 @@ function loginSuccess(streamList, type) {
   if(browser == "Safari"){
 
     videoElement.src = streamList[0].urls_hls[0]
-    videoElement.play().catch(function(err){
-      alert(err)
-    })
   
   }else if(streamList.length !== 0){
     
@@ -144,14 +148,11 @@ function loginSuccess(streamList, type) {
     //若支持flv.js
     if (flvjs.isSupported()) {
     var flvPlayer = flvjs.createPlayer({
-        type: 'flv',
-        url: flvUrl
+      type: 'flv',
+      url: flvUrl
     });
     flvPlayer.attachMediaElement(videoElement);
     flvPlayer.load();
-    flvPlayer.play().catch(function(error){
-      alert(err)
-    });
     }
     
   }else {
@@ -167,8 +168,6 @@ function loginSuccess(streamList, type) {
   // 监听sdk回掉
   listen();
 
-  //开始预览本地视频
-  type === 1 && doPreviewPublish();
 }
 
 </script>
