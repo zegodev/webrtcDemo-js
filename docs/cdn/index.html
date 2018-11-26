@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="../lib/bootstrap.min.css" >
     <style>
         video{
-            width: 900px;
+            width: 320px;
             height: auto;
         }
         .videoRow{
@@ -57,14 +57,19 @@
 
       <div class="row">
         <div class="col-sm">
+          <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
           <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(CDN拉流)</button>
         </div>       
       </div>
 
       <div class="row videoRow">
-          <div class="col-sm">
-            <video id="test" autoplay playsinline></video>
-          </div>
+        <div class="col-sm">
+            <label id="previewLabel"></label>
+            <video id="previewVideo" autoplay muted playsinline></video>
+        </div>
+        <div class="col-sm">
+          <video id="test" autoplay playsinline></video>
+        </div>
       </div>
 
 
@@ -84,19 +89,16 @@
     openRoom($('#roomId').val(), 2)
     videoElement.play()             //解决移动端无法自动播放
   })
-
-
-
+  
   function init() {
 
-  zg = new ZegoClient();
+    zg = new ZegoClient();
 
   //测试用代码，客户请忽略  start
-  if (location.search) {
+    if (location.search) {
       let _arr_config = location.search.substr(1).split('&');
       _arr_config.forEach(function (item)  {
           var key = item.split('=')[0], value = item.split('=')[1];
-
           if (value && _config.hasOwnProperty(key)) {
               _config[key] = decodeURIComponent(value);
           } else if (value && _otherConfig.hasOwnProperty(key)) {
@@ -106,31 +108,21 @@
   }
   //测试用代码，客户请忽略  end
 
-
   console.log("config param:" + JSON.stringify(_config));
-
   _config.appid = 1739272706;
   zg.config(_config);
-
   //测试用代码，客户请忽略  start
   if(_otherConfig.signal){
       zg.setCustomSignalUrl(_otherConfig.signal);
   }
   //测试用代码，客户请忽略  end
-
-
   enumDevices();
 }
 
 //覆盖common.js中的loginSuccess
 function loginSuccess(streamList, type) {
-
-
   var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
-
-  //获取当前浏览器类型
-  var browser = getBrowser ();
-
+ 
   //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
   if (streamList.length >= maxNumber) {
     alert('房间太拥挤，换一个吧！');
@@ -138,35 +130,46 @@ function loginSuccess(streamList, type) {
     return;
   }
 
-  if(browser == "Safari"){
-    videoElement.src = streamList[0].urls_hls[0]
-  }else if(streamList.length !== 0){
-    console.log(streamList)
-    var flvUrl = streamList[0].urls_https_flv[0] ;
-    //若支持flv.js
-    if (flvjs.isSupported()) {
-    var flvPlayer = flvjs.createPlayer({
-      type: 'flv',
-      url: flvUrl
-    });
-    flvPlayer.attachMediaElement(videoElement);
-    flvPlayer.load();
+  if(type == 1){
+    useLocalStreamList = streamList;
+
+    $('.remoteVideo').html('');
+    $('#memberList').html('');
+    for (var index = 0; index < useLocalStreamList.length; index++) {
+      $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
+      $('#memberList').append('<option value="' + useLocalStreamList[index].anchor_id_name + '">' + useLocalStreamList[index].anchor_nick_name + '</option>');
+      play(useLocalStreamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
     }
-    
-  }else {
-    alert("未找到流");
+  }else if(type == 2){
+     //获取当前浏览器类型
+    var browser = getBrowser ();
+
+    if(browser == "Safari"){
+      videoElement.src = streamList[0].urls_hls[0]
+    }else if(streamList.length !== 0){
+      console.log(streamList)
+      var flvUrl = streamList[0].urls_https_flv[0] ;
+      //若支持flv.js
+      if (flvjs.isSupported()) {
+      var flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: flvUrl
+      });
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
+      }
+    }else {
+      alert("未找到流");
+    }
   }
   
-  
-
   console.log(`login success`);
-
   loginRoom = true;
-
   // 监听sdk回掉
   listen();
 
+  //开始预览本地视频
+  type === 1 && doPreviewPublish();
 }
-
 </script>
 </html>
