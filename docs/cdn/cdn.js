@@ -1,6 +1,6 @@
 var videoElement = document.getElementById('test');
 
-  $('#openRoom').click(function(){
+  $('#openRoomNew').click(function(){
     openRoom($('#roomId').val(), 2)
     videoElement.play()             //解决移动端无法自动播放
   })
@@ -28,6 +28,7 @@ function init() {
 
   console.log("config param:" + JSON.stringify(_config));
 
+  _config.appid = _config.appid*1;
   zg.config(_config);
   //测试用代码，客户请忽略  start
   if(_otherConfig.signal){
@@ -55,9 +56,12 @@ function loginSuccess(streamList, type) {
      //获取当前浏览器类型
     var browser = getBrowser ();
 
-    if(browser == "Safari"){
+    if(browser == "Safari" && useLocalStreamList.length !== 0 && useLocalStreamList[0].urls_hls){
+
       videoElement.src = useLocalStreamList[0].urls_hls[0]
-    }else if(useLocalStreamList.length !== 0){
+
+    }else if(useLocalStreamList.length !== 0 && useLocalStreamList[0].urls_https_flv){
+
       var flvUrl = useLocalStreamList[0].urls_https_flv[0] ;
       //若支持flv.js
       if (flvjs.isSupported()) {
@@ -67,6 +71,7 @@ function loginSuccess(streamList, type) {
       });
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
+      
       }
     }else {
       alert("未找到流");
