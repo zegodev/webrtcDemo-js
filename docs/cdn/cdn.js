@@ -1,6 +1,6 @@
 var videoElement = document.getElementById('test');
 
-  $('#openRoom').click(function(){
+  $('#openRoomNew').click(function(){
     openRoom($('#roomId').val(), 2)
     videoElement.play()             //解决移动端无法自动播放
   })
