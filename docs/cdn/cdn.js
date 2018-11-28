@@ -55,9 +55,9 @@ function loginSuccess(streamList, type) {
      //获取当前浏览器类型
     var browser = getBrowser ();
 
-    if(browser == "Safari"){
+    if(browser == "Safari" && useLocalStreamList.length !== 0 && useLocalStreamList[0].urls_hls){
       videoElement.src = useLocalStreamList[0].urls_hls[0]
-    }else if(useLocalStreamList.length !== 0){
+    }else if(useLocalStreamList.length !== 0 && useLocalStreamList[0].urls_https_flv){
       var flvUrl = useLocalStreamList[0].urls_https_flv[0] ;
       //若支持flv.js
       if (flvjs.isSupported()) {
