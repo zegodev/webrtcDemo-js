@@ -132,7 +132,7 @@ function handleStreamList(streamList, streamId){
         })
       }  
     }
-  }else if([pro == 'https:']){
+  }else if(pro == 'https:'){
     for(let key in flv){
       if(flv[key]){
         console.log(flv[key])
