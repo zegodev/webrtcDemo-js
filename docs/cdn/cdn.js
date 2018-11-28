@@ -2,6 +2,7 @@ var videoElement = document.getElementById('test');
 
   $('#openRoomNew').click(function(){
     openRoom($('#roomId').val(), 2)
+    videoElement.play()             //解决移动端无法自动播放
   })
 
 //覆盖common.js中的init
@@ -36,7 +37,7 @@ function init() {
   //测试用代码，客户请忽略  end
   enumDevices();
 
-  videoElement.play()             //解决移动端无法自动播放
+  
 }
 
 //覆盖common.js中的loginSuccess
@@ -72,13 +73,11 @@ function loginSuccess(streamList, type) {
       });
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
-      
       }
     }else {
       alert("未找到流");
     }
-
-    
+   
   }
   
   console.log(`login success`);
