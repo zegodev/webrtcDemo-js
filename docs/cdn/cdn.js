@@ -10,6 +10,8 @@ function init() {
 
   zg = new ZegoClient();
 
+  _config.appid = 1739272706;
+
   //测试用代码，客户请忽略  start
     if (location.search) {
       let _arr_config = location.search.substr(1).split('&');
@@ -25,7 +27,7 @@ function init() {
   //测试用代码，客户请忽略  end
 
   console.log("config param:" + JSON.stringify(_config));
-  _config.appid = 1739272706;
+
   zg.config(_config);
   //测试用代码，客户请忽略  start
   if(_otherConfig.signal){
