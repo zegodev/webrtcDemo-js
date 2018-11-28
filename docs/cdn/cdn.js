@@ -124,16 +124,25 @@ function handleStreamList(streamList, streamId){
         }
       })
     }
-  }else if(pro == 'http:'){
+  }else if([pro == 'http:']){
     for(let key in flv){
       if(flv[key]){
+        console.log(flv[key])
         flv[key].forEach(function(item){
           if(item.indexOf('http')!== -1 || item.indexOf('https')!== -1) streamListUrl.push(item)
         })
       }  
     }
+  }else if([pro == 'https:']){
+    for(let key in flv){
+      if(flv[key]){
+        console.log(flv[key])
+        flv[key].forEach(function(item){
+          if(item.indexOf('https')!== -1) streamListUrl.push(item)
+        })
+      }  
+    }
   }
-
   console.log(streamListUrl)
   
   return streamListUrl
