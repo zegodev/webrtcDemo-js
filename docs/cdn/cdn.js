@@ -2,7 +2,6 @@ var videoElement = document.getElementById('test');
 
   $('#openRoomNew').click(function(){
     openRoom($('#roomId').val(), 2)
-    videoElement.play()             //解决移动端无法自动播放
   })
 
 //覆盖common.js中的init
@@ -54,7 +53,7 @@ function loginSuccess(streamList, type) {
 
   useLocalStreamList = handleStreamList(streamList)
 
-  console.log(useLocalStreamList)
+  console.log(streamList[0],useLocalStreamList)
 
   if(type == 2){
      //获取当前浏览器类型

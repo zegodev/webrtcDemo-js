@@ -364,7 +364,7 @@ function handleStreamList(streamList, streamId){
 
   if(browser == 'Safari'){
     for(let key in hls) {
-      key.forEach(function(){
+      hls[key].forEach(function(){
         for(let key in flv){
           if(flv[key]){
             flv[key].forEach(function(item){
