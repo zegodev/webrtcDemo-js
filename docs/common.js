@@ -365,10 +365,15 @@ function handleStreamList(streamList, streamId){
   if(browser == 'Safari'){
     for(let key in hls) {
       hls[key].forEach(function(){
-        for(let key in flv){
-          if(flv[key]){
-            flv[key].forEach(function(item){
-              if(item.indexOf(pro)!== -1) streamListUrl.push(item)
+        for(let key in hls){
+          if(hls[key]){
+            hls[key].forEach(function(item){
+              if(pro == 'http:'){
+                if(item.indexOf('http')!== -1 || item.indexOf('https')!== -1) streamListUrl.push(item)
+              } else if(item.indexOf(pro)!== -1){
+                streamListUrl.push(item)
+              }
+              
             })
           }  
         }
