@@ -43,8 +43,6 @@ function init() {
 //覆盖common.js中的loginSuccess
 function loginSuccess(streamList, type) {
 
-  
-
   var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
 
   //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
@@ -55,6 +53,8 @@ function loginSuccess(streamList, type) {
   }
 
   useLocalStreamList = handleStreamList(streamList)
+
+  console.log(useLocalStreamList)
 
   if(type == 2){
      //获取当前浏览器类型
@@ -90,59 +90,3 @@ function loginSuccess(streamList, type) {
   type === 1 && doPreviewPublish();
 }
 
-function handleStreamList(streamList, streamId){
-  var flv = {};
-  var hls = {};
-  var rtmp = {};
-
-  var streamListUrl = []
-
-  for (let key in streamList[0]){
-    if (key == 'urls_flv' || key == 'urls_https_flv' ){
-      flv[key] = streamList[0][key]
-    }
-    if (key == 'urls_hls' || key == 'urls_https_hls'){
-      hls[key] = streamList[0][key]
-    }
-    if (key == 'urls_rtmp' ){
-      rtmp[key] = streamList[0][key]
-    }
-  }
-
-  var pro = window.location.protocol
-  var browser = getBrowser ()
-
-  if(browser == 'Safari'){
-    for(let key in hls) {
-      key.forEach(function(){
-        for(let key in flv){
-          if(flv[key]){
-            flv[key].forEach(function(item){
-              if(item.indexOf(pro)!== -1) streamListUrl.push(item)
-            })
-          }  
-        }
-      })
-    }
-  }else if(pro == 'http:'){
-    for(let key in flv){
-      if(flv[key]){
-        flv[key].forEach(function(item){
-          if(item.indexOf('http')!== -1 || item.indexOf('https')!== -1) streamListUrl.push(item)
-        })
-      }  
-    }
-  }else if(pro == 'https:'){
-    for(let key in flv){
-      if(flv[key]){
-        console.log(flv[key])
-        flv[key].forEach(function(item){
-          if(item.indexOf('https')!== -1) streamListUrl.push(item)
-        })
-      }  
-    }
-  }
-  console.log(streamListUrl)
-  
-  return streamListUrl
-}
