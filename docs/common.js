@@ -372,8 +372,7 @@ function handleStreamList(streamList, streamId){
                 if(item.indexOf('http')!== -1 || item.indexOf('https')!== -1) streamListUrl.push(item)
               } else if(item.indexOf(pro)!== -1){
                 streamListUrl.push(item)
-              }
-              
+              }             
             })
           }  
         }
