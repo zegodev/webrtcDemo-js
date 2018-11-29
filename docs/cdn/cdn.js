@@ -1,7 +1,11 @@
 var videoElement = document.getElementById('test');
 
-  $('#openRoomNew').click(function(){
-    openRoom($('#roomId').val(), 2)
+  $('#playVideo').click(function(){
+    videoElement.play()
+  })
+
+  $('html').one('touchstart',function(){
+    videoElement.play()
   })
 
 //覆盖common.js中的init
@@ -79,7 +83,6 @@ function loginSuccess(streamList, type) {
     }else {
       alert("未找到流");
     }
-   
   }
   
   console.log(`login success`);
