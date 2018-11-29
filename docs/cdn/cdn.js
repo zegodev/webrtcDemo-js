@@ -74,6 +74,7 @@ function loginSuccess(streamList, type) {
       });
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
+      flvPlayer.play();
       }
     }else {
       alert("未找到流");
