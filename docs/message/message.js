@@ -4,31 +4,11 @@ function init() {
     zg.setUserStateUpdate(true);//重要  启动用户变化监听
     console.log("config param:" + JSON.stringify(_config));
 
-    //测试用代码，客户请忽略  start
-    if (location.search) {
-        let _arr_config = location.search.substr(1).split('&');
-        _arr_config.forEach(function (item)  {
-            var key = item.split('=')[0], value = item.split('=')[1];
+    //内调测试用代码，客户请忽略  start
+    setConfig(zg);
+    //内调测试用代码，客户请忽略  end
 
-            if (value && _config.hasOwnProperty(key)) {
-                _config[key] = decodeURIComponent(value);
-            } else if (value && _otherConfig.hasOwnProperty(key)) {
-                _otherConfig[key] = decodeURIComponent(value);
-            }
-        });
-    }
-    //测试用代码，客户请忽略  end
-
-    _config.appid = _config.appid*1;
     zg.config(_config);
-
-
-    //测试用代码，客户请忽略  start
-    if(_otherConfig.signal){
-        zg.setCustomSignalUrl(_otherConfig.signal);
-    }
-    //测试用代码，客户请忽略  end
-
     enumDevices();
 
 }

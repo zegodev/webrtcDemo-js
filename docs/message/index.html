@@ -6,16 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../lib/bootstrap.min.css" >
+    <link rel="stylesheet" href="../lib/bootstrap.min.css">
     <style>
-        video{
+        video {
             width: 320px;
             height: auto;
         }
-        .videoRow{
+
+        .videoRow {
             margin-top: 30px;
         }
-        #previewLabel{
+
+        #previewLabel {
             display: block;
         }
     </style>
@@ -30,7 +32,7 @@
         <div class="col-sm">
             <div class="form-group">
                 <label for="audioList">音频设备</label>
-                <select  class="form-control d-inline" id="audioList" style="width: 70%">
+                <select class="form-control d-inline" id="audioList" style="width: 70%">
 
                 </select>
             </div>
@@ -40,7 +42,7 @@
         <div class="col-sm">
             <div class="form-group">
                 <label for="videoList">视频设备</label>
-                <select  class="form-control d-inline" id="videoList" style="width: 70%">
+                <select class="form-control d-inline" id="videoList" style="width: 70%">
 
                 </select>
             </div>
@@ -57,9 +59,20 @@
         <div class="col-sm">
             <div class="form-group">
                 <label for="videoList">房间人员</label>
-                <select  class="form-control d-inline" id="memberList" style="width: 65%">
+                <select class="form-control d-inline" id="memberList" style="width: 65%">
 
                 </select>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <label for="roomId">流ID</label>
+                    <input type="email" class="form-control d-inline" id="streamID" style="width: 75%"
+                           aria-describedby="emailHelp" placeholder="请输入流ID">
+                </div>
             </div>
         </div>
 
@@ -94,7 +107,7 @@
 </body>
 <script src="../lib/jquery-3.3.1.min.js"></script>
 <script src="../lib/popper.min.js"></script>
-<script src="../lib/bootstrap.min.js" ></script>
+<script src="../lib/bootstrap.min.js"></script>
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js"></script>
 <script src="../common.js?v=010"></script>

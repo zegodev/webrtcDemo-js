@@ -73,17 +73,18 @@ function enumDevices() {
 function getParamByName(key) {
     var search = location.search;
 
-    if(!search||search == '?')return null;
-    search = search.replace('?','');
+    if (!search || search == '?') return null;
+    search = search.replace('?', '');
 
-    var param_arr = search.split('&'),param_map = {};
-    param_arr.forEach(function (item){
+    var param_arr = search.split('&'), param_map = {};
+    param_arr.forEach(function (item) {
         var _key = item.split('=')[0], value = item.split('=')[1];
         param_map[_key] = value;
     });
 
     return param_map[key];
 }
+
 function openRoom(roomId, type) {
 
     if (!roomId) {
@@ -131,8 +132,16 @@ function loginSuccess(streamList, type) {
         leaveRoom();
         return;
     }
+    if ($('#streamID').val()) {
+        useLocalStreamList = [{
+            anchor_id_name: 'custom',
+            stream_id: $('#streamID').val(),
+            anchor_nick_name: 'custom'
+        }, ...streamList];
+    } else {
+        useLocalStreamList = streamList;
+    }
 
-    useLocalStreamList = streamList;
 
     $('.remoteVideo').html('');
     $('#memberList').html('');
@@ -335,85 +344,85 @@ function leaveRoom() {
 }
 
 //用于筛选符合当前浏览器的流
-function handleStreamList(streamList, streamId){
-  var flv = {};
-  var hls = {};
-  var rtmp = {};
+function handleStreamList(streamList, streamId) {
+    var flv = {};
+    var hls = {};
+    var rtmp = {};
 
-  var streamListUrl = []
-  var index = 0
+    var streamListUrl = []
+    var index = 0
 
-  streamList.forEach(function(item,ind){
-    if (item.stream_id == streamId) index = ind
-  })
+    streamList.forEach(function (item, ind) {
+        if (item.stream_id == streamId) index = ind
+    })
 
-  for (let key in streamList[index]){
-    if (key == 'urls_flv' || key == 'urls_https_flv' ){
-      flv[key] = streamList[index][key]
-    }
-    if (key == 'urls_hls' || key == 'urls_https_hls'){
-      hls[key] = streamList[index][key]
-    }
-    if (key == 'urls_rtmp' ){
-      rtmp[key] = streamList[index][key]
-    }
-  }
-
-  var pro = window.location.protocol
-  var browser = getBrowser ()
-
-  if(browser == 'Safari'){
-    for(let key in hls) {
-      key.forEach(function(){
-        for(let key in flv){
-          if(flv[key]){
-            flv[key].forEach(function(item){
-              if(item.indexOf(pro)!== -1) streamListUrl.push(item)
-            })
-          }  
+    for (let key in streamList[index]) {
+        if (key == 'urls_flv' || key == 'urls_https_flv') {
+            flv[key] = streamList[index][key]
         }
-      })
+        if (key == 'urls_hls' || key == 'urls_https_hls') {
+            hls[key] = streamList[index][key]
+        }
+        if (key == 'urls_rtmp') {
+            rtmp[key] = streamList[index][key]
+        }
     }
-  }else if(pro == 'http:'){
-    for(let key in flv){
-      if(flv[key]){
-        flv[key].forEach(function(item){
-          if(item.indexOf('http')!== -1 || item.indexOf('https')!== -1) streamListUrl.push(item)
-        })
-      }  
+
+    var pro = window.location.protocol
+    var browser = getBrowser()
+
+    if (browser == 'Safari') {
+        for (let key in hls) {
+            key.forEach(function () {
+                for (let key in flv) {
+                    if (flv[key]) {
+                        flv[key].forEach(function (item) {
+                            if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                        })
+                    }
+                }
+            })
+        }
+    } else if (pro == 'http:') {
+        for (let key in flv) {
+            if (flv[key]) {
+                flv[key].forEach(function (item) {
+                    if (item.indexOf('http') !== -1 || item.indexOf('https') !== -1) streamListUrl.push(item)
+                })
+            }
+        }
+    } else if (pro == 'https:') {
+        for (let key in flv) {
+            if (flv[key]) {
+                flv[key].forEach(function (item) {
+                    if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                })
+            }
+        }
+    } else if (pro == 'rtmp:') {
+        for (let key in rtmp) {
+            if (rtmp[key]) {
+                rtmp[key].forEach(function (item) {
+                    if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                })
+            }
+        }
     }
-  }else if(pro == 'https:'){
-    for(let key in flv){
-      if(flv[key]){
-        flv[key].forEach(function(item){
-          if(item.indexOf(pro)!== -1) streamListUrl.push(item)
-        })
-      }  
-    }
-  }else if(pro == 'rtmp:'){
-    for(let key in rtmp){
-      if(rtmp[key]){
-        rtmp[key].forEach(function(item){
-          if(item.indexOf(pro)!== -1) streamListUrl.push(item)
-        })
-      }
-    }
-  }
-  
-  return streamListUrl.filter(function(ele,index,self){
-    return self.indexOf(ele) == index
-  })
+
+    return streamListUrl.filter(function (ele, index, self) {
+        return self.indexOf(ele) == index
+    })
 
 }
 
 
 var zg,
-    appid = getParamByName('appid')|| 1082937486,
+    appid = getParamByName('appid') || 1082937486,
     _config = {
-        appid: appid*1,
+        appid: appid * 1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom"+appid+"-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
+        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
@@ -436,34 +445,11 @@ function init() {
 
     zg = new ZegoClient();
 
-    //测试用代码，客户请忽略  start
-    if (location.search) {
-        let _arr_config = location.search.substr(1).split('&');
-        _arr_config.forEach(function (item)  {
-            var key = item.split('=')[0], value = item.split('=')[1];
+    //内调测试用代码，客户请忽略  start
+    setConfig(zg);
+    //内调测试用代码，客户请忽略  end
 
-            if (value && _config.hasOwnProperty(key)) {
-                _config[key] = decodeURIComponent(value);
-            } else if (value && _otherConfig.hasOwnProperty(key)) {
-                _otherConfig[key] = decodeURIComponent(value);
-            }
-        });
-    }
-    //测试用代码，客户请忽略  end
-
-
-    console.log("config param:" + JSON.stringify(_config));
-
-    _config.appid = _config.appid*1;
     zg.config(_config);
-
-    //测试用代码，客户请忽略  start
-    if(_otherConfig.signal){
-        zg.setCustomSignalUrl(_otherConfig.signal);
-    }
-    //测试用代码，客户请忽略  end
-
-
     enumDevices();
 }
 
@@ -499,7 +485,7 @@ function bindEvent() {
 }
 
 $(function () {
-    console.log('sdk version is',ZegoClient.getCurrentVersion());
+    console.log('sdk version is', ZegoClient.getCurrentVersion());
     if (ZegoClient.isSupportWebrtc()) {
         ZegoClient.isSupportH264(result => {
             bindEvent();
@@ -515,3 +501,45 @@ $(function () {
 
 
 });
+
+
+
+
+
+
+
+function setConfig(zg) {
+    //测试用代码，客户请忽略  start
+    if (location.search) {
+        let _arr_config = location.search.substr(1).split('&');
+        _arr_config.forEach(function (item) {
+            var key = item.split('=')[0], value = item.split('=')[1];
+
+            if (value && _config.hasOwnProperty(key)) {
+                _config[key] = decodeURIComponent(value);
+            } else if (value && _otherConfig.hasOwnProperty(key)) {
+                _otherConfig[key] = decodeURIComponent(value);
+            }
+        });
+    }
+    //测试用代码，客户请忽略  end
+
+
+    console.log("config param:" + JSON.stringify(_config));
+
+    _config.appid = _config.appid * 1;
+
+
+    //测试用代码，客户请忽略  start
+    if (_otherConfig.signal) {
+        zg.setCustomSignalUrl(_otherConfig.signal);
+    }
+
+    if(_otherConfig.cgi_token&&_otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token'){
+        $.get(_otherConfig.cgi_token,function (cgi_token) {
+            _otherConfig.cgi_token = cgi_token.data;
+            console.log(_otherConfig.cgi_token);
+        })
+    }
+    //测试用代码，客户请忽略  end
+}
