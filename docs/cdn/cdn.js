@@ -22,6 +22,78 @@ function init() {
 
 }
 
+//用于筛选符合当前浏览器的流
+function handleStreamList(streamList, streamId) {
+    var flv = {};
+    var hls = {};
+    var rtmp = {};
+
+    var streamListUrl = []
+    var index = 0
+
+    streamList.forEach(function (item, ind) {
+        if (item.stream_id == streamId) index = ind
+    })
+
+    for (let key in streamList[index]) {
+        if (key == 'urls_flv' || key == 'urls_https_flv') {
+            flv[key] = streamList[index][key]
+        }
+        if (key == 'urls_hls' || key == 'urls_https_hls') {
+            hls[key] = streamList[index][key]
+        }
+        if (key == 'urls_rtmp') {
+            rtmp[key] = streamList[index][key]
+        }
+    }
+
+    var pro = window.location.protocol
+    var browser = getBrowser()
+
+    if (browser == 'Safari') {
+        for (let key in hls) {
+            key.forEach(function () {
+                for (let key in flv) {
+                    if (flv[key]) {
+                        flv[key].forEach(function (item) {
+                            if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                        })
+                    }
+                }
+            })
+        }
+    } else if (pro == 'http:') {
+        for (let key in flv) {
+            if (flv[key]) {
+                flv[key].forEach(function (item) {
+                    if (item.indexOf('http') !== -1 || item.indexOf('https') !== -1) streamListUrl.push(item)
+                })
+            }
+        }
+    } else if (pro == 'https:') {
+        for (let key in flv) {
+            if (flv[key]) {
+                flv[key].forEach(function (item) {
+                    if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                })
+            }
+        }
+    } else if (pro == 'rtmp:') {
+        for (let key in rtmp) {
+            if (rtmp[key]) {
+                rtmp[key].forEach(function (item) {
+                    if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+                })
+            }
+        }
+    }
+
+    return streamListUrl.filter(function (ele, index, self) {
+        return self.indexOf(ele) == index
+    })
+
+}
+
 //覆盖common.js中的loginSuccess
 function loginSuccess(streamList, type) {
 
