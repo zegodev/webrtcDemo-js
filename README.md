@@ -157,9 +157,9 @@ function leaveRoom() {
 }
 ```
 
-7 录屏功能:web端目前只有pc的Chrome和火狐浏览器支持该功能，chrome需要安装[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)，火狐不需要
+7 录屏功能:web端目前只有pc的Chrome和火狐浏览器支持该功能，chrome需要安装[zego-chrome录屏插件](https://chrome.google.com/webstore/detail/screensharing-extension-b/kdniilocdopajembdlhneebfodcmjmeh?hl=zh-CN&authuser=1)，火狐不需要
 
-> chrome: 首先打开你的 Chrome 浏览器，点击屏幕右上方的扩展按钮，选择 更多工具 > 扩展程序。打开开发者模式 > 加载已解压的扩展程序 > 选择下载并解压的zego-Chrome录屏插件
+> chrome: chrome网上应用商店搜索 Screensharing Extension by Zego > 选择添加至chrome
 >
 ```js
 
