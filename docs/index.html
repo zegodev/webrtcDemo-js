@@ -18,6 +18,12 @@
         #previewLabel{
             display: block;
         }
+        .list-group{
+            width: 100%;
+        }
+        .list-group-item{
+            border: 0px;
+        }
     </style>
     <title>zego jssdk demo</title>
 </head>
@@ -26,15 +32,23 @@
 <div class="container" style="margin-top: 1%;">
     <div class="row">
         <ul class="list-group">
+            <li class="list-group-item"><h3>实时音视频Demo</h3></li>
+            <li class="list-group-item active" >基础能力</li>
             <li class="list-group-item" onclick="go('./base')"><a href="javascript:void (0)">基础推拉流</a></li>
+            <li class="list-group-item" onclick="go('./audio')"><a href="javascript:void (0)">纯音频</a></li>
+
+            <li class="list-group-item active" >进阶能力</li>
             <li class="list-group-item" onclick="go('./message')"><a href="javascript:void (0)">消息推送</a></li>
             <li class="list-group-item" onclick="go('./live')"><a href="javascript:void (0)">连麦</a></li>
-            <li class="list-group-item" onclick="go('./audio')"><a href="javascript:void (0)">纯音频</a></li>
             <li class="list-group-item" onclick="go('./auth')"><a href="javascript:void (0)">鉴权</a></li>
             <li class="list-group-item" onclick="go('./mix')"><a href="javascript:void (0)">混流</a></li>
             <li class="list-group-item" onclick="go('./screen')"><a href="javascript:void (0)">屏幕共享</a></li>
             <li class="list-group-item" onclick="go('./cdn')"><a href="javascript:void (0)">CDN拉流</a></li>
+
+            <li class="list-group-item active" >辅助工具</li>
+            <!--<li class="list-group-item" onclick="go('./abilitytest')"><a href="javascript:void (0)">WebRTC能力测试</a></li>-->
             <li class="list-group-item"><a href="https://github.com/zegodev/webrtcDemo-js/issues" target="_blank">常见问题</a></li>
+            <li class="list-group-item"><a href="https://github.com/zegodev/webrtcDemo-js">代码下载</a></li>
         </ul>
     </div>
 </div>
