@@ -51,21 +51,21 @@
         <p><a class="btn btn-success btn-lg" href="#" role="button" @click="startTest">开始测试</a></p>
       </div>
 
-      <div class="panel panel-info">
+      <div class="panel panel-primary">
         <div class="panel-heading"><h3>浏览器测试  <span v-cloak>{{state.webrtcState}}</span></h3></div>
-        <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成!!!'">
+        <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
             <div v-if="webRTC" class="alert alert-success">当前浏览器支持webrtc！！！</div>
             <div v-else class="alert alert-danger">当前浏览器暂不支持webrtc！！！</div>
         </div>
       </div>
 
-      <div class="panel panel-info">
+      <div class="panel panel-primary">
         <div class="panel-heading"><h3>音频输入  <span v-cloak>{{state.audioinputState}}</span></h3></div>
-        <div class="panel-body" v-cloak v-if="state.audioinputState == '检测完成!!!'">
+        <div class="panel-body" v-cloak v-if="state.audioinputState == '检测完成'">
               <div v-if="isAudioInput" >
                 <div class="alert alert-success">检测到音频输入设备！！！</div>
                 {{audioinputInfos}}
-                <div class="progress">
+                <div class="progress" v-if="isSound">
                   <div class="progress-bar" role="progressbar" :aria-valuenow="sounder" aria-valuemin="0" aria-valuemax="100" :style="{width: sounder*4 + '%'}">
                 </div>
                 </div>
@@ -75,7 +75,7 @@
         </div>
       </div>
 
-      <div class="panel panel-info">
+      <div class="panel panel-primary">
         <div class="panel-heading"><h3>音频输出   <span v-cloak>{{state.audiooutputState}}</span><h3></div>
         <div class="panel-body">
           <audio controls>
@@ -87,9 +87,9 @@
         </div>
       </div>
 
-      <div class="panel panel-info">
+      <div class="panel panel-primary">
         <div class="panel-heading"><h3>视频输入  <span v-cloak>{{state.videoinputState}}</span></h3></div>
-        <div class="panel-body" v-cloak v-if="state.videoinputState == '检测完成!!!'">
+        <div class="panel-body" v-cloak v-if="state.videoinputState == '检测完成'">
           <div v-if="isVideoInput">
             <div class="alert alert-success">检测到视频输入设备！！！</div>
             {{videoinputInfos}}
@@ -98,9 +98,18 @@
         </div>
       </div>
 
-      <div class="panel panel-info">
+      <div class="panel panel-primary">
+        <div class="panel-heading"><h3>分辨率检测 <span v-cloak>{{state.resolutionState}}</span></h3></div>
+        <div class="panel-body" v-cloak v-if="state.resolutionState === '检测完成'">
+          <p>240 X 320: {{resolutionState.oneState}} </p>
+          <p>480 X 640: {{resolutionState.twoState}} </p>
+          <p>720 X 1280 {{resolutionState.threeState}} </p>
+        </div>
+      </div>
+
+      <div class="panel panel-primary">
         <div class="panel-heading"><h3>H264编码  <span v-cloak>{{state.H264State}}</span></h3></div>
-        <div class="panel-body" v-cloak v-if="state.H264State === '检测完成!!!'">
+        <div class="panel-body" v-cloak v-if="state.H264State === '检测完成'">
           <div v-if="isH264" class="alert alert-success">当前浏览器支持H264编码！！！</div>
           <div v-else class="alert alert-danger">当前浏览器暂不支持！！！</div>
         </div>
@@ -116,6 +125,7 @@
 <script src="../lib/vue.min.js"></script>
 <script src="../lib/jquery-3.3.1.min.js"></script>
 <script src="../lib/bootstrap.js"></script>
+<script src="../common.js"></script>
 <script>
 
   let vm = new Vue({
@@ -126,27 +136,22 @@
         audioinputState:"",
         audiooutputState:"",
         videoinputState:"",
+        resolutionState:"",
         H264State:""
       },
       webRTC:false,
       isAudioInput:false,
       isVideoInput:false,
       isH264:false,
+      isSound:false,
       audioinputInfos:"",
       videoinputInfos:"",
       audiooutputInfos:"",
-      sounder:""
-    },
-    computed:{
-      isHTTPs (){
-        return location.protocol === 'https'
-      },
-      canEnumerate () {
-        if (typeof MediaStreamTrack !== 'undefined' && 'getSources' in MediaStreamTrack) {
-          return true;
-        } else if (navigator.mediaDevices && !!navigator.mediaDevices.enumerateDevices) {
-          return true;
-  }
+      sounder:"",
+      resolutionState:{
+        oneState:"不支持",
+        twoState:"不支持",
+        threeState:"不支持"
       }
     },
     methods:{
@@ -155,22 +160,26 @@
         this.state.webrtcState = "正在检测..."
         setTimeout(()=>{
           this.webRTC = ZegoClient.isSupportWebrtc()
-          this.state.webrtcState = "检测完成!!!"
+          this.state.webrtcState = "检测完成"
           this.state.audioinputState = "正在检测..."
           this.state.videoinputState = "正在检测..."
           setTimeout(()=>{
             this.checkDeviceSupport()
             this.checkMicrophoneSound()
-            this.state.audioinputState = "检测完成!!!"
-            this.state.videoinputState = "检测完成!!!"
-            this.state.H264State = "正在检测..."
+            this.state.audioinputState = "检测完成"
+            this.state.videoinputState = "检测完成"
+            this.state.resolutionState = "正在检测..."
             setTimeout(()=>{
-              ZegoClient.isSupportH264((param) => {
-                  this.isH264 = param
-                },err => {
-                  console.log(err)
-              })
-              this.state.H264State = "检测完成!!!"
+              this.checkResolution()
+              this.state.resolutionState = "检测完成"
+              setTimeout(() =>{
+                ZegoClient.isSupportH264((param) => {
+                    this.isH264 = param
+                  },err => {
+                    console.log(err)
+                })
+                this.state.H264State = "检测完成"
+              },2500)
             },2500)
           },2500)
         },2500) 
@@ -184,8 +193,6 @@
         let speakers = []
 
         ZegoClient.enumDevices(devicesinfo => {
-
-          console.log(devicesinfo)
 
           if (devicesinfo.cameras.length > 0){
             devicesinfo.cameras.forEach(item => {
@@ -214,33 +221,57 @@
       },
       
       checkMicrophoneSound () {
+        
+        if(!window.AudioContext) return
         window.AudioContext = window.AudioContext || window.webkitAudioContext
         let context = new AudioContext()
         let script = context.createScriptProcessor(2048,1,1)
         script.onaudioprocess = event =>{
           let input = event.inputBuffer.getChannelData(0)
           let instant = 0.0
-          // let slow = 0.0
-          // let clip = 0.0
           let sum = 0.0
-          // let clipcount = 0
           for (let i=0; i<input.length; ++i){
             sum += input[i] * input[i]
-            // if(Math.abs(input[i]) >0.99){
-            //   clipcount +=1
-            // }
           }
           instant = Math.sqrt(sum/input.length)
-          // slow = 0.95 * slow + 0.05 * instant
-          // clip = clipcount / input.length
-          this.sounder = instant * 100
-          
+          this.sounder = instant * 1000
         }
         
         navigator.getUserMedia({audio:true}, stream => {
           let audioinput = context.createMediaStreamSource(stream)
           audioinput.connect(script)
           script.connect(context.destination)
+          this.isSound = true
+        })
+      },
+      
+      checkResolution (){
+        let videoInput
+        let video = document.createElement("video")
+        if(!navigator.getUserMedia) return
+        navigator.getUserMedia({video:true}, stream => {
+          videoInput = stream.getVideoTracks()[0].label
+        })
+        let previewConfig = {
+          "audio":false,
+          "audioInput":null,
+          "video":true,
+          "videoInput":videoInput,
+          "videoQuality":1,
+          "horizontal":true,
+          "externalCapture": false,
+          "externalMediaStream":null
+        }
+        zg.startPreview(video,previewConfig,()=>{
+          this.resolutionState.oneState = "支持"
+        })
+        previewConfig.videoQuality = 2
+        zg.startPreview(video,previewConfig,()=>{
+          this.resolutionState.twoState = "支持"
+        })
+        previewConfig.videoQuality = 3
+        zg.startPreview(video,previewConfig,()=>{
+          this.resolutionState.threeState = "支持"
         })
       }
 
