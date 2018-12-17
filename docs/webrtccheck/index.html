@@ -48,11 +48,11 @@
       <div class="jumbotron">
         <h1>webrtc测试</h1>
         <p class="lead">此网站用于测试浏览器是否支持webrtc</p>
-        <p><a class="btn btn-success btn-lg" href="#" role="button" @click="startTest">开始测试</a></p>
+        <p><a class="btn btn-success btn-lg" href="#" role="button" @click="startTest" >开始测试</a></p>
       </div>
 
-      <div class="panel panel-primary">
-        <div class="panel-heading"><h3>浏览器测试  <span v-cloak>{{state.webrtcState}}</span></h3></div>
+      <div class="panel panel-primary" >
+        <div class="panel-heading" style="background-color:#347ef6"><h3>浏览器测试  <span v-cloak>{{state.webrtcState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
             <div v-if="webRTC" class="alert alert-success">当前浏览器支持webrtc！！！</div>
             <div v-else class="alert alert-danger">当前浏览器暂不支持webrtc！！！</div>
@@ -60,7 +60,7 @@
       </div>
 
       <div class="panel panel-primary">
-        <div class="panel-heading"><h3>音频输入  <span v-cloak>{{state.audioinputState}}</span></h3></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h3>音频输入  <span v-cloak>{{state.audioinputState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.audioinputState == '检测完成'">
               <div v-if="isAudioInput" >
                 <div class="alert alert-success">检测到音频输入设备！！！</div>
@@ -76,7 +76,7 @@
       </div>
 
       <div class="panel panel-primary">
-        <div class="panel-heading"><h3>音频输出   <span v-cloak>{{state.audiooutputState}}</span><h3></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h3>音频输出   <span v-cloak>{{state.audiooutputState}}</span><h3></div>
         <div class="panel-body">
           <audio controls>
             <source src="../lib/test.mp3">
@@ -88,7 +88,7 @@
       </div>
 
       <div class="panel panel-primary">
-        <div class="panel-heading"><h3>视频输入  <span v-cloak>{{state.videoinputState}}</span></h3></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h3>视频输入  <span v-cloak>{{state.videoinputState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.videoinputState == '检测完成'">
           <div v-if="isVideoInput">
             <div class="alert alert-success">检测到视频输入设备！！！</div>
@@ -99,7 +99,7 @@
       </div>
 
       <div class="panel panel-primary">
-        <div class="panel-heading"><h3>分辨率检测 <span v-cloak>{{state.resolutionState}}</span></h3></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h3>分辨率检测 <span v-cloak>{{state.resolutionState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.resolutionState === '检测完成'">
           <p>240 X 320: {{resolutionState.oneState}} </p>
           <p>480 X 640: {{resolutionState.twoState}} </p>
@@ -108,7 +108,7 @@
       </div>
 
       <div class="panel panel-primary">
-        <div class="panel-heading"><h3>H264编码  <span v-cloak>{{state.H264State}}</span></h3></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h3>H264编码  <span v-cloak>{{state.H264State}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.H264State === '检测完成'">
           <div v-if="isH264" class="alert alert-success">当前浏览器支持H264编码！！！</div>
           <div v-else class="alert alert-danger">当前浏览器暂不支持！！！</div>
@@ -149,9 +149,9 @@
       audiooutputInfos:"",
       sounder:"",
       resolutionState:{
-        oneState:"不支持",
-        twoState:"不支持",
-        threeState:"不支持"
+        oneState:"",
+        twoState:"",
+        threeState:""
       }
     },
     methods:{
@@ -222,10 +222,20 @@
       
       checkMicrophoneSound () {
         
-        if(!window.AudioContext) return
-        window.AudioContext = window.AudioContext || window.webkitAudioContext
+        
+        window.AudioContext = window.AudioContext || window.webkitAudioContext || mozAudioContext
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
+        if(!window.AudioContext || !navigator.getUserMedia) return
         let context = new AudioContext()
         let script = context.createScriptProcessor(2048,1,1)
+
+        navigator.getUserMedia({audio:true}, stream => {
+          let audioinput = context.createMediaStreamSource(stream)
+          audioinput.connect(script)
+          script.connect(context.destination)
+          this.isSound = true
+        })
+
         script.onaudioprocess = event =>{
           let input = event.inputBuffer.getChannelData(0)
           let instant = 0.0
@@ -237,22 +247,19 @@
           this.sounder = instant * 100
         }
         
-        navigator.getUserMedia({audio:true}, stream => {
-          let audioinput = context.createMediaStreamSource(stream)
-          audioinput.connect(script)
-          script.connect(context.destination)
-          this.isSound = true
-        })
+        
       },
       
       checkResolution (){
         let videoInput 
         ZegoClient.enumDevices(devicesinfo => {
           videoInput = devicesinfo.cameras[0].label
+          this.checkDeviceSupport()     //有些浏览器需调用过摄像头才能看到label
         })
         let video = document.createElement('video')
         let previewConfig = {}
 
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
         if(!navigator.getUserMedia) return
 
         previewConfig = {
@@ -265,7 +272,7 @@
           "externalCapture": false,
           "externalMediaStream":null
         }
-        console.log(video,previewConfig)
+        
         zg.startPreview(video,previewConfig,()=>{
           this.resolutionState.oneState = "支持"
           zg.stopPreview(video)
@@ -279,8 +286,17 @@
             zg.startPreview(video,previewConfig,()=>{
               this.resolutionState.threeState = "支持"
               zg.stopPreview(video)
+            },err => {
+              this.resolutionState.threeState = "不支持"
+              zg.stopPreview(video)
             })
+          },err => {
+            this.resolutionState.twoState = "不支持"
+            zg.stopPreview(video)
           })  
+        },err => {
+          this.resolutionState.oneState = "不支持"
+          zg.stopPreview(video)
         })  
         
         
