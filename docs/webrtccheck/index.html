@@ -234,7 +234,7 @@
             sum += input[i] * input[i]
           }
           instant = Math.sqrt(sum/input.length)
-          this.sounder = instant * 1000
+          this.sounder = instant * 100
         }
         
         navigator.getUserMedia({audio:true}, stream => {
@@ -246,13 +246,16 @@
       },
       
       checkResolution (){
-        let videoInput
-        let video = document.createElement("video")
-        if(!navigator.getUserMedia) return
-        navigator.getUserMedia({video:true}, stream => {
-          videoInput = stream.getVideoTracks()[0].label
+        let videoInput 
+        ZegoClient.enumDevices(devicesinfo => {
+          videoInput = devicesinfo.cameras[0].label
         })
-        let previewConfig = {
+        let video = document.createElement('video')
+        let previewConfig = {}
+
+        if(!navigator.getUserMedia) return
+
+        previewConfig = {
           "audio":false,
           "audioInput":null,
           "video":true,
@@ -262,17 +265,26 @@
           "externalCapture": false,
           "externalMediaStream":null
         }
+        console.log(video,previewConfig)
         zg.startPreview(video,previewConfig,()=>{
           this.resolutionState.oneState = "支持"
-        })
-        previewConfig.videoQuality = 2
-        zg.startPreview(video,previewConfig,()=>{
-          this.resolutionState.twoState = "支持"
-        })
-        previewConfig.videoQuality = 3
-        zg.startPreview(video,previewConfig,()=>{
-          this.resolutionState.threeState = "支持"
-        })
+          zg.stopPreview(video)
+
+          previewConfig.videoQuality = 2
+          zg.startPreview(video,previewConfig,()=>{
+            this.resolutionState.twoState = "支持"
+            zg.stopPreview(video)
+
+            previewConfig.videoQuality = 3
+            zg.startPreview(video,previewConfig,()=>{
+              this.resolutionState.threeState = "支持"
+              zg.stopPreview(video)
+            })
+          })  
+        })  
+        
+        
+        
       }
 
     }
