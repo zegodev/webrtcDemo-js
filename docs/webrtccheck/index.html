@@ -37,21 +37,26 @@
     [v-cloak]{
       display: none;
     }
+
+    .panel-new{
+      margin-bottom: 10px
+    }
+    
   </style>
 </head>
 <body>
 
   <div id="app">
-
     <div class="container">
 
-      <div class="jumbotron">
-        <h1>webrtc测试</h1>
+      <div class="jumbotron" style="margin-bottom: 10px;padding-bottom: 10px;padding-top: 10px">
+        
+        <h2><img src="https://www.zego.im/favicon.ico?t=201706023" alt="" style="margin-right:10px">webrtc测试</h2>
         <p class="lead">此网站用于测试浏览器是否支持webrtc</p>
-        <p><a class="btn btn-success btn-lg" href="#" role="button" @click="startTest" >开始测试</a></p>
+        <p><a class="btn btn-success btn-lg" href="#" role="button" @click="startTest" style="background-color:#347ef6">开始测试</a></p>
       </div>
 
-      <div class="panel panel-primary" >
+      <div class="panel panel-primary panel-new" >
         <div class="panel-heading" style="background-color:#347ef6"><h3>浏览器测试  <span v-cloak>{{state.webrtcState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
             <div v-if="webRTC" class="alert alert-success">当前浏览器支持webrtc！！！</div>
@@ -59,7 +64,7 @@
         </div>
       </div>
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h3>音频输入  <span v-cloak>{{state.audioinputState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.audioinputState == '检测完成'">
               <div v-if="isAudioInput" >
@@ -75,7 +80,7 @@
         </div>
       </div>
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h3>音频输出   <span v-cloak>{{state.audiooutputState}}</span><h3></div>
         <div class="panel-body">
           <audio controls>
@@ -87,7 +92,7 @@
         </div>
       </div>
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h3>视频输入  <span v-cloak>{{state.videoinputState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.videoinputState == '检测完成'">
           <div v-if="isVideoInput">
@@ -98,16 +103,18 @@
         </div>
       </div>
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h3>分辨率检测 <span v-cloak>{{state.resolutionState}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.resolutionState === '检测完成'">
           <p>240 X 320: {{resolutionState.oneState}} </p>
           <p>480 X 640: {{resolutionState.twoState}} </p>
-          <p>720 X 1280 {{resolutionState.threeState}} </p>
+          <p>720 X 1280: {{resolutionState.threeState}} </p>
+          <p>540 X 960: {{resolutionState.fourState}}</p>
+          <p>360 X 640: {{resolutionState.fiveState}}</p>
         </div>
       </div>
 
-      <div class="panel panel-primary">
+      <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h3>H264编码  <span v-cloak>{{state.H264State}}</span></h3></div>
         <div class="panel-body" v-cloak v-if="state.H264State === '检测完成'">
           <div v-if="isH264" class="alert alert-success">当前浏览器支持H264编码！！！</div>
@@ -151,7 +158,9 @@
       resolutionState:{
         oneState:"",
         twoState:"",
-        threeState:""
+        threeState:"",
+        fourState:"",
+        fiveState:""
       }
     },
     methods:{
@@ -194,7 +203,7 @@
 
         ZegoClient.enumDevices(devicesinfo => {
 
-          if (devicesinfo.cameras.length > 0){
+          if (devicesinfo.cameras.length != 0){
             devicesinfo.cameras.forEach(item => {
               cameras.push(item.label)
             })
@@ -202,7 +211,7 @@
             that.videoinputInfos = cameras.join("  ")
           }
           
-          if (devicesinfo.microphones.length > 0){
+          if (devicesinfo.microphones.length != 0){
             devicesinfo.microphones.forEach(item => {
               microphones.push(item.label)
             })
@@ -210,7 +219,7 @@
             that.audioinputInfos = microphones.join(" ")
           }
 
-          if (devicesinfo.speakers.length > 0){
+          if (devicesinfo.speakers.length != 0){
             devicesinfo.speakers.forEach(item => {
               speakers.push(item.label)
             })
@@ -286,6 +295,27 @@
             zg.startPreview(video,previewConfig,()=>{
               this.resolutionState.threeState = "支持"
               zg.stopPreview(video)
+
+              previewConfig.videoQuality = 4
+              previewConfig.width = 540
+              previewConfig.height = 960
+              zg.startPreview(video,previewConfig,()=>{
+                this.resolutionState.fourState = "支持"
+                zg.stopPreview(video)
+                
+                previewConfig.width = 360
+                previewConfig.height = 640
+                zg.startPreview(video,previewConfig,()=>{
+                  this.resolutionState.fiveState = "支持"
+                  zg.stopPreview(video)
+                },err=>{
+                  this.resolutionState.fiveState = "不支持"
+                  zg.stopPreview(video)
+                })
+              },err => {
+                this.resolutionState.fourState = "不支持"
+                zg.stopPreview(video)
+              })
             },err => {
               this.resolutionState.threeState = "不支持"
               zg.stopPreview(video)
