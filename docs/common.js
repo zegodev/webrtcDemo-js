@@ -345,7 +345,7 @@ function leaveRoom() {
 
 
 var zg,
-    appid = getParamByName('appid') || 1082937486,
+    appid = getParamByName('appid') || 1739272706,
     _config = {
         appid: appid * 1,
         idName: new Date().getTime() + '',

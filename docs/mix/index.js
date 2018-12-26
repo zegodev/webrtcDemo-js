@@ -1,7 +1,7 @@
 $(function () {
     $('#mixStream').click(function () {
         var streamList = [{
-            streamId: _config.idName,
+            streamId: _config.idName, 
             top: 3,
             left: 3,
             bottom: 5,
@@ -18,12 +18,14 @@ $(function () {
         })
 
         zg.updateMixStream({
-            outputStreamId: 'choui',
-            outputUrl: 'test.aliyun.zego.im/zegodemo',
+            outputStreamId: 'choui', 
+            outputUrl: 'rtmp://test.aliyun.zego.im/zegodemo',
             outputBitrate: 300,
             outputFps: 15,
             outputWidth: 240,
             outputHeight: 320,
+            outputBgColor:'red',
+            outputBgImage:'test',
             streamList: streamList
         }, function (mixStreamId, mixStreamInfo) {
             console.log('mixStreamId: ' + mixStreamId);
