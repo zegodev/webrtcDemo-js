@@ -326,29 +326,21 @@ function listen() {
 
 
 function leaveRoom() {
-    zg.stopPublishingStream(_config.idName);
-    let video = document.querySelector('#previewVideo')
-    let tracks = video.srcObject.getTracks()
-    tracks.reverse()
-    console.log(tracks)
-    tracks.forEach(track => {
-      track.stop()
-    })
-    // console.info('leave room  and close stream');
+    console.info('leave room  and close stream');
 
-    // if (isPreviewed) {
-    //     zg.stopPreview(previewVideo);
-    //     zg.stopPublishingStream(_config.idName);
-    //     isPreviewed = false;
-    // }
+    if (isPreviewed) {
+        zg.stopPreview(previewVideo);
+        zg.stopPublishingStream(_config.idName);
+        isPreviewed = false;
+    }
 
-    // for (var i = 0; i < useLocalStreamList.length; i++) {
-    //     zg.stopPlayingStream(useLocalStreamList[i].stream_id);
-    // }
+    for (var i = 0; i < useLocalStreamList.length; i++) {
+        zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+    }
 
-    // useLocalStreamList = [];
-    // $('.remoteVideo').html('');
-    // zg.logout();
+    useLocalStreamList = [];
+    $('.remoteVideo').html('');
+    zg.logout();
 }
 
 

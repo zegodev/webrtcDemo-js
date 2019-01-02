@@ -85,7 +85,7 @@ $(function () {
             console.log('requestJoinLive err', err, seq);
         }, function (result, fromUserId, fromUserName) {
             window._fromUserId = fromUserId;
-            alert(result?'同意连麦':'j拒绝连麦');
+            alert(result?'同意连麦':'拒绝连麦');
             if(result){
                 doPreviewPublish();
             }
