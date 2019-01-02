@@ -153,9 +153,7 @@ function loginSuccess(streamList, type) {
     console.log(`login success`);
 
     loginRoom = true;
-
-    // 监听sdk回掉
-    listen();
+    
 
     //开始预览本地视频
     type === 1 && doPreviewPublish();
@@ -379,6 +377,9 @@ function init() {
 
     zg.config(_config);
     enumDevices();
+
+    // 监听sdk回掉
+    listen();
 }
 
 

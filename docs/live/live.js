@@ -11,6 +11,8 @@ function init() {
     zg.config(_config);
     enumDevices();
 
+    // 监听sdk回掉
+    listen();
 }
 
 
