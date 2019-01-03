@@ -52,15 +52,11 @@ function handleStreamList(streamList, streamId) {
 
     if (browser == 'Safari') {
         for (let key in hls) {
-            key.forEach(function () {
-                for (let key in flv) {
-                    if (flv[key]) {
-                        flv[key].forEach(function (item) {
-                            if (item.indexOf(pro) !== -1) streamListUrl.push(item)
-                        })
-                    }
-                }
-            })
+            if(hls[key]){
+              hls[key].forEach(function(item) {
+                if( item.indexOf(pro) !== -1 ) streamListUrl.push(item)
+              })
+            }
         }
     } else if (pro == 'http:') {
         for (let key in flv) {
@@ -108,7 +104,7 @@ function loginSuccess(streamList, type) {
 
     useLocalStreamList = handleStreamList(streamList)
 
-    console.log(useLocalStreamList)
+    console.log("能在当前浏览器播放的流有:" + useLocalStreamList)
 
     if (type == 2) {
         //获取当前浏览器类型
@@ -116,7 +112,9 @@ function loginSuccess(streamList, type) {
 
         if (browser == "Safari" && useLocalStreamList.length !== 0) {
 
-            videoElement.src = useLocalStreamList[0]
+            videoElement.src = useLocalStreamList[0];
+            videoElement.load();
+            videoElement.muted = false;
 
         } else if (useLocalStreamList.length !== 0) {
 
@@ -129,6 +127,7 @@ function loginSuccess(streamList, type) {
                 });
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load();
+                videoElement.muted = false;
             }
         } else {
             alert("未找到流");
@@ -139,8 +138,5 @@ function loginSuccess(streamList, type) {
     console.log(`login success`);
     loginRoom = true;
 
-
-    //开始预览本地视频
-    type === 1 && doPreviewPublish();
 }
 
