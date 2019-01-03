@@ -42,6 +42,10 @@ $(function () {
 
     $('#stopScreenShot').click(function () {
         zg.stopScreenShot()
+        zg.stopPreview(previewVideo);
+        zg.stopPublishingStream(_config.idName);
+        
+        doPreviewPublish();
     });
 
 });
