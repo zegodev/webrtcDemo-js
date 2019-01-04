@@ -113,8 +113,8 @@ function loginSuccess(streamList, type) {
         if (browser == "Safari" && useLocalStreamList.length !== 0) {
 
             videoElement.src = useLocalStreamList[0];
-            videoElement.load();
-            videoElement.muted = false;
+            //videoElement.load();
+            //videoElement.muted = false;
 
         } else if (useLocalStreamList.length !== 0) {
 

@@ -143,6 +143,13 @@
         </div>
       </div>
       
+      <div class="panel panel-primary panel-new">
+        <div class="panel-heading" style="background-color:#347ef6"><h4>连通性检测 <span v-cloak>{{state.connectivityState}}</span></h4></div>
+        <div class="panel-body" v-coak v-if="state.connectivityState === '检测完成'">
+          <div v-if="isConnectivity" class="alert alert-success">连通性检测成功！！！</div>
+          <div v-else class="alert alert-danger">连通性检测失败！！！</div>
+        </div>
+      </div>
   
     </div> <!-- /container -->
   
@@ -165,13 +172,15 @@
         audiooutputState:"",
         videoinputState:"",
         resolutionState:"",
-        H264State:""
+        H264State:"",
+        connectivityState:""
       },
       webRTC:false,
       isAudioInput:false,
       isVideoInput:false,
       isH264:false,
       isSound:false,
+      isConnectivity:false,
       audioinputInfos:"",
       videoinputInfos:"",
       audiooutputInfos:"",
@@ -204,6 +213,7 @@
             setTimeout(()=>{
               this.checkResolution()
               this.state.resolutionState = "检测完成"
+              this.state.H264State = "正在检测..."
               setTimeout(() =>{
                 ZegoClient.isSupportH264((param) => {
                     this.isH264 = param
@@ -211,6 +221,11 @@
                     console.log(err)
                 })
                 this.state.H264State = "检测完成"
+                this.state.connectivityState = "正在检测..."
+                setTimeout(() => {
+                  this.checkConnectivity()
+                  this.state.connectivityState = "检测完成"
+                },2500)
               },2500)
             },2500)
           },2500)
@@ -231,7 +246,7 @@
               cameras.push(item.label)
             })
             that.isVideoInput = true
-            that.videoinputInfos = cameras.join("  ")
+            that.videoinputInfos = cameras.join(" ")
           }
           
           if (devicesinfo.microphones.length != 0){
@@ -375,6 +390,47 @@
         
         
       },
+
+      checkConnectivity (){
+
+        let video = document.createElement('video')
+        let result = false
+
+        $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
+        function (token) {
+            if (!token) {
+                alert('get token failed')
+            } else {
+                console.log('gettoken success');
+
+                zg.login("123",1,token,streamList => {
+                  console.log('login success')
+
+                  let previewConfig = {
+                    "audio":false,
+                    "audioInput":null,
+                    "video":false,
+                    "videoInput":null,
+                    "videoQuality":1,
+                    "horizontal":true,
+                    "externalCapture":true,
+                    "externalMediaStream":null
+                  }
+
+                  result = zg.startPreview(video,previewConfig, () => {
+                    console.log('preview success')
+                    zg.startPublishingStream(_config.idName, video);
+                  })
+                  
+                },err => {
+                  console.log('login fail reason' + err)
+                })
+            }
+        }, 'text');
+
+        this.isConnectivity = result
+        
+      }
 
 
     }
