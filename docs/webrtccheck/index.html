@@ -102,7 +102,7 @@
       <div class="panel panel-primary panel-new">
         <div class="panel-heading" style="background-color:#347ef6"><h4>音频输出   <span v-cloak>{{state.audiooutputState}}</span><h4></div>
         <div class="panel-body">
-          <audio controls>
+          <audio controls id="test">
             <source src="../lib/test.mp3">
           </audio>
           <p v-cloak>
@@ -393,42 +393,42 @@
 
       checkConnectivity (){
 
-        let video = document.createElement('video')
-        let result = false
+        // let video = document.getElementById('test')
+        // let result = false
 
-        $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
-        function (token) {
-            if (!token) {
-                alert('get token failed')
-            } else {
-                console.log('gettoken success');
+        // $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
+        // function (token) {
+        //     if (!token) {
+        //         alert('get token failed')
+        //     } else {
+        //         console.log('gettoken success');
 
-                zg.login("123",1,token,streamList => {
-                  console.log('login success')
+        //         zg.login("123",1,token,streamList => {
+        //           console.log('login success')
 
-                  let previewConfig = {
-                    "audio":false,
-                    "audioInput":null,
-                    "video":false,
-                    "videoInput":null,
-                    "videoQuality":1,
-                    "horizontal":true,
-                    "externalCapture":true,
-                    "externalMediaStream":null
-                  }
+        //           let previewConfig = {
+        //             "audio":false,
+        //             "audioInput":null,
+        //             "video":false,
+        //             "videoInput":null,
+        //             "videoQuality":1,
+        //             "horizontal":true,
+        //             "externalCapture":true,
+        //             "externalMediaStream":null
+        //           }
 
-                  result = zg.startPreview(video,previewConfig, () => {
-                    console.log('preview success')
-                    zg.startPublishingStream(_config.idName, video);
-                  })
+        //           result = zg.startPreview(video,previewConfig, () => {
+        //             console.log('preview success')
+        //             zg.startPublishingStream(_config.idName, video);
+        //           })
                   
-                },err => {
-                  console.log('login fail reason' + err)
-                })
-            }
-        }, 'text');
+        //         },err => {
+        //           console.log('login fail reason' + err)
+        //         })
+        //     }
+        // }, 'text');
 
-        this.isConnectivity = result
+        // this.isConnectivity = result
         
       }
 
