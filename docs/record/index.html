@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../lib/bootstrap.min.css" >
+    <style>
+        video{
+            width: 320px;
+            height: auto;
+        }
+        .videoRow{
+            margin-top: 30px;
+        }
+        #previewLabel{
+            display: block;
+        }
+    </style>
+    <title>推拉流基础功能</title>
+</head>
+<body>
+
+<div class="container" style="margin-top: 1%;">
+
+    <div class="row">
+
+        <div class="col-sm">
+            <div class="form-group">
+                <label for="audioList">音频设备</label>
+                <select  class="form-control d-inline" id="audioList" style="width: 70%">
+
+                </select>
+            </div>
+        </div>
+
+
+        <div class="col-sm">
+            <div class="form-group">
+                <label for="videoList">视频设备</label>
+                <select  class="form-control d-inline" id="videoList" style="width: 70%">
+
+                </select>
+            </div>
+        </div>
+
+        <div class="col-sm">
+            <div class="form-group">
+                <label for="roomId">房间号</label>
+                <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
+                       aria-describedby="emailHelp" placeholder="请输入房间号">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm">
+            <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
+            <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+
+            <button type="button" id="getAudioInfo" class="btn btn-primary btn-sm">获取推流音频信息</button>
+            <button type="button" id="stopgetAudioInfo" class="btn btn-primary btn-sm">stop获取推流音频信息</button>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <div class="col-sm">
+          <button type="button" id="snapShot" class="btn btn-primary btn-sm">截屏</button>
+          <button type="button" id="startRecord" class="btn btn-primary btn-sm">开始录制</button>
+          <button type="button" id="pauseRecord" class="btn btn-primary btn-sm">暂停录制</button>
+          <button type="button" id="resumeRecord" class="btn btn-primary btn-sm">恢复录制</button>
+          <button type="button" id="stopRecord" class="btn btn-primary btn-sm">停止录制</button>
+          <button type="button" id="saveRecord" class="btn btn-primary btn-sm">保存录制视频</button>
+      </div>
+    </div>
+
+    <div class="row videoRow">
+        <div class="col-sm">
+            <label id="previewLabel"></label>
+            <video id="previewVideo" autoplay muted playsinline></video>
+        </div>
+        <div class="col-sm remoteVideo">
+            <!-- <video  autoplay muted playsinline></video> -->
+        </div>
+    </div>
+
+</div>
+
+</body>
+<script src="../lib/jquery-3.3.1.min.js"></script>
+<script src="../lib/popper.min.js"></script>
+<script src="../lib/bootstrap.min.js" ></script>
+<!-- zego js sdk -->
+<script src="../lib/jZego-rtc.js"></script>
+<script src="../common.js?v=010"></script>
+<script src="./record.js"></script>
+</html>
