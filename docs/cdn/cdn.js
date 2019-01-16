@@ -70,5 +70,7 @@ function loginSuccess(streamList, type) {
     console.log(`login success`);
     loginRoom = true;
 
+    type === 1 && doPreviewPublish()
+
 }
 
