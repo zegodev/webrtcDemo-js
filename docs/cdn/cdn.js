@@ -34,7 +34,7 @@ function loginSuccess(streamList, type) {
         return;
     }
 
-    useLocalStreamList = ZegoClient.filterStreamList(streamList)
+    useLocalStreamList = zg.filterStreamList()
 
     console.log("能在当前浏览器播放的流有:" + useLocalStreamList)
 
