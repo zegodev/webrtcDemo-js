@@ -144,8 +144,10 @@
       </div>
       
       <div class="panel panel-primary panel-new">
+      <video muted autoplay playsinlne id="checkvideo" style="display:none"></video>
         <div class="panel-heading" style="background-color:#347ef6"><h4>连通性检测 <span v-cloak>{{state.connectivityState}}</span></h4></div>
-        <div class="panel-body" v-coak v-if="state.connectivityState === '检测完成'">
+        <div class="panel-body" v-cloak v-if="state.connectivityState === '检测完成'">
+          
           <div v-if="isConnectivity" class="alert alert-success">连通性检测成功！！！</div>
           <div v-else class="alert alert-danger">连通性检测失败！！！</div>
         </div>
@@ -224,7 +226,6 @@
                 this.state.connectivityState = "正在检测..."
                 setTimeout(() => {
                   this.checkConnectivity()
-                  this.state.connectivityState = "检测完成"
                 },2500)
               },2500)
             },2500)
@@ -393,42 +394,43 @@
 
       checkConnectivity (){
 
-        // let video = document.getElementById('test')
-        // let result = false
+        let that = this
+        let checkvideo = document.getElementById('checkvideo')
 
-        // $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
-        // function (token) {
-        //     if (!token) {
-        //         alert('get token failed')
-        //     } else {
-        //         console.log('gettoken success');
+        $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
+        function (token) {
+            if (!token) {
+                alert('get token failed')
+            } else {
+                console.log('gettoken success');
 
-        //         zg.login("123",1,token,streamList => {
-        //           console.log('login success')
+                zg.login("123",1,token,streamList => {
+                  console.log('login success')
 
-        //           let previewConfig = {
-        //             "audio":false,
-        //             "audioInput":null,
-        //             "video":false,
-        //             "videoInput":null,
-        //             "videoQuality":1,
-        //             "horizontal":true,
-        //             "externalCapture":true,
-        //             "externalMediaStream":null
-        //           }
+                  let previewConfig = {
+                    "audio":true,
+                    "audioInput":null,
+                    "video":true,
+                    "videoInput":null,
+                    "videoQuality":1,
+                    "horizontal":true,
+                    "externalCapture":false,
+                    "externalMediaStream":null
+                  }
 
-        //           result = zg.startPreview(video,previewConfig, () => {
-        //             console.log('preview success')
-        //             zg.startPublishingStream(_config.idName, video);
-        //           })
+                  zg.startPreview(checkvideo,previewConfig, () => {
+                    console.log('preview success')
+                    that.isConnectivity = zg.startPublishingStream(_config.idName, checkvideo);
+                    that.state.connectivityState = "检测完成"
+                  })
                   
-        //         },err => {
-        //           console.log('login fail reason' + err)
-        //         })
-        //     }
-        // }, 'text');
+                },err => {
+                  console.log('login fail reason' + err)
+                })
+            }
+        }, 'text');
 
-        // this.isConnectivity = result
+        
         
       }
 

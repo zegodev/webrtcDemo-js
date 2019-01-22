@@ -10,19 +10,42 @@ $(function () {
 
   $('#startRecord').click(function () {
       ZegoClient.startRecord($('#previewVideo')[0])
-      console.log("start record")
+
+      console.warn("start record")
+      $('#startRecord')[0].disabled = true
+      $('#saveRecord')[0].disabled = true
+      $('#pauseRecord')[0].disabled = false
+      $('#stopRecord')[0].disabled = false
   })
 
   $('#pauseRecord').click(function () {
       ZegoClient.pauseRecord()
+      
+      console.warn("record pause")
+      $('#pauseRecord')[0].disabled = true
+      $('#stopRecord')[0].disabled = false
+      $('#resumeRecord')[0].disabled = false
   })
 
   $('#resumeRecord').click(function () {
       ZegoClient.resumeRecord()
+
+      console.warn("resume record")
+      $('#resumeRecord')[0].disabled = true
+      $('#stopRecord')[0].disabled = false
+      $('#pauseRecord')[0].disabled = false
+
   })
 
   $('#stopRecord').click(function () {
       ZegoClient.stopRecord()
+
+      console.warn("record stop")
+      $('#stopRecord')[0].disabled = true
+      $('#resumeRecord')[0].disabled = true
+      $('#pauseRecord')[0].disabled = true
+      $('#saveRecord')[0].disabled = false
+      $('#startRecord')[0].disabled = false
   })
 
   $('#saveRecord').click(function () {
