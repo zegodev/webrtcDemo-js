@@ -111,6 +111,8 @@
 
     //获取播放流音量
     $('#getAudioInfo').click(function () {
+        if(window.souder) return
+
         window.souder = ZegoClient.getAudioInfo($('#previewVideo')[0], function (e) {
             e && console.error(e);
         });
