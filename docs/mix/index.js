@@ -24,8 +24,6 @@ $(function () {
             outputFps: 15,
             outputWidth: 240,
             outputHeight: 320,
-            outputBgColor:'red',
-            outputBgImage:'test',
             streamList: streamList
         }, function (mixStreamId, mixStreamInfo) {
             console.log('mixStreamId: ' + mixStreamId);
