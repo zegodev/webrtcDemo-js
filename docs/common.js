@@ -146,7 +146,7 @@ function loginSuccess(streamList, type) {
     $('.remoteVideo').html('');
     $('#memberList').html('');
     for (var index = 0; index < useLocalStreamList.length; index++) {
-        $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
+        $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
         $('#memberList').append('<option value="' + useLocalStreamList[index].anchor_id_name + '">' + useLocalStreamList[index].anchor_nick_name + '</option>');
         play(useLocalStreamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
     }

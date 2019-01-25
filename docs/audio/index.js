@@ -148,7 +148,7 @@ function listen() {
 
                           useLocalStreamList.splice(k, 1);
 
-                          $('.remoteVideo video:eq(' + k + ')').remove();
+                          $('.remoteVideo audio:eq(' + k + ')').remove();
                           $('#memberList option:eq(' + k + ')').remove();
 
                           break;
