@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../lib/bootstrap.min.css" >
-    <style>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <style>
+    .bg-f2{
+          background-color:#f8f9fa; 
+        }
         video{
             width: 320px;
             height: auto;
@@ -17,109 +21,122 @@
         }
         #previewLabel{
             display: block;
+            position: absolute;
         }
     </style>
-    <title>连麦功能</title>
+  <title>连麦功能</title>
 </head>
-<body>
 
-<div class="container" style="margin-top: 1%;">
+<body class="bg-f2">
 
-    <div class="row">
+  <div class="container">
+
+    <div class="my-3 p-3 bg-white rounded box-shadow small">
+
+      <h6 class="border-bottom border-gray pb-2 mb-0">连麦</h6>
+
+      <div class="row" style="margin-top:1%">
 
         <div class="col-sm">
-            <div class="form-group">
-                <label for="audioList">音频设备</label>
-                <select  class="form-control d-inline" id="audioList" style="width: 70%">
-
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
             </div>
+            <select class="custom-select" id="audioList" style="width: 60%">
+            </select>
+          </div>
         </div>
 
-
         <div class="col-sm">
-            <div class="form-group">
-                <label for="videoList">视频设备</label>
-                <select  class="form-control d-inline" id="videoList" style="width: 70%">
-
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
             </div>
+            <select class="custom-select" id="videoList" style="width: 60%">
+            </select>
+          </div>
         </div>
 
-
-
         <div class="col-sm">
-            <div class="form-group">
-                <label for="roomId">房间号</label>
-                <input type="email" class="form-control d-inline" id="roomId" style="width: 75%" value="123"
-                       aria-describedby="emailHelp" placeholder="请输入房间号">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
+            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
+              placeholder="请输入房间号">
+          </div>
         </div>
 
         <div class="col-sm">
-            <div class="form-group">
-                <label for="videoList">房间人员</label>
-                <select  class="form-control d-inline" id="memberList" style="width: 65%">
-
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="memberList"><strong class="text-gray-dark">房间人员</strong></label>
             </div>
+            <select class="custom-select" id="memberList" style="width: 60%">
+            </select>
+          </div>
         </div>
 
-    </div>
 
-    <div class="row">
+      </div>
+
+      <div class="row">
 
         <div class="col-sm">
-            <div class="form-group">
-                <label for="videoList">推流质量</label>
-                <select  class="form-control d-inline" id="videoQuality" style="width: 70%">
-                    <option value="1">标清</option>
-                    <option value="2">高清</option>
-                    <option value="3">超清</option>
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">推流质量</strong></label>
             </div>
+            <select class="custom-select" id="videoQuality" style="width: 70%">
+              <option value="1">标清</option>
+              <option value="2">高清</option>
+              <option value="3">超清</option>
+            </select>
+          </div>
         </div>
 
         <div class="col-sm">
-            <div class="form-group">
-                <label for="videoList">最大拉流数</label>
-                <input type="email" class="form-control d-inline" id="maxPullNamber" style="width: 75%"  value="7"
-                       aria-describedby="emailHelp" placeholder="最大拉流数默认为4">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">最大拉流数</strong></label>
             </div>
+            <input type="email" class="form-control d-inline" id="maxPullNamber" style="width: 75%" value="7"
+              aria-describedby="emailHelp" placeholder="最大拉流数默认为4">
+          </div>
         </div>
-    </div>
+      </div>
 
-    <div class="row">
+      <div class="row">
         <div class="col-sm">
-            <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间(作为主播)</button>
-            <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(作为观众)</button>
-            <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
-            <button type="button" id="endJoinLive" class="btn btn-primary btn-sm">结束连麦(作为主播)</button>
-            <button type="button" id="endLive" class="btn btn-primary btn-sm">结束连麦(作为观众)</button>
-            <button type="button" id="requestJoinLive" class="btn btn-primary btn-sm">请求连麦(作为观众)</button>
-            <button type="button" id="inviteJoinLive" class="btn btn-primary btn-sm">邀请连麦(作为主播)</button>
+          <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间(作为主播)</button>
+          <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(作为观众)</button>
+          <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+          <button type="button" id="endJoinLive" class="btn btn-primary btn-sm">结束连麦(作为主播)</button>
+          <button type="button" id="endLive" class="btn btn-primary btn-sm">结束连麦(作为观众)</button>
+          <button type="button" id="requestJoinLive" class="btn btn-primary btn-sm">请求连麦(作为观众)</button>
+          <button type="button" id="inviteJoinLive" class="btn btn-primary btn-sm">邀请连麦(作为主播)</button>
         </div>
-    </div>
+      </div>
 
-    <div class="row videoRow">
+      <div class="row videoRow">
         <div class="col-sm">
-            <label id="previewLabel"></label>
-            <video id="previewVideo" autoplay muted playsinline></video>
+          <label id="previewLabel" class="text-white"></label>
+          <video id="previewVideo" autoplay muted playsinline></video>
         </div>
         <div class="col-sm remoteVideo">
-            <!--<video  autoplay muted playsinline></video>-->
+          <!-- <video  autoplay muted playsinline></video> -->
         </div>
+      </div>
     </div>
 
-
-</div>
-
+  </div>
 </body>
 <script src="../lib/jquery-3.3.1.min.js"></script>
 <script src="../lib/popper.min.js"></script>
-<script src="../lib/bootstrap.min.js" ></script>
+<script src="../lib/bootstrap.min.js"></script>
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js"></script>
 <script src="../common.js?v=011"></script>
 <script src="live.js?v=011"></script>
+
 </html>
