@@ -1,26 +1,28 @@
 $(function () {
-    $('#mixStream').click(function () {
+    var mixStreamId = 'mixwebrtc-'+new Date().getTime();
+
+        $('#mixStream').click(function () {
         var streamList = [{
-            streamId: _config.idName, 
-            top: 3,
-            left: 3,
-            bottom: 5,
-            right: 5,
+            streamId: _config.idName,
+            top: 0,
+            left: 0,
+            bottom: 320,
+            right: 240,
         }];
-        useLocalStreamList.forEach(function (stream) {
-            streamList.push({
-                streamId: stream.stream_id,
-                top: 3,
-                left: 3,
-                bottom: 5,
-                right: 5,
-            })
-        })
+        // useLocalStreamList.forEach(function (stream) {
+        //     streamList.push({
+        //         streamId: stream.stream_id,
+        //         top: 0,
+        //         left: 0,
+        //         bottom: 320,
+        //         right: 240,
+        //     })
+        // })
 
         zg.updateMixStream({
-            outputStreamId: 'choui', 
+            outputStreamId: mixStreamId,
             outputUrl: 'rtmp://test.aliyun.zego.im/zegodemo',
-            outputBitrate: 300,
+            outputBitrate: 300*1000,
             outputFps: 15,
             outputWidth: 240,
             outputHeight: 320,
@@ -38,7 +40,7 @@ $(function () {
 
     $('#stopMixStream').click(function () {
         zg.stopMixStream({
-            outputStreamId: 'choui'
+            outputStreamId: mixStreamId
         }, function () {
             alert('停止混流成功。。。')
             console.log('stopMixStream success: ');
