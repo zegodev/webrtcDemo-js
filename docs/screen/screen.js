@@ -49,4 +49,66 @@ $(function () {
         doPreviewPublish();
     });
 
+    $('#pushTwoStreams').click(function ()  {
+      
+      if(!loginRoom) {
+        alert('请先登录房间')
+        return
+      }
+
+      if(screenCaptrue) {
+
+        var previewConfig = {
+          "audio": $('#audioList').val() === '0' ? false : true,
+          "audioInput": $('#audioList').val() || null,
+          "video": $('#videoList').val() === '0' ? false : true,
+          "videoInput": $('#videoList').val() || null,
+          "videoQuality": 1,
+          "horizontal": true,
+          "externalCapture": false,
+          "externalMediaStream": null
+        }
+        
+        idName = 'zego-'+ new Date().getTime()
+
+        var result = zg.startPreview($('#previewVideo2')[0],previewConfig,function () {
+          console.log('preview twice success');
+          zg.startPublishingStream(idName, $('#previewVideo2')[0])
+          //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
+          enumDevices();
+        },function (err) {
+          alert(JSON.stringify(err));
+          console.error('preview failed', err);
+        })
+
+        if (!result) alert('预览失败！')
+
+      }else {
+        alert('请先开启屏幕共享')
+      }
+
+     
+
+    });
+
+    $('#leaveRoom').click(function () {
+      console.info('leave room  and close stream');
+
+      if (isPreviewed) {
+          zg.stopPreview(previewVideo);
+          zg.stopPublishingStream(_config.idName);
+          zg.stopPreview($('#previewVideo2')[0]);
+          zg.stopPublishingStream(idName);
+          isPreviewed = false;
+      }
+
+      for (var i = 0; i < useLocalStreamList.length; i++) {
+          zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+      }
+
+      useLocalStreamList = [];
+      $('.remoteVideo').html('');
+      zg.logout();
+    })
+
 });
