@@ -9,15 +9,18 @@ $(function () {
             bottom: 320,
             right: 240,
         }];
-        // useLocalStreamList.forEach(function (stream) {
-        //     streamList.push({
-        //         streamId: stream.stream_id,
-        //         top: 0,
-        //         left: 0,
-        //         bottom: 320,
-        //         right: 240,
-        //     })
-        // })
+        useLocalStreamList.forEach(function (stream) {
+            streamList.push({
+                streamId: stream.stream_id,
+                top: 0,
+                left: 0,
+                bottom: 320,
+                right: 240,
+            })
+        })
+
+        console.log('mixStreamList:' + streamList)
+        
 
         zg.updateMixStream({
             outputStreamId: mixStreamId,
