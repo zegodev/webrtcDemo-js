@@ -29,9 +29,9 @@ function loginSuccess(streamList, type) {
         return;
     }
 
-    useLocalStreamList = zg.filterStreamList()
+    useLocalStreamList = filterStreamList()
 
-    console.log("能在当前浏览器播放的流有:" + useLocalStreamList)
+    console.log(useLocalStreamList)
 
     if (type == 2) {
         //获取当前浏览器类型
@@ -67,5 +67,75 @@ function loginSuccess(streamList, type) {
 
     type === 1 && doPreviewPublish()
 
+}
+
+function filterStreamList(streamId) {
+  let flv = {};
+  let hls = {};
+  let rtmp = {};
+  
+  let streamListUrl = []
+  let index = 0
+
+  console.log(zg.stateCenter.streamList)
+
+  zg.stateCenter.streamList.forEach((item, ind) => {
+    if (item.stream_id == streamId) index = ind
+  })
+
+  for (let key in zg.stateCenter.streamList[index]) {
+    if (key == 'urls_flv' || key == 'urls_https_flv') {
+      flv[key] = zg.stateCenter.streamList[index][key]
+    }
+    if (key == 'urls_m3u8' || key == 'urls_https_m3u8') {
+      hls[key] = zg.stateCenter.streamList[index][key]
+    }
+    if (key == 'urls_rtmp') {
+      rtmp[key] = zg.stateCenter.streamList[index][key]
+    }
+  }
+
+  let pro = window.location.protocol
+  let browser = getBrowser()
+
+  if (browser == 'Safari') {
+    for (let key in hls) {
+      if(hls[key]){
+        hls[key].forEach(item => {
+          console.log(pro)
+          if( item.indexOf(pro) !== -1 ) streamListUrl.push(item)
+          else if( pro == 'https:' && item.indexOf('http') !== -1) {
+            streamListUrl.push(item.replace('http','https'))
+          }
+        })
+      }
+    }
+  } else if (pro == 'http:') {
+    for (let key in flv) {
+      if (flv[key]) {
+        flv[key].forEach(item => {
+          if (item.indexOf('http') !== -1 || item.indexOf('https') !== -1) streamListUrl.push(item)
+        })
+      }
+    }
+  } else if (pro == 'https:') {
+    for (let key in flv) {
+      if (flv[key]) {
+        flv[key].forEach(item => {
+          if (item.indexOf('http') !== -1) streamListUrl.push(item.replace('http','https'))
+        })
+      }
+    }
+  } else if (pro == 'rtmp:') {
+      for (let key in rtmp) {
+          if (rtmp[key]) {
+              rtmp[key].forEach(item => {
+                  if (item.indexOf(pro) !== -1) streamListUrl.push(item)
+              })
+          }
+      }
+  }
+
+  return streamListUrl.filter( (ele, index, self) => self.indexOf(ele) == index)
 }
 
