@@ -12,6 +12,7 @@ $('#externalCaptureA').click(function (){
 
 function loginSuccess(streamList, type) {
   var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
+  var mediastream
 
   //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
   if (streamList.length >= maxNumber) {
@@ -41,14 +42,19 @@ function loginSuccess(streamList, type) {
 
   loginRoom = true;
 
-  let mediastream = localMedia.captureStream()
+  if(localMedia['captureStream']) {
+    mediastream = localMedia.captureStream()
+  } else if(localMedia['mozCaptureStream']) {
+    mediastream = localMedia.mozCaptureStream()
+  }
+  
   previewVideo.srcObject = mediastream
   var config = {
     externalCapture: null,
-    width: 640,
-    height: 480,
-    frameRate: 15,
-    bitRate: 1000
+    width: 1280,
+    height: 720,
+    frameRate: 20,
+    bitRate: 1500
   }
   config.externalMediaStream = mediastream
   config.video = false
