@@ -1,9 +1,5 @@
 $(function () {
 
-  $('#createRoomCdn').click(function () {
-      openRoom($('#roomId').val(), 1);
-  });
-
   $('#snapShot').click(function () {
       ZegoClient.saveSnapShot($('#previewVideo')[0],'zego'+new Date().getTime())
   })
@@ -12,40 +8,34 @@ $(function () {
       ZegoClient.startRecord($('#previewVideo')[0])
 
       console.warn("start record")
-      $('#startRecord')[0].disabled = true
-      $('#saveRecord')[0].disabled = true
-      $('#pauseRecord')[0].disabled = false
-      $('#stopRecord')[0].disabled = false
+  })
+
+  $('#startRecordPull').click(function (){
+      if(!useLocalStreamList || useLocalStreamList.length == 0){
+        alert('并没找到拉流视频')
+        return
+      }
+
+      ZegoClient.startRecord($('.remoteVideo video:eq(0)')[0] )
+      console.warn('start record')
   })
 
   $('#pauseRecord').click(function () {
       ZegoClient.pauseRecord()
       
       console.warn("record pause")
-      $('#pauseRecord')[0].disabled = true
-      $('#stopRecord')[0].disabled = false
-      $('#resumeRecord')[0].disabled = false
   })
 
   $('#resumeRecord').click(function () {
       ZegoClient.resumeRecord()
 
       console.warn("resume record")
-      $('#resumeRecord')[0].disabled = true
-      $('#stopRecord')[0].disabled = false
-      $('#pauseRecord')[0].disabled = false
-
   })
 
   $('#stopRecord').click(function () {
       ZegoClient.stopRecord()
 
       console.warn("record stop")
-      $('#stopRecord')[0].disabled = true
-      $('#resumeRecord')[0].disabled = true
-      $('#pauseRecord')[0].disabled = true
-      $('#saveRecord')[0].disabled = false
-      $('#startRecord')[0].disabled = false
   })
 
   $('#saveRecord').click(function () {
