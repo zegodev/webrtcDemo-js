@@ -15,7 +15,15 @@ function init() {
     listen();
 }
 
-
+function respondJoinLive(flag, requestId, fromUserId) {
+  var accept = flag;
+  window._fromUserId = fromUserId;
+  zg.respondJoinLive(requestId, accept, function (seq) {
+      console.log('respondJoinLive success', seq);
+  }, function (err, seq) {
+      console.log('respondJoinLive err', err, seq);
+  })
+}
 function listenChild(){
     var listens = {
         onGetAnchorInfo: function (userid, username) {
@@ -24,19 +32,23 @@ function listenChild(){
 
         onRecvJoinLiveRequest: function (requestId, from_userid, from_username, roomid) {
             console.log('onRecvJoinLiveRequest', requestId, from_userid, from_username, roomid);
-            var accept = window.confirm('收到请求连麦');
-            window._fromUserId = from_userid;
-            zg.respondJoinLive(requestId, accept, function (seq) {
-                console.log('respondJoinLive success', seq);
-            }, function (err, seq) {
-                console.log('respondJoinLive err', err, seq);
-            });
+            $('#exampleModalLabel').text("收到id为"+ requestId + "的连麦请求" )
+            $('#liveConfirm').click();
+            $('#liveAgree').on('click', function() {
+              respondJoinLive(true, requestId, from_userid)
+            })
+            $('#liveRefuse').on('click', function() {
+              respondJoinLive(false, requestId, from_userid)
+            })
         },
 
         onRecvInviteJoinLiveRequest: function (requestId, from_userid, from_username, roomid) {
             console.log('onRecvInviteJoinLiveRequest', requestId, from_userid, from_username, roomid);
-            var accept = window.confirm('收到邀请连麦');
-            accept && doPreviewPublish();
+            $('#exampleModalLabel').text("收到id为"+ requestId + "的连麦请求" )
+            $('#liveConfirm').click();
+            $('#liveAgree').on('click', function() {
+              doPreviewPublish()
+            })
         },
 
         onRecvEndJoinLiveCommand:function (requestId, from_userid, from_username, roomid){

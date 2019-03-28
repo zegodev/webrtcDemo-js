@@ -127,6 +127,29 @@
           <!-- <video  autoplay muted playsinline></video> -->
         </div>
       </div>
+
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="liveConfirm" style="display:none">
+        连麦弹窗
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <strong class="text-gray-dark" id="exampleModalLabel">收到连麦请求</strong>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" id="liveRefuse" data-dismiss="modal">拒绝连麦</button>
+              <button type="button" class="btn btn-primary btn-sm"  id="liveAgree" data-dismiss="modal">同意连麦</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
