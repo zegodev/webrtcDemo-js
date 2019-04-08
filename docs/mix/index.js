@@ -31,9 +31,25 @@ $(function () {
             outputHeight: 320,
             streamList: streamList
         }, function (mixStreamId, mixStreamInfo) {
-            console.log('mixStreamId: ' + mixStreamId);
-            console.log('mixStreamInfo: ' + JSON.stringify(mixStreamInfo));
-            alert('混流开始。。。')
+            if (navigator.userAgent.indexOf('iPhone') !== -1 && getBrowser() == 'Safari') {
+              hlsUrl = mixStreamInfo[0]['hlsUrls'][0].replace('http', 'https')
+              $('#mixVideo')[0].src = hlsUrl
+            } else {
+              var flvUrl = mixStreamInfo[0]['flvUrls'][0].replace('http', 'https')
+                console.log('mixStreamId: ' + mixStreamId);
+                console.log('mixStreamUrl:' + flvUrl);
+                alert('混流开始。。。')
+                if (flvjs.isSupported()) {
+                  var flvPlayer = flvjs.createPlayer({
+                      type: 'flv',
+                      url: flvUrl
+                  });
+                  flvPlayer.attachMediaElement($('#mixVideo')[0]);
+                  flvPlayer.load(); 
+                }
+            }
+            $('#mixVideo')[0].muted = false;
+            $('#mixVideo').css('display', '')
         }, function (err, errorInfo) {
             alert('混流失败。。。')
             console.log('err: ' + JSON.stringify(err));
@@ -47,6 +63,8 @@ $(function () {
         }, function () {
             alert('停止混流成功。。。')
             console.log('stopMixStream success: ');
+            $('#mixVideo')[0].src = ''
+            $('#mixVideo').css('display', 'none')
         }, function (err) {
             alert('停止混流失败。。。')
             console.log('stopMixStream err: ');

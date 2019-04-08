@@ -24,7 +24,7 @@
         position: absolute;
     }
   </style>
-  <title>推拉流基础功能</title>
+  <title>混流</title>
 </head>
 
 <body class="bg-f2">
@@ -81,6 +81,7 @@
         <div class="col-sm">
           <label id="previewLabel"></label>
           <video id="previewVideo" autoplay muted playsinline controls></video>
+          <video id="mixVideo" autoplay muted playsinline controls style="display:none"></video>
         </div>
         <div class="col-sm remoteVideo">
           <!--<video  autoplay muted playsinline></video>-->
@@ -97,6 +98,7 @@
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js"></script>
 <script src="../common.js?v=010"></script>
+<script src="../lib/flv.min.js"></script>
 <script src="index.js?v=010"></script>
 
 </html>
