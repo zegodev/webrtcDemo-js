@@ -9,18 +9,14 @@ $(function () {
             bottom: 240,  
             right: 320,
         }];
-        useLocalStreamList.forEach(function (stream) {
+
             streamList.push({
-                streamId: stream.stream_id,
+                streamId: useLocalStreamList[0].stream_id,
                 top: 240,
                 left: 0,
                 bottom: 480,
                 right: 320,
-            })
-        })
-
-        console.log(streamList)
-        
+            })      
 
         zg.updateMixStream({
             outputStreamId: mixStreamId,
@@ -71,6 +67,12 @@ $(function () {
             console.log(err);
         })
     });
+
+    $('#leaveRoom').click(function () {
+        leaveRoom();
+        $('#mixVideo')[0].src = ''
+        $('#mixVideo').css('display', 'none')
+    })
 
 });
 
