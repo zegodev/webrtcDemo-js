@@ -6,20 +6,20 @@ $(function () {
             streamId: _config.idName,
             top: 0,
             left: 0,
-            bottom: 320,
-            right: 240,
+            bottom: 240,  
+            right: 320,
         }];
         useLocalStreamList.forEach(function (stream) {
             streamList.push({
                 streamId: stream.stream_id,
-                top: 0,
+                top: 240,
                 left: 0,
-                bottom: 320,
-                right: 240,
+                bottom: 480,
+                right: 320,
             })
         })
 
-        console.log('mixStreamList:' + streamList)
+        console.log(streamList)
         
 
         zg.updateMixStream({
@@ -27,8 +27,8 @@ $(function () {
             outputUrl: 'rtmp://test.aliyun.zego.im/zegodemo',
             outputBitrate: 300*1000,
             outputFps: 15,
-            outputWidth: 240,
-            outputHeight: 320,
+            outputWidth: 320,
+            outputHeight: 480,
             streamList: streamList
         }, function (mixStreamId, mixStreamInfo) {
             if (navigator.userAgent.indexOf('iPhone') !== -1 && getBrowser() == 'Safari') {
