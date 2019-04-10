@@ -34,12 +34,13 @@ $(function () {
 
   $('#stopRecord').click(function () {
       ZegoClient.stopRecord()
-
+      $('#saveRecord')[0].disabled = false
       console.warn("record stop")
   })
 
   $('#saveRecord').click(function () {
       ZegoClient.saveRecord('zego'+new Date().getTime())
+      $('#saveRecord')[0].disabled = true
   })
 
 });

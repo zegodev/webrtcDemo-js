@@ -9,14 +9,15 @@ $(function () {
             bottom: 240,  
             right: 320,
         }];
-
-            streamList.push({
-                streamId: useLocalStreamList[0].stream_id,
-                top: 240,
-                left: 0,
-                bottom: 480,
-                right: 320,
-            })      
+        if (useLocalStreamList.length !== 0) {
+          streamList.push({
+            streamId: useLocalStreamList[0].stream_id,
+            top: 240,
+            left: 0,
+            bottom: 480,
+            right: 320,
+          })  
+        }    
 
         zg.updateMixStream({
             outputStreamId: mixStreamId,
