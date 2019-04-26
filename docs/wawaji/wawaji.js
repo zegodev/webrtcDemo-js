@@ -63,29 +63,6 @@ function listen() {
           }
 
       },
-      onPublishStateUpdate: function (type, streamid, error) {
-          if (type == 0) {
-              console.info(' publish  success');
-          } else if (type == 2) {
-              console.info(' publish  retry');
-          } else {
-              console.error('publish error ' + error.msg);
-              var _msg = error.msg;
-              if (error.msg.indexOf('server session closed, reason: ') > -1) {
-                  var code = error.msg.replace('server session closed, reason: ', '');
-                  if (code == 21) {
-                      _msg = '音频编解码不支持(opus)';
-                  } else if (code == 22) {
-                      _msg = '视频编解码不支持(H264)'
-                  } else if (code == 20) {
-                      _msg = 'sdp 解释错误';
-                  }
-              }
-              alert('推流失败,reason = ' + _msg);
-
-          }
-
-      },
       onPublishQualityUpdate: function (streamid, quality) {
           console.info("#" + streamid + "#" + "publish " + " audio: " + quality.audioBitrate + " video: " + quality.videoBitrate + " fps: " + quality.videoFPS);
       },
@@ -103,40 +80,6 @@ function listen() {
       onKickOut: function (error) {
           console.error("onKickOut " + JSON.stringify(error));
       },
-      onStreamUpdated: function (type, streamList) {
-          if (type == 0) {
-              for (var i = 0; i < streamList.length; i++) {
-                  console.info(streamList[i].stream_id + ' was added');
-                  useLocalStreamList.push(streamList[i]);
-                  $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
-                  $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
-                  play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
-              }
-
-          } else if (type == 1) {
-
-              for (var k = 0; k < useLocalStreamList.length; k++) {
-
-                  for (var j = 0; j < streamList.length; j++) {
-
-                      if (useLocalStreamList[k].stream_id === streamList[j].stream_id) {
-
-                          zg.stopPlayingStream(useLocalStreamList[k].stream_id);
-
-                          console.info(useLocalStreamList[k].stream_id + 'was devared');
-
-                          useLocalStreamList.splice(k, 1);
-
-                          $('.remoteVideo video:eq(' + k + ')').remove();
-                          $('#memberList option:eq(' + k + ')').remove();
-
-                          break;
-                      }
-                  }
-              }
-          }
-
-      }
   };
 
   for (var key in _config) {
@@ -231,15 +174,7 @@ function startLogin(roomId, token, type) {
 
 function loginSuccess(streamList, type) {
 
-  if ($('#streamID').val()) {
-      useLocalStreamList = [{
-          anchor_id_name: 'custom',
-          stream_id: $('#streamID').val(),
-          anchor_nick_name: 'custom'
-      }, ...streamList];
-  } else {
-      useLocalStreamList = streamList;
-  }
+    useLocalStreamList = streamList;
 
   $('.remoteVideo').html('');
     $('#memberList').html('');
