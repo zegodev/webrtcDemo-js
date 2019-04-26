@@ -1,35 +1,37 @@
 # 即构 web版sdk 互动视频教程
  本教程能帮助你快速上手即构web-sdk,示例主要包括以下内容
- 
+
  - 创建/退出房间
  - 推送/拉取流
  - 开启/关闭 音视频
  - [更多用法](https://www.zego.im/html/document/#Live_Room/API_Instructions:web)
- 
- 
+
+
  ## 准备条件
  - 即构开发者账户（[获取appid](https://www.zego.im)）
  - 支持SSL的Web服务器（https）
- 
- 
+
+
  ## 快速开始
- 
+
+ - 安装依赖: npm i
+ - 启动： npm run start
  - [获取sdk](#getsdk)
  - [使用示例](#demoStep)
- 
- 
+
+
  ### <a id="getsdk">获取sdk</a>
  #### 官网下载
   下载最新[sdk](https://storage.zego.im/downloads/jZego-rtc-SDK.zip)并解压
  , 在你的html页面适当位置引入
- 
+
  `` <script src="lib/jZego-rtc-1.0.3.js"></script>
  ``
- 
+
  如有录屏需求，使用chrome浏览器时需另外下载[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)
- 
+
  ### <a id="demoStep">使用示例</a>
- 
+
  1 创建，配置实列对象；配置对象_config请参考[api文档](https://www.zego.im/html/document/#Live_Room/API_Instructions:web)或[demo](https://zegodev.github.io/webrtcDemo-js/)
  ```html
   var zg = new ZegoClient(), _config = {
@@ -43,7 +45,7 @@
                                 }
   zg.config(_config);
 ```
- 
+
  2 创建/登录房间
  ```js
     //get token
@@ -55,8 +57,8 @@
                  startLogin(token)
              }
          }, 'text');
- 
- 
+
+
      //login
      function startLogin(token) {
          zg.login(roomId, 2, token, function (streamList) {
@@ -97,7 +99,7 @@
 ```
 
 
- 4 拉流获取 
+ 4 拉流获取
  ```js
  //登录房间获取拉流
   zg.login(roomId, 2, token, function (streamList) {
@@ -106,25 +108,25 @@
          }, function (err) {
              loginFailed(err);
    })
-   
-   
-   //进入房间后监听拉流变化  
+
+
+   //进入房间后监听拉流变化
    zg.onStreamUpdated = function (type, streamList) {
                       if (type == 0) {
                           // 新增的拉流
                           // todo.....
-      
-                      } else if (type == 1) { 
+
+                      } else if (type == 1) {
                           // 退出的拉流
                           // todo.....
                       }
-      
+
                   }
 
 
 ```
- 
- 5 播放拉流 
+
+ 5 播放拉流
  ```js
   function play(streamId, video) {
         var result = zg.startPlayingStream(streamId, video);
@@ -182,5 +184,5 @@ function leaveRoom() {
 >  **录屏返回得到的mediastream 是媒体流，是否播放或者推流，自由发挥**
  ## [常见问题](https://github.com/zegodev/webrtcDemo-js/issues)
 
- 
- 
+
+

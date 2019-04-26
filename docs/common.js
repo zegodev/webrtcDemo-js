@@ -153,7 +153,7 @@ function loginSuccess(streamList, type) {
     console.log(`login success`);
 
     loginRoom = true;
-    
+
 
     //开始预览本地视频
     type === 1 && doPreviewPublish();
@@ -343,7 +343,7 @@ function leaveRoom() {
 
 
 var zg,
-    appid = getParamByName('appid') || 1739272706,
+    appid = getParamByName('appid') || 3265350344,
     _config = {
         appid: appid * 1,
         idName: new Date().getTime() + '',
