@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../lib/bootstrap.min.css" >
     <style>
         .bg-f2{
-          background-color: #f8f9fa; 
+          background-color: #f8f9fa;
         }
         video{
             width: 320px;
@@ -53,8 +53,8 @@
                 </select>
             </div>
         </div>
-  
-  
+
+
           <div class="col-sm">
             <div class="input-group input-group-sm mb-3">
                 <div class="input-group-prepend">
@@ -64,7 +64,7 @@
                 aria-describedby="emailHelp" placeholder="请输入房间号">
             </div>
           </div>
-  
+
       </div>
 
       <div class="row">
@@ -79,7 +79,7 @@
             </div>
         </div>
       </div>
-    
+
       <div class="row">
         <div class="col-sm">
           <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
@@ -89,9 +89,10 @@
 
           <button type="button" id="getAudioInfo" class="btn btn-primary btn-sm">获取推流音频信息</button>
           <button type="button" id="stopgetAudioInfo" class="btn btn-primary btn-sm">stop获取推流音频信息</button>
+          <button type="button" id="getAudioPCM" class="btn btn-primary btn-sm">获取音频pcm数据</button>
         </div>
       </div>
-    
+
       <div class="row videoRow">
           <div class="col-sm">
               <label id="previewLabel" class="text-white"></label>
@@ -146,5 +147,15 @@
             delete window.souder
         }
     });
+
+    $('#getAudioPCM').click(function () {
+        mediaUtil = ZegoClient.getAudioInfo($('#previewVideo')[0], (err) => {
+          err && console.error(err)
+        }, {type: 'pcm', bufferSize: 16384, channels: 1, sampleBit: 16, sampleRate: 44100})
+
+        mediaUtil.onReceiveBuffer = (buf) => {
+          console.log('buf', buf)
+        }
+    })
 </script>
 </html>
