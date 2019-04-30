@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>用户自定义地址去播放视频</title>
+    <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    <script type="text/javascript" src="../lib/jquery-3.3.1.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        * {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        html, body {
+            margin: 0px;
+            padding: 0px;
+            width: 100%;
+            height: 100%;
+            font-size: 62.5%;
+        }
+    </style>
+</head>
+<body>
+rtmp地址<input type="text" id="rtmp" placeholder="填入rtmp地址">
+flv地址<input type="text" id="flv" placeholder="填入flv地址">
+<button onclick="init()">播放</button>
+<div id="strobeMediaPlayback">
+    <p>Alternative content</p>
+</div>
+<h1>默认静音</h1>
+<div class="container" style="width: 520px; height: 360px; margin-bottom: 100px;">
+    <div class="row">
+        <div class="col-lg-6  clearfix-context">
+            <div>
+                <video id="video-player" src></video>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6  clearfix-context">
+            <div>
+                <video id="video-player2"></video>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="swfobject.js"></script> <!--必须的的-->
+<script type="text/javascript">
+    $(function () {
+        src1 = "rtmp://rtmp.wsdemo.zego.im/livestream/1556618908316";
+        src2 = "http://hdl-wsdemo.zego.im/livestream/1556618908316.flv";
+        el1 = "video-player";
+        el2 = "video-player2";
+        playVideo(src1, el1);
+        playVideo(src2, el2);
+    });
+
+    function init() {
+      rtmpUrl = document.querySelector('#rtmp').value
+      flvUrl = document.querySelector('#flv').value
+      el1 = "video-player";
+      el2 = "video-player2";
+      playVideo(rtmpUrl, el1);
+      playVideo(flvUrl, el2);
+    }
+
+    var $URL = "./";
+    function playVideo(src, el) {
+        var swfPlayer = new SWFPlayer("container", el, "520", "360", "12312.jpg");
+        swfPlayer.reload(src);
+    }
+
+    var SWFPlayer = function (_parent_id, _player_id, _width, _height, _poster) {
+        var parent_id = _parent_id;
+        var player_id = _player_id;
+        var width = _width;
+        var height = _height;
+        var poster = _poster;
+
+        function createPlayer(src) {
+
+            var swfVersionStr = "11.1.0";
+            var xiSwfUrlStr = $URL + "expressInstall.swf";
+
+            var flashvars = {
+                src: src,
+                autoPlay: "true",
+                verbose: "true",
+//                volume: "0",
+                controlBarAutoHide: "true",
+                controlBarPosition: "bottom",
+                poster: poster,
+                plugin_hls: $URL + "HLSDynamicPlugin.swf",
+                VolumeMenuButton: $URL + "HLSDynamicPlugin.swf",
+                javascriptCallbackFunction: "onJavaScriptBridgeCreated"
+            };
+            flashvars.src = src;
+            flashvars.autoPlay = "true";
+
+            var params = {
+                allowFullScreen: "true",
+            };
+
+            var attributes = {};
+            attributes.mode = "transparent";
+            attributes.id = player_id;
+            attributes.name = player_id;
+            //attributes.align = "middle";
+
+            swfobject.embedSWF($URL + "StrobeMediaPlayback.swf", player_id, width, height, swfVersionStr, xiSwfUrlStr, flashvars, params, attributes);
+//            swfobject.createCSS(".container", "display:block;text-align:left;background-color: #3a9425;"); //背景颜色控制
+        };
+
+        this.reload = function (src) {
+            createPlayer(src);
+        };
+    };
+
+    function completeFunc(time, playerId) {
+        //var player = document.getElementById(playerId);
+        alert("!!!");
+    }
+
+    function onCurrentTimeChange(time, playerId)
+    {
+        document.getElementById("currentTime").innerHTML = time;
+    }
+
+    function onDurationChange(time, playerId)
+    {
+        document.getElementById("duration").innerHTML = time;
+        console.log('time :: '+time)
+    }
+
+    var player = null;
+    function onJavaScriptBridgeCreated(playerId)
+    {
+        if (player == null) {
+            player = document.getElementById("video-player");
+
+            // Add event listeners that will update the
+            player.addEventListener("currentTimeChange", "onCurrentTimeChange");
+            player.addEventListener("durationChange", "onDurationChange");
+
+            player.addEventListener("complete", "completeFunc");
+        }
+    }
+
+    function onComplete() {
+        console.log('Complete111111!')
+    }
+
+
+</script>
+</body>
+</html>

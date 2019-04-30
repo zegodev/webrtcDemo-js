@@ -2,6 +2,11 @@
 
 $(function () {
 
+    if ( getBrowser() === 'Chrome' && 'getDisplayMedia' in navigator.mediaDevices !== true) {
+      alert ('当前浏览器不支持无插件屏幕共享')
+      $('#screenSharing')[0].disabled = true
+    }
+
     function scrennShot(bool) {
 
       if(IsPC()){
@@ -32,8 +37,8 @@ $(function () {
           getBrowser() === 'Chrome' && bool &&zg.startScreenShotChrome(function (suc,mediastream) {
               console.log('startScreenShot:'+suc);
               screenCaptrue = suc;
-              // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
-              //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
+            // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
+            //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
               previewVideo.srcObject = mediastream;
               if(loginRoom) {
                   doPreviewPublish({externalCapture:true});
@@ -43,8 +48,6 @@ $(function () {
           getBrowser() === 'Chrome' && !bool && zg.startScreenSharingChrome(false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
-            // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
-            //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
             previewVideo.srcObject = mediastream;
             if(loginRoom) {
                 doPreviewPublish({externalCapture:true});
