@@ -38,7 +38,15 @@ function loginSuccess(streamList, type) {
         //获取当前浏览器类型
         var browser = getBrowser();
         var hasAudio = true
-        var playType = JSON.parse(streamList[0].extra_info).playType
+        var playType
+
+        if (streamList[0].extra_info.length !== 0) {
+          try {
+            playType = JSON.parse(streamList[0].extra_info).playType
+          } catch (err) {
+            alert (err)
+          }
+        }
 
         playType === 'Video'?hasAudio = false: hasAudio = true
 
