@@ -1,4 +1,5 @@
 var videoElement = document.getElementById('test');
+var flvPlayer = null
 
 //覆盖common.js中的init
 function init() {
@@ -36,6 +37,10 @@ function loginSuccess(streamList, type) {
     if (type == 2) {
         //获取当前浏览器类型
         var browser = getBrowser();
+        var hasAudio = true
+        var playType = JSON.parse(streamList[0].extra_info).playType
+
+        playType === 'Video'?hasAudio = false: hasAudio = true
 
         if (browser == "Safari" && useLocalStreamList.length !== 0) {
 
@@ -46,11 +51,15 @@ function loginSuccess(streamList, type) {
         } else if (useLocalStreamList.length !== 0) {
 
             var flvUrl = useLocalStreamList[0];
+            if(streamList)
+
             //若支持flv.js
             if (flvjs.isSupported()) {
                 var flvPlayer = flvjs.createPlayer({
                     type: 'flv',
-                    url: flvUrl
+                    isLive: true,
+                    url: flvUrl,
+                    hasAudio: hasAudio
                 });
                 flvPlayer.attachMediaElement(videoElement);
                 flvPlayer.load();
@@ -73,7 +82,7 @@ function filterStreamList(streamId) {
   let flv = {};
   let hls = {};
   let rtmp = {};
-  
+
   let streamListUrl = []
   let index = 0
 
@@ -137,5 +146,33 @@ function filterStreamList(streamId) {
   }
 
   return streamListUrl.filter( (ele, index, self) => self.indexOf(ele) == index)
+}
+
+function leaveRoom() {
+  console.info('leave room  and close stream');
+
+  if (isPreviewed) {
+      zg.stopPreview(previewVideo);
+      zg.stopPublishingStream(_config.idName);
+      isPreviewed = false;
+  }
+
+  for (var i = 0; i < useLocalStreamList.length; i++) {
+      zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+  }
+
+  useLocalStreamList = [];
+
+  if (typeof player !== "undefined") {
+    if (flvPlayer != null) {
+      flvPlayer.unload();
+      flvPlayer.detachMediaElement();
+      flvPlayer.destroy();
+      flvPlayer = null;
+    }
+  }
+
+  $('.remoteVideo').html('');
+  zg.logout();
 }
 
