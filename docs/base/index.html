@@ -90,6 +90,8 @@
           <button type="button" id="getAudioInfo" class="btn btn-primary btn-sm">获取推流音频信息</button>
           <button type="button" id="stopgetAudioInfo" class="btn btn-primary btn-sm">stop获取推流音频信息</button>
           <button type="button" id="getAudioPCM" class="btn btn-primary btn-sm">获取音频pcm数据</button>
+          <button type="button" id="downloadWAV" class="btn btn-primary btn-sm">下载wav</button>
+          <button type="button" id="stopPCM" class="btn btn-primary btn-sm">停止获取PCM</button>
         </div>
       </div>
 
@@ -147,15 +149,61 @@
             delete window.souder
         }
     });
-
+    var mediaUtil
+    var pcmBuffer = []
     $('#getAudioPCM').click(function () {
+        if($('#previewVideo')[0].srcObject === null) {
+          alert('请先预览视频')
+          return
+        }
         mediaUtil = ZegoClient.getAudioInfo($('#previewVideo')[0], (err) => {
           err && console.error(err)
         }, {type: 'pcm', bufferSize: 16384, channels: 1, sampleBit: 16, sampleRate: 44100})
 
         mediaUtil.onReceiveBuffer = (buf) => {
           console.log('buf', buf)
+
+          pcmBuffer.push(buf)
+
         }
+    })
+
+    $('#downloadWAV').click(function () {
+      if (pcmBuffer.length === 0 ){
+        alert('未获取到pcm数据')
+        return
+      }
+      // 将pcm转为wav
+      var wav = mediaUtil.encodeWave(pcmBuffer)
+      console.log(wav)
+      var blob = new Blob([wav], {
+        type: 'audio/wav'
+      })
+
+      var url = (window.URL || window.webkitURL).createObjectURL(blob)
+      var link = document.createElement('a')
+      link.download = new Date().getTime() + '.wav'
+      link.style.display = 'none'
+      link.href = url
+
+      document.body.appendChild(link)
+      link.click()
+
+      document.body.removeChild(link)
+      pcmBuffer = []
+    })
+
+    $('#stopPCM').click(function () {
+      if (pcmBuffer.length === 0 ){
+        alert('请先获取pcm数据')
+        return
+      }
+      ac = AudioContext || webkitAudioContext
+      mediaUtil.mic.disconnect(mediaUtil.script)
+      mediaUtil.script.disconnect(ac.destination)
+      pcmBuffer = []
+      mediaUtil = null
+      console.warn('stop PCM')
     })
 </script>
 </html>
