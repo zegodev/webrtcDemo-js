@@ -359,7 +359,8 @@ var zg,
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
-        audienceCreateRoom: true
+        audienceCreateRoom: true,
+        testEnvironment:false,
     },
     _otherConfig = {
         cgi_token: '',
@@ -464,7 +465,7 @@ function setConfig(zg) {
     console.log("config param:" + JSON.stringify(_config));
 
     _config.appid = _config.appid * 1;
-
+    _config.testEnvironment = !!_config.testEnvironment;
 
     //测试用代码，客户请忽略  start
     if (_otherConfig.signal) {
