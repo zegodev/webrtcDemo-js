@@ -465,7 +465,7 @@ function setConfig(zg) {
     console.log("config param:" + JSON.stringify(_config));
 
     _config.appid = _config.appid * 1;
-    _config.testEnvironment = !!_config.testEnvironment;
+    _config.testEnvironment = !!_config.testEnvironment * 1;
 
     //测试用代码，客户请忽略  start
     if (_otherConfig.signal) {
