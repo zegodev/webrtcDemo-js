@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script src="./video.js"></script>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <link href="./video-js.css" rel="stylesheet">
+  <style>
+    .bg-f2{
+      background-color: #f8f9fa;
+    }
+    video{
+            width: 320px;
+            height: auto;
+        }
+    .videoRow{
+        margin-top: 30px;
+    }
+    #previewLabel{
+        display: block;
+        position: absolute;
+    }
+  </style>
+  <title>rtmp m3u8 flv 测试</title>
+</head>
+
+<body class="bg-f2">
+
+  <div class="container">
+
+    <div class="my-3 p-3 bg-white rounded box-shadow small">
+
+      <h6 class="border-bottom border-gray pb-2 mb-0">rtmp m3u8 flv 测试</h6>
+
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">rtmp</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="rtmpUrl"
+                aria-describedby="emailHelp" placeholder="输入rtmp地址" value="rtmp://media3.sinovision.net:1935/live/livestream">
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">m3u8</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="rtmpUrl"
+                aria-describedby="emailHelp" placeholder="输入m3u8地址">
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:1%">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">flv</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="rtmpUrl"
+                aria-describedby="emailHelp" placeholder="输入flv地址">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" id="playVideo" class="btn btn-primary btn-sm">播放</button>
+        </div>
+      </div>
+
+      <div class="row videoRow">
+        <div class="col-sm">
+          <video id="rtmpVideo" style="color:black" class="video-js" autoplay controls preload="auto" width="750" height="350" data-setup="{}">
+            <source src='rtmp://media3.sinovision.net:1935/live/livestream' type='rtmp/flv'/>
+          </video>
+        </div>
+      </div>
+
+      <!-- <div class="row videoRow">
+        <div class="col-sm">
+          <video id="my-video" style="color:black" class="video-js" autoplay controls preload="auto" width="750" height="350" data-setup="{}">
+            <source src='' type='rtmp/flv'/>
+          </video>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+
+</body>
+<script src="../lib/jquery-3.3.1.min.js"></script>
+<script src="../lib/popper.min.js"></script>
+<script src="../lib/bootstrap.min.js"></script>
+<script src="../lib/flv.min.js"></script>
+<script>
+  $('#playVideo').click(() => {
+    let src = $('#rtmpUrl')[0].value
+    let player = videojs('rtmpVideo')
+    $('#rtmpVideo').attr('src', src)
+    player.src(src)
+    player.load(src)
+    player.play()
+  })
+</script>
+</html>
