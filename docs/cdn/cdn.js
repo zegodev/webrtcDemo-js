@@ -119,9 +119,8 @@ function filterStreamList(streamId) {
     for (let key in hls) {
       if(hls[key]){
         hls[key].forEach(item => {
-          console.log(pro)
           if( item.indexOf(pro) !== -1 ) streamListUrl.push(item)
-          else if( pro == 'https:' && item.indexOf('http') !== -1) {
+          else if( pro == 'https:' && item.indexOf('https') === -1) {
             streamListUrl.push(item.replace('http','https'))
           }
         })
@@ -139,7 +138,10 @@ function filterStreamList(streamId) {
     for (let key in flv) {
       if (flv[key]) {
         flv[key].forEach(item => {
-          if (item.indexOf('http') !== -1) streamListUrl.push(item.replace('http','https'))
+          if (item.indexOf('https') === -1) streamListUrl.push(item.replace('http','https'))
+          else if (item.indexOf(pro) !== -1) {
+            streamListUrl.push(item)
+          }
         })
       }
     }

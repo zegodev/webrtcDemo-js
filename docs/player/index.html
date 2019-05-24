@@ -42,6 +42,19 @@
 
       <div class="row">
         <div class="col-sm">
+
+          <div class="row" style="margin-top:1%">
+            <div class="col-sm">
+              <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <label class="input-group-text" for="audioList"><strong class="text-gray-dark">flv</strong></label>
+                </div>
+                <input type="email" class="form-control d-inline" id="flvUrl"
+                    aria-describedby="emailHelp" placeholder="输入flv地址">
+              </div>
+            </div>
+          </div>
+
           <div class="row" style="margin-top:1%">
               <div class="col-sm">
                 <div class="input-group input-group-sm mb-3">
@@ -66,43 +79,33 @@
             </div>
           </div>
 
-          <div class="row" style="margin-top:1%">
-            <div class="col-sm">
-              <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="audioList"><strong class="text-gray-dark">flv</strong></label>
-                </div>
-                <input type="email" class="form-control d-inline" id="flvUrl"
-                    aria-describedby="emailHelp" placeholder="输入flv地址">
-              </div>
-            </div>
-          </div>
+        </div>
+
+        <div class="col-sm" style="font-size: large">
 
           <div class="row">
             <div class="col-sm">
               <label for="hasAudio">flvAudio</label>
               <input type="checkbox" id="hasAudio" checked>
+
+              <label for="hasVideo">flvVideo</label>
+              <input type="checkbox" id="hasVideo" checked>
+
+
+              <label for="isLive">flvIsLive</label>
+              <input type="checkbox" id="isLive" checked>
+
+              <label for="withCredentials">withCredentials</label>
+              <input type="checkbox" id="withCredentials">
             </div>
           </div>
 
           <div class="row">
             <div class="col-sm">
-              <button type="button" id="playVideo" class="btn btn-info btn-sm">播放</button>
+              <button type="button" id="playVideo" class="btn btn-info">全部播放</button>
             </div>
           </div>
-        </div>
-        <div class="col-sm">
-          在线秒表
-          <button type="button" id="handleTimer" class="btn btn-info btn-sm" onclick="handleTimerClick()">开始</button>
-          <button type="button" id="clearTimer" class="btn btn-info btn-sm" onclick="clearTimer()">复位</button>
-          <div class="stopWatch">
-            <h1 id="timer">
-              <span id="hours">00</span>:
-              <span id="minutes">00</span>:
-              <span id="seconds">00</span>:
-              <span id="milliseconds">00</span>
-            </h1>
-          </div>
+
         </div>
       </div>
 
@@ -128,7 +131,19 @@
           <video id="flvVideo" style="width: 100%;" controls></video>
         </div>
 
-        <div class="col-sm"></div>
+        <div class="col-sm">
+          在线秒表
+          <button type="button" id="handleTimer" class="btn btn-info btn-sm" onclick="handleTimerClick()">开始</button>
+          <button type="button" id="clearTimer" class="btn btn-info btn-sm" onclick="clearTimer()">复位</button>
+          <div class="stopWatch">
+            <h1 id="timer">
+              <span id="hours">00</span>:
+              <span id="minutes">00</span>:
+              <span id="seconds">00</span>:
+              <span id="milliseconds">00</span>
+            </h1>
+          </div>
+        </div>
       </div>
 
 
@@ -228,9 +243,10 @@
 
           flvPlayer = flvjs.createPlayer({
               type: 'flv',
-              isLive: true,
+              isLive: $('#isLive')[0].checked,
               url: flvUrl,
-              hasAudio: $('#hasAudio')[0].checked
+              hasAudio: $('#hasAudio')[0].checked,
+              hasVideo: $('#hasVideo')[0].checked
           });
           flvPlayer.attachMediaElement($('#flvVideo')[0]);
           flvPlayer.load();
