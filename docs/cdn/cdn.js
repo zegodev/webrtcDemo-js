@@ -15,7 +15,7 @@ function init() {
     zg.config(_config);
     enumDevices();
 
-
+    listen()
 }
 
 //覆盖common.js中的loginSuccess
@@ -63,7 +63,7 @@ function loginSuccess(streamList, type) {
 
             //若支持flv.js
             if (flvjs.isSupported()) {
-                var flvPlayer = flvjs.createPlayer({
+                flvPlayer = flvjs.createPlayer({
                     type: 'flv',
                     isLive: true,
                     url: flvUrl,
@@ -173,8 +173,9 @@ function leaveRoom() {
 
   useLocalStreamList = [];
 
-  if (typeof player !== "undefined") {
+  if (typeof flvPlayer !== "undefined") {
     if (flvPlayer != null) {
+      flvPlayer.pause();
       flvPlayer.unload();
       flvPlayer.detachMediaElement();
       flvPlayer.destroy();
