@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="../lib/bootstrap.min.css" >
-    <style>
-        .bg-f2{
-          background-color: #f8f9fa;
-        }
-        video{
-            width: 320px;
-            height: auto;
-        }
-        .videoRow{
-            margin-top: 30px;
-        }
-        #previewLabel{
-            display: block;
-            position: absolute;
-        }
-    </style>
-    <title>推拉流基础功能</title>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <style>
+    .bg-f2 {
+      background-color: #f8f9fa;
+    }
+
+    video {
+      width: 320px;
+      height: auto;
+    }
+
+    .videoRow {
+      margin-top: 30px;
+    }
+
+    #previewLabel {
+      display: block;
+      position: absolute;
+    }
+  </style>
+  <title>推拉流基础功能</title>
 </head>
+
 <body class="bg-f2">
   <div class="container">
 
@@ -35,48 +40,58 @@
       <div class="row" style="margin-top:1%">
 
         <div class="col-sm">
-            <div class="input-group input-group-sm mb-3">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
-              </div>
-                <select  class="custom-select" id="audioList" style="width: 70%">
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
             </div>
+            <select class="custom-select" id="audioList" style="width: 70%">
+            </select>
+          </div>
         </div>
 
         <div class="col-sm">
-            <div class="input-group input-group-sm mb-3">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
-              </div>
-                <select  class="custom-select" id="videoList" style="width: 70%">
-                </select>
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
             </div>
+            <select class="custom-select" id="videoList" style="width: 70%">
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioOutputList"><strong class="text-gray-dark">输出设备</strong></label>
+            </div>
+            <select class="custom-select" id="audioOutputList" style="width: 70%">
+            </select>
+          </div>
         </div>
 
 
-          <div class="col-sm">
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
-                </div>
-                <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
-                aria-describedby="emailHelp" placeholder="请输入房间号">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
+            <input type="email" class="form-control d-inline" id="roomId" style="width: 75%"
+              aria-describedby="emailHelp" placeholder="请输入房间号">
           </div>
+        </div>
 
       </div>
 
       <div class="row">
 
         <div class="col-sm">
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <label class="input-group-text" for="cdnUrl"><strong class="text-gray-dark">cdn地址</strong></label>
-                </div>
-                <input type="email" class="form-control d-inline" id="cdnUrl"
-                aria-describedby="emailHelp" placeholder="请输入cdn地址">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="cdnUrl"><strong class="text-gray-dark">cdn地址</strong></label>
             </div>
+            <input type="email" class="form-control d-inline" id="cdnUrl" aria-describedby="emailHelp"
+              placeholder="请输入cdn地址">
+          </div>
         </div>
       </div>
 
@@ -87,6 +102,7 @@
           <button type="button" id="createRoomCdn" class="btn btn-primary btn-sm">创建房间(转推cdn)</button>
           <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
 
+          <button type="button" id="setLocalAudioOutput" class="btn btn-primary btn-sm">更改输出设备</button>
           <button type="button" id="getAudioInfo" class="btn btn-primary btn-sm">获取推流音频信息</button>
           <button type="button" id="stopgetAudioInfo" class="btn btn-primary btn-sm">stop获取推流音频信息</button>
           <button type="button" id="getAudioPCM" class="btn btn-primary btn-sm">获取音频pcm数据</button>
@@ -96,13 +112,13 @@
       </div>
 
       <div class="row videoRow">
-          <div class="col-sm">
-              <label id="previewLabel" class="text-white"></label>
-              <video id="previewVideo" autoplay muted playsinline></video>
-          </div>
-          <div class="col-sm remoteVideo">
-              <!-- <video  autoplay muted playsinline></video> -->
-          </div>
+        <div class="col-sm">
+          <label id="previewLabel" class="text-white"></label>
+          <video id="previewVideo" autoplay muted playsinline></video>
+        </div>
+        <div class="col-sm remoteVideo">
+          <!-- <video  autoplay muted playsinline></video> -->
+        </div>
       </div>
     </div>
 
@@ -112,64 +128,89 @@
 </body>
 <script src="../lib/jquery-3.3.1.min.js"></script>
 <script src="../lib/popper.min.js"></script>
-<script src="../lib/bootstrap.min.js" ></script>
+<script src="../lib/bootstrap.min.js"></script>
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js"></script>
 <script src="../common.js?v=010"></script>
 <script>
-    $(function () {
-        $('#createRoomCdn').click(function () {
-            openRoom($('#roomId').val(), 1);
+  let mediaUtil
+  let pcmBuffer = []
+
+  $(function () {
+
+    let speakersList = []
+
+    ZegoClient.enumDevices(deviceInfo => {
+      if (deviceInfo.speakers) {
+        deviceInfo.speakers.forEach((device, index) => {
+          if (!device.label) {
+            device.label = 'speaker' + index
+          }
+
+          speakersList.push('<option value="' + device.deviceId + '">' + device.label + '</option>')
+          console.log('speakers:' + device.label)
+          $('#audioOutputList').html(speakersList.join(''))
         });
+      }
+    }, err => alert(err))
+
+
+
+    $('#createRoomCdn').click(function () {
+      openRoom($('#roomId').val(), 1);
     });
 
-    //推流
-    function publish() {
-        zg.startPublishingStream(_config.idName, previewVideo,null,{cdnUrl:$('#cdnUrl').val()||''});
-    }
-
+    //更改拉流端音频输出设备
+    $('#setLocalAudioOutput').click(function () {
+      $('.remoteVideo video') && zg.setLocalAudioOutput($('.remoteVideo video')[0], $('#audioOutputList').val())
+    })
 
     //获取播放流音量
     $('#getAudioInfo').click(function () {
-        if(window.souder) return
+      if (window.souder) return
 
-        window.souder = ZegoClient.getAudioInfo($('#previewVideo')[0], function (e) {
-            e && console.error(e);
-        });
-        window.souderTimer = setInterval(() => {
-            console.log(souder);
-        }, 2000);
+      window.souder = ZegoClient.getAudioInfo($('#previewVideo')[0], function (e) {
+        e && console.error(e);
+      });
+      window.souderTimer = setInterval(() => {
+        console.log(souder);
+      }, 2000);
     });
 
 
     $('#stopgetAudioInfo').click(function () {
-        if(window.souder ){
-            clearInterval(window.souderTimer);
-            window.souder.stop();
-            delete window.souder
-        }
+      if (window.souder) {
+        clearInterval(window.souderTimer);
+        window.souder.stop();
+        delete window.souder
+      }
     });
-    var mediaUtil
-    var pcmBuffer = []
+
     $('#getAudioPCM').click(function () {
-        if($('#previewVideo')[0].srcObject === null) {
-          alert('请先预览视频')
-          return
-        }
-        mediaUtil = ZegoClient.getAudioInfo($('#previewVideo')[0], (err) => {
-          err && console.error(err)
-        }, {type: 'pcm', bufferSize: 16384, channels: 1, sampleBit: 16, sampleRate: 44100})
+      if ($('#previewVideo')[0].srcObject === null) {
+        alert('请先预览视频')
+        return
+      }
+      mediaUtil = ZegoClient.getAudioInfo($('#previewVideo')[0], (err) => {
+        err && console.error(err)
+      }, {
+        type: 'pcm',
+        bufferSize: 16384,
+        channels: 1,
+        sampleBit: 16,
+        sampleRate: 44100
+      })
 
-        mediaUtil.onReceiveBuffer = (buf) => {
-          console.log('buf', buf)
+      mediaUtil.onReceiveBuffer = (buf) => {
+        console.log('buf', buf)
 
-          pcmBuffer.push(buf)
+        pcmBuffer.push(buf)
 
-        }
+      }
     })
 
     $('#downloadWAV').click(function () {
-      if (pcmBuffer.length === 0 ){
+      if (pcmBuffer.length === 0) {
         alert('未获取到pcm数据')
         return
       }
@@ -194,7 +235,7 @@
     })
 
     $('#stopPCM').click(function () {
-      if (pcmBuffer.length === 0 ){
+      if (pcmBuffer.length === 0) {
         alert('请先获取pcm数据')
         return
       }
@@ -205,5 +246,48 @@
       mediaUtil = null
       console.warn('stop PCM')
     })
+  });
+
+  //推流
+  function publish() {
+    zg.startPublishingStream(_config.idName, previewVideo, null, {
+      cdnUrl: $('#cdnUrl').val() || ''
+    });
+  }
+
+  function leaveRoom() {
+    console.info('leave room  and close stream');
+
+    if (isPreviewed) {
+        zg.stopPreview(previewVideo);
+        zg.stopPublishingStream(_config.idName);
+        isPreviewed = false;
+    }
+
+    for (var i = 0; i < useLocalStreamList.length; i++) {
+        zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+    }
+
+    if(pcmBuffer.length !== 0) {
+      ac = AudioContext || webkitAudioContext
+      mediaUtil.mic.disconnect(mediaUtil.script)
+      mediaUtil.script.disconnect(ac.destination)
+      pcmBuffer = []
+      mediaUtil = null
+      console.warn('stop PCM')
+    }
+
+    if (window.souder) {
+        clearInterval(window.souderTimer);
+        window.souder.stop();
+        delete window.souder
+    }
+
+
+    useLocalStreamList = [];
+    $('.remoteVideo').html('');
+    zg.logout();
+  }
 </script>
+
 </html>
