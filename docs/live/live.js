@@ -1,6 +1,7 @@
+var role = null  //角色
 //覆盖index.js 中的init
 function init() {
-    zg = new ZegoClient(); 
+    zg = new ZegoClient();
     zg.setUserStateUpdate(true);//重要  启动用户变化监听
 
     //内调测试用代码，客户请忽略  start
@@ -88,6 +89,80 @@ function listenChild(){
     for (var key in listens) {
         zg[key] = listens[key]
     }
+}
+
+function loginSuccess(streamList, type) {
+
+  let role = zg.stateCenter.role
+
+  if(role == 1) {
+    $('#endLive')[0].disabled = true
+    $('#requestJoinLive')[0].disabled = true
+  } else if (role == 2) {
+    $('#endJoinLive')[0].disabled = true
+    $('#inviteJoinLive')[0].disabled = true
+  }
+
+
+  var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
+
+  //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
+  if (streamList.length >= maxNumber) {
+      alert('房间太拥挤，换一个吧！');
+      leaveRoom();
+      return;
+  }
+  if ($('#streamID').val()) {
+      useLocalStreamList = [{
+          anchor_id_name: 'custom',
+          stream_id: $('#streamID').val(),
+          anchor_nick_name: 'custom'
+      }, ...streamList];
+  } else {
+      useLocalStreamList = streamList;
+  }
+
+
+  $('.remoteVideo').html('');
+  $('#memberList').html('');
+  for (var index = 0; index < useLocalStreamList.length; index++) {
+      $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
+      $('#memberList').append('<option value="' + useLocalStreamList[index].anchor_id_name + '">' + useLocalStreamList[index].anchor_nick_name + '</option>');
+      play(useLocalStreamList[index].stream_id, $('.remoteVideo video:eq(' + index + ')')[0]);
+  }
+  console.log(`login success`);
+
+  loginRoom = true;
+
+
+  //开始预览本地视频
+  type === 1 && doPreviewPublish();
+
+}
+
+function leaveRoom() {
+  console.info('leave room  and close stream');
+
+  if (isPreviewed) {
+      zg.stopPreview(previewVideo);
+      zg.stopPublishingStream(_config.idName);
+      isPreviewed = false;
+  }
+
+  for (var i = 0; i < useLocalStreamList.length; i++) {
+      zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+  }
+
+  $('#endLive')[0].disabled = false
+  $('#requestJoinLive')[0].disabled = false
+  $('#endJoinLive')[0].disabled = false
+  $('#inviteJoinLive')[0].disabled = false
+
+  useLocalStreamList = [];
+  $('.remoteVideo').html('');
+  zg.logout();
+
+  role = null
 }
 
 

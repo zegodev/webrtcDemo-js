@@ -388,8 +388,6 @@ function init() {
 
     // 监听sdk回掉
     listen();
-
-    //zg.setCustomSignalUrl('wss://webrtctest.zego.im/ws?a=jackapp')
 }
 
 
@@ -425,18 +423,20 @@ function bindEvent() {
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
-    if (ZegoClient.isSupportWebrtc()) {
-        ZegoClient.isSupportH264(result => {
-            bindEvent();
-            if (!result) {
-                alert('浏览器不支持视频h264编码，不能推拉音频流');
-            }
-        }, err => {
-            console.error(err);
-        })
-    } else {
-        alert('浏览器不支持webrtc，换一个浏览器试试吧');
-    }
+    // if (ZegoClient.isSupportWebrtc()) {
+    //     ZegoClient.isSupportH264(result => {
+    //         bindEvent();
+    //         if (!result) {
+    //             alert('浏览器不支持视频h264编码，不能推拉音频流');
+    //         }
+    //     }, err => {
+    //         console.error(err);
+    //     })
+    // } else {
+    //     alert('浏览器不支持webrtc，换一个浏览器试试吧');
+    // }
+
+    bindEvent();
 
 
 });

@@ -5,7 +5,7 @@ $(function (){
     path: '../lib/laugh.mp3'
   }, {
     effectId: 2,
-    path: 'https://web-demos-static.agora.io/agora/smlt.flac'
+    path: 'https://web-demos-static.agora.io/agora/smlt.flac',
   }]
 
   $('#preloadEffect').click(() => {
@@ -13,8 +13,6 @@ $(function (){
     audioEffectList.forEach(effect => {
       zg.preloadEffect(effect.effectId, effect.path, () => {
         console.warn('preload success')
-        $('#playLaughEffect')[0].disabled = false
-        $('#playBgEffect')[0].disabled = false
       })
     })
   })
