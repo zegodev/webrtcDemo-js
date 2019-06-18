@@ -278,6 +278,8 @@
 }
 .chatBox-content{
     width: 100%;
+    height: 448px;
+    overflow-y: scroll;
 }
 .chatBox-content-demo{
     width: 100%;
@@ -378,7 +380,7 @@
     left: 0;
 }
 .div-textarea{
-    width: 260px;
+    width: 325px;
     min-height: 20px;
     max-height: 100px;
     _height: 120px;

@@ -8,24 +8,27 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="../lib/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="font_Icon/iconfont.css">
+  <link rel="stylesheet" type="text/css" href="css/chat.css">
   <style>
-    .bg-f2{
-          background-color: #f8f9fa; 
-        }
-        video {
-            width: 320px;
-            height: auto;
-        }
+    .bg-f2 {
+      background-color: #f8f9fa;
+    }
 
-        .videoRow {
-            margin-top: 30px;
-        }
+    video {
+      width: 320px;
+      height: auto;
+    }
 
-        #previewLabel {
-          display: block;
-          position: absolute;
-        }
-    </style>
+    .videoRow {
+      margin-top: 30px;
+    }
+
+    #previewLabel {
+      display: block;
+      position: absolute;
+    }
+  </style>
   <title>消息发送</title>
 </head>
 
@@ -44,7 +47,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
             </div>
-            <select class="custom-select" id="audioList" style="width: 60%">
+            <select class="custom-select" id="audioList" style="width: 70%">
             </select>
           </div>
         </div>
@@ -54,7 +57,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
             </div>
-            <select class="custom-select" id="videoList" style="width: 60%">
+            <select class="custom-select" id="videoList" style="width: 70%">
             </select>
           </div>
         </div>
@@ -64,8 +67,8 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
-            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
-              placeholder="请输入房间号">
+            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%"
+              aria-describedby="emailHelp" placeholder="请输入房间号">
           </div>
         </div>
 
@@ -79,16 +82,6 @@
           </div>
         </div>
 
-        <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">流ID</strong></label>
-            </div>
-            <input type="email" class="form-control d-inline" id="streamID" style="width: 75%" aria-describedby="emailHelp"
-              placeholder="请输入流ID">
-          </div>
-        </div>
-
       </div>
 
       <div class="row">
@@ -96,7 +89,6 @@
           <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间(作为主播)</button>
           <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(作为观众)</button>
           <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
-          <button type="button" id="sendRoomMsg" class="btn btn-primary btn-sm">发送房间消息</button>
           <button type="button" id="ReliableMessage" class="btn btn-primary btn-sm">Reliable消息</button>
           <button type="button" id="RelayMessage" class="btn btn-primary btn-sm">Relay消息</button>
           <button type="button" id="BigRoomMessage" class="btn btn-primary btn-sm">大房间消息</button>
@@ -115,13 +107,79 @@
       </div>
     </div>
   </div>
+
+  <div class="chatContainer">
+    <div class="chatBtn">
+      <i class="iconfont icon-xiaoxi1"></i>
+    </div>
+    <div class="chat-message-num">0</div>
+    <div class="chatBox" ref="chatBox">
+
+      <div class="chatBox-info">
+        <div class="chatBox-kuang" ref="chatBoxkuang">
+          <div class="chatBox-content">
+            <div class="chatBox-content-demo" id="chatBox-content-demo">
+            </div>
+          </div>
+          <div class="chatBox-send">
+            <div class="div-textarea" contenteditable="true"></div>
+            <div>
+              <button id="chat-fasong" class="btn-default-styles"><i class="iconfont icon-fasong"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
 </body>
 <script src="../lib/jquery-3.3.1.min.js"></script>
 <script src="../lib/popper.min.js"></script>
 <script src="../lib/bootstrap.min.js"></script>
 <!-- zego js sdk -->
 <script src="../lib/jZego-rtc.js"></script>
-<script src="../common.js?v=010"></script>
+<script src="common.js?v=010"></script>
 <script src="message.js?v=010"></script>
+<script>
+  $('.chatBox').hide()
+
+  //打开/关闭聊天框
+  $(".chatBtn").click(function () {
+
+    $(".chatBox").toggle()
+    $(".chatBox-kuang").toggle();
+
+    //聊天框默认最底部
+    $(document).ready(function () {
+      $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+    });
+
+  })
+
+  //      发送信息
+  $("#chat-fasong").click(function () {
+    var textContent = $(".div-textarea").html().replace(/[\n\r]/g, '<br>')
+    if (textContent != "") {
+      zg.sendRoomMsg(1, 1, textContent, () => {
+        console.warn('send Message success')
+
+        $(".chatBox-content-demo").append("<div class=\"clearfloat\">" +
+          "<div class=\"author-name\"><small class=\"chat-date\">" + new Date().toLocaleString() +
+          "</small> </div> " +
+          "<div class=\"right\"> <div class=\"chat-message\"> " + textContent + " </div> " +
+          "<div class=\"chat-avatars\"><img src=\"img/icon01.png\" alt=\"头像\" /></div> </div> </div>");
+        //发送后清空输入框
+        $(".div-textarea").html("");
+        //聊天框默认最底部
+        $(document).ready(function () {
+          $("#chatBox-content-demo").scrollTop($("#chatBox-content-demo")[0].scrollHeight);
+        });
+      }, err => {
+        console.warn('send Message error' + err)
+      })
+    }
+  });
+</script>
 
 </html>
