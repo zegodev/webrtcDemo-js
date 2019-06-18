@@ -53,7 +53,7 @@ function listenChild() {
       chat_data[0].msg_category == 2 ? chatBox = "<div class=\"clearfloat\">" +
         "<div class=\"author-name\"><small class=\"chat-date\">" + new Date().toLocaleString() + "</small> </div> " +
         "<div class=\"left\"> " + "<div class=\"chat-avatars\"><img src=\"img/icon01.png\" alt=\"头像\" /></div> " +
-        " <div class=\"chat-message\"> <img src=\"" + chat_data[0].msg_content + "\" >" + " </div> </div>" : chatBox = "<div class=\"clearfloat\">" +
+        " <div class=\"chat-message\"> <img src=\"" + chat_data[0].msg_content + "\" >" + " </div>" : chatBox = "<div class=\"clearfloat\">" +
         "<div class=\"author-name\"><small class=\"chat-date\">" + new Date().toLocaleString() + "</small> </div> " +
         "<div class=\"left\"> " + "<div class=\"chat-avatars\"><img src=\"img/icon01.png\" alt=\"头像\" /></div> " +
         " <div class=\"chat-message\">" + chat_data[0].msg_content + " </div> </div> "
