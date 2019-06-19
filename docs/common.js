@@ -109,6 +109,7 @@ function openRoom(roomId, type) {
 
 //login
 function startLogin(roomId, token, type) {
+    zg.setCustomSignalUrl('wss://webrtctest.zego.im/ws?a=jackapp')
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
         loginSuccess(streamList, type);
@@ -389,7 +390,7 @@ function init() {
     // 监听sdk回掉
     listen();
 
-    //zg.setCustomSignalUrl('wss://webrtctest.zego.im/ws?a=jackapp')
+
 }
 
 
