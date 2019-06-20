@@ -121,7 +121,7 @@ $(function () {
           zg.stopPreview(previewVideo);
           zg.stopPublishingStream(_config.idName);
           zg.stopPreview($('#previewVideo2')[0]);
-          zg.stopPublishingStream(idName);
+          zg.stopPublishingStream(_config.idName);
           isPreviewed = false;
       }
 
