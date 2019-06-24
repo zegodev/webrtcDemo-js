@@ -5,7 +5,7 @@ $(function (){
     path: '../lib/laugh.mp3'
   }, {
     effectId: 2,
-    path: 'https://web-demos-static.agora.io/agora/smlt.flac',
+    path: '../lib/bike',
   }]
 
   $('#preloadEffect').click(() => {

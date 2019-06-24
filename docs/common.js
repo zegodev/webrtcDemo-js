@@ -101,14 +101,14 @@ function openRoom(roomId, type) {
                 alert('get token failed')
             } else {
                 console.log('gettoken success');
-                startLogin(roomId, token, type)
+                startLogin(roomId, type, token)
             }
         }, 'text');
 }
 
 
 //login
-function startLogin(roomId, token, type) {
+function startLogin(roomId, type, token) {
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
         loginSuccess(streamList, type);
