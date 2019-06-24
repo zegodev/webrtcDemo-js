@@ -389,7 +389,7 @@ function init() {
     // 监听sdk回掉
     listen();
 
-    //zg.setCustomSignalUrl('wss://webrtctest.zego.im/ws?a=jackapp')
+
 }
 
 
