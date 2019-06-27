@@ -179,7 +179,7 @@ function openRoom(roomId, type) {
 
 
 //login
-function startLogin(roomId, type, token) {
+function startLogin(roomId, token,type) {
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
         loginSuccess(streamList, type);
