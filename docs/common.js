@@ -551,7 +551,11 @@ function desc() {
         // descAtag.setAttribute('data-trigger', 'focus');
         descAtag.setAttribute('data-toggle', 'popover');
         descAtag.setAttribute('title', '调用说明');
-        var descArr = descObj[/\/(.+)\//.exec(location.pathname)[1]] || [];
+
+        var pageUrl = location.pathname.split('/');
+        pageUrl = pageUrl[pageUrl.length-2];
+
+        var descArr = descObj[pageUrl] || [];
         descAtag.setAttribute('data-content', descArr.join(`<br/><br/>`));
 
         console.log(descObj);
