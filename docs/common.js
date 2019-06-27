@@ -141,6 +141,7 @@ function openRoom(roomId, type) {
 
     screenCaptrue && zg.stopScreenShot();
 
+
     //get token   生产环境下获取token方式
     if(!appSigin){
         $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
@@ -178,8 +179,7 @@ function openRoom(roomId, type) {
 
 
 //login
-function startLogin(roomId, token, type) {
-
+function startLogin(roomId, type, token) {
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
         loginSuccess(streamList, type);
