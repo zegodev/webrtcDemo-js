@@ -2,10 +2,10 @@ $(function (){
 
   let audioEffectList = [{
     effectId: 1,
-    path: '../lib/laugh.mp3'
+    path: '../assets/laugh.mp3'
   }, {
     effectId: 2,
-    path: '../lib/aoisora.mp3',
+    path: '../assets/aoisora.mp3',
   }]
 
   $('#preloadEffect').click(() => {

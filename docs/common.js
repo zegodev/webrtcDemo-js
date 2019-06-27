@@ -1,3 +1,50 @@
+var zg,
+    appid = getParamByName('appid') || 1739272706,
+    appSigin = '',
+    _config = {
+        appid: appid * 1,
+        idName:  new Date().getTime() + '',
+        nickName: 'u' + new Date().getTime(),
+        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
+        logLevel: 0,
+        logUrl: "",
+        remoteLogLevel: 0,
+        audienceCreateRoom: true,
+        testEnvironment: false,
+    },
+    _otherConfig = {
+        cgi_token: '',
+        roomlist: '',
+        signal: '',
+        token: "https://wsliveroom-demo.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
+    },
+    loginRoom = false,
+    previewVideo,
+    screenCaptrue,
+    isPreviewed = false,
+    useLocalStreamList = [];
+var anchor_userid = '', anchro_username = '';
+
+
+$(function () {
+    console.log('sdk version is', ZegoClient.getCurrentVersion());
+    if (ZegoClient.isSupportWebrtc()) {
+        ZegoClient.isSupportH264(result => {
+            bindEvent();
+            if (!result) {
+                alert('浏览器不支持视频h264编码，不能推拉音频流');
+            }
+        }, err => {
+            console.error(err);
+        })
+    } else {
+        alert('浏览器不支持webrtc，换一个浏览器试试吧');
+    }
+
+    desc()
+
+});
+
 function getBrowser() {
     var ua = window.navigator.userAgent;
     var isIE = window.ActiveXObject != undefined && ua.indexOf("MSIE") != -1;
@@ -94,16 +141,39 @@ function openRoom(roomId, type) {
 
     screenCaptrue && zg.stopScreenShot();
 
-    //get token
-    $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
-        function (token) {
-            if (!token) {
-                alert('get token failed')
-            } else {
-                console.log('gettoken success');
-                startLogin(roomId, token, type)
-            }
-        }, 'text');
+    //get token   生产环境下获取token方式
+    if(!appSigin){
+        $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
+            function (token) {
+                if (!token) {
+                    alert('get token failed')
+                } else {
+                    console.log('gettoken success');
+                    startLogin(roomId, token, type)
+                }
+            }, 'text');
+
+    }else{//get token  前端开发绕过后端，临时获取token方式，需要填写appSign
+        var now = new Date().getTime();
+        $.get('https://sig-wstoken.zego.im:8282/tokenverify',
+            {
+                app_id: _config.appid,
+                id_name: _config.idName,
+                app_secret: appSigin,
+                nonce: now,
+                expired: Math.floor(now / 1000 + 30 * 60)
+            },
+            function (token) {
+                token = /token:(.+)/.exec(token)&&/token:(.+)/.exec(token)[1]&&/token:(.+)/.exec(token)[1].replace(' ','');
+
+                if (!token) {
+                    alert('get token failed')
+                } else {
+                    console.log('gettoken success');
+                    startLogin(roomId,  token, type)
+                }
+            });
+    }
 }
 
 
@@ -182,7 +252,7 @@ function doPreviewPublish(config) {
         isPreviewed = true;
         $('#previewLabel').html(_config.nickName);
         let isAudio
-        $('#previewVideo')[0].srcObject.getAudioTracks().length === 0? isAudio = false: isAudio = true;
+        $('#previewVideo')[0].srcObject.getAudioTracks().length === 0 ? isAudio = false : isAudio = true;
         publish(isAudio);
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
         enumDevices();
@@ -196,11 +266,11 @@ function doPreviewPublish(config) {
 
 //推流
 function publish(isAudio) {
-  if (isAudio) {
-    zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"All"}');
-  } else {
-    zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"Video"}')
-  }
+    if (isAudio) {
+        zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"All"}');
+    } else {
+        zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"Video"}')
+    }
 
 }
 
@@ -222,8 +292,7 @@ function listen() {
         onPlayStateUpdate: function (type, streamid, error) {
             if (type == 0) {
                 console.info('play  success');
-            }
-            else if (type == 2) {
+            } else if (type == 2) {
                 console.info('play retry');
             } else {
 
@@ -350,32 +419,6 @@ function leaveRoom() {
 }
 
 
-var zg,
-    appid = getParamByName('appid') || 1739272706,
-    _config = {
-        appid: appid * 1,
-        idName: new Date().getTime() + '',
-        nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
-        logLevel: 0,
-        logUrl: "",
-        remoteLogLevel: 0,
-        audienceCreateRoom: true,
-        testEnvironment:false,
-    },
-    _otherConfig = {
-        cgi_token: '',
-        roomlist: '',
-        signal: '',
-        token: "https://wsliveroom-demo.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
-    },
-    loginRoom = false,
-    previewVideo,
-    screenCaptrue,
-    isPreviewed = false,
-    useLocalStreamList = [];
-var anchor_userid = '', anchro_username = '';
-
 function init() {
 
     zg = new ZegoClient();
@@ -424,29 +467,6 @@ function bindEvent() {
 
 }
 
-$(function () {
-    console.log('sdk version is', ZegoClient.getCurrentVersion());
-    if (ZegoClient.isSupportWebrtc()) {
-        ZegoClient.isSupportH264(result => {
-            bindEvent();
-            if (!result) {
-                alert('浏览器不支持视频h264编码，不能推拉音频流');
-            }
-        }, err => {
-            console.error(err);
-        })
-    } else {
-        alert('浏览器不支持webrtc，换一个浏览器试试吧');
-    }
-
-
-});
-
-
-
-
-
-
 
 function setConfig(zg) {
     //测试用代码，客户请忽略  start
@@ -468,18 +488,80 @@ function setConfig(zg) {
     console.log("config param:" + JSON.stringify(_config));
 
     _config.appid = _config.appid * 1;
-    _config.testEnvironment = !! (_config.testEnvironment * 1);
+    _config.testEnvironment = !!(_config.testEnvironment * 1);
 
     //测试用代码，客户请忽略  start
     if (_otherConfig.signal) {
         zg.setCustomSignalUrl(_otherConfig.signal);
     }
 
-    if(_otherConfig.cgi_token&&_otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token'){
-        $.get(_otherConfig.cgi_token,function (cgi_token) {
+    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token') {
+        $.get(_otherConfig.cgi_token, function (cgi_token) {
             _otherConfig.cgi_token = cgi_token.data;
             console.log(_otherConfig.cgi_token);
         })
     }
     //测试用代码，客户请忽略  end
 }
+
+
+function desc() {
+    function addCssByLink(url) {
+        var doc = document;
+        var link = doc.createElement("link");
+        link.setAttribute("rel", "stylesheet");
+        link.setAttribute("type", "text/css");
+        link.setAttribute("href", url);
+
+        var heads = doc.getElementsByTagName("head");
+        if (heads.length)
+            heads[0].appendChild(link);
+        else
+            doc.documentElement.appendChild(link);
+    }
+
+    function loadJs(url, callback) {
+        var script = document.createElement('script');
+        script.type = "text/javascript";
+        if (typeof (callback) != "undefined") {
+            if (script.readyState) {
+                script.onreadystatechange = function () {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                        script.onreadystatechange = null;
+                        callback();
+                    }
+                }
+            } else {
+                script.onload = function () {
+                    callback();
+                }
+            }
+        }
+        script.src = url;
+        document.body.appendChild(script);
+    }
+
+    addCssByLink('../assets/desc.css');
+
+    loadJs('../assets/desc.js', function () {
+        var descAtag = document.createElement('a');
+        descAtag.setAttribute('id', 'descModule');
+        descAtag.setAttribute('role', 'button');
+        descAtag.setAttribute('tabindex', '0');
+        // descAtag.setAttribute('data-trigger', 'focus');
+        descAtag.setAttribute('data-toggle', 'popover');
+        descAtag.setAttribute('title', '调用说明');
+        var descArr = descObj[/\/(.+)\//.exec(location.pathname)[1]] || [];
+        descAtag.setAttribute('data-content', descArr.join(`<br/><br/>`));
+
+        console.log(descObj);
+        document.getElementsByTagName('body')[0].appendChild(descAtag);
+
+        $('#descModule').popover({
+            html: true
+        })
+    })
+}
+
+
+

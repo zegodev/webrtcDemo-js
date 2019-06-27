@@ -1,0 +1,11 @@
+#descModule {
+    width: 3vw;
+    height: 3vw;
+    border: 0px solid #06060636;
+    position: fixed;
+    top: 40vh;
+    right: 1vw;
+    /*border-radius: 3vw;*/
+    background-image: url(../assets/why.jpg);
+    background-size: cover;
+}

@@ -25,7 +25,7 @@
   下载最新[sdk](https://storage.zego.im/downloads/jZego-rtc-SDK.zip)并解压
  , 在你的html页面适当位置引入
 
- `` <script src="lib/jZego-rtc-1.0.3.js"></script>
+ `` <script src="assets/jZego-rtc-1.0.3.js"></script>
  ``
 
  如有录屏需求，使用chrome浏览器时需另外下载[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)

@@ -7,7 +7,7 @@ var zg,
       server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
       logLevel: 0,
       logUrl: "",
-      workerUrl: '../lib/jsmpeg-stub.min.js'
+      workerUrl: '../assets/jsmpeg-stub.min.js'
     },
     _otherConfig = {
       cgi_token: '',

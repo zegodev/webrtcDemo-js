@@ -4,11 +4,13 @@
   "description": "demo",
   "main": "index.js",
   "scripts": {
-    "start": "http-server ./docs -p 9090 -S -C cert.pem -K key.pem"
+    "start": "http-server ./docs -p 9090 -S -C cert.pem -K key.pem",
+    "http": "http-server ./docs -p 9091"
   },
   "author": "choui",
   "license": "ISC",
   "dependencies": {
+    "blueimp-md5": "^2.10.0",
     "http-server": "^0.11.1"
   }
 }
