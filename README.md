@@ -9,30 +9,22 @@
 
  ## 集成条件
  - 即构开发者账户（[获取appid](https://www.zego.im)）
- - webrtc只支持以下浏览器
+ - webrtc兼容性如下
    <img src="https://storage.zego.im/sdk-doc/Pics/Web/ZegoLiveRoom/ZegoLiveRoom-IntegrationGuide/form.png?v=Thu%20Jun%2027%202019%2015:53:03%20GMT+0800%20(GMT+08:00)">
- - 支持SSL的Web服务器（https）
+ - 只支持SSL的Web服务器（https）
+> 项目里测试用https证书在浏览器中会有警告，可以点击高级-->继续访问 
+> >localhost,127.0.0.1等同于https
 
 
- ## 快速开始
-
+ ## 快速搭建自己demo
  - 安装依赖: npm i
+ - 修改/docs/common.js中代码为自己的配置
+ > appid,appSigin，server为自己的配置（不清楚的请咨询即构技术支持）
+ >  
+ > appSigin为即构给客户分配的秘钥，请勿泄漏；（生产环境下是生成token的密码，需要放到服务端）
+ <img src="http://zego-sdkdemospace.oss-cn-shanghai.aliyuncs.com/webrtcDemo-config.png"/>
  - 启动： npm run start
- - [获取sdk](#getsdk)
- - [使用示例](#demoStep)
 
-
- ### <a id="getsdk">获取sdk</a>
- #### 官网下载
-  下载最新[sdk](https://storage.zego.im/downloads/jZego-rtc-SDK.zip)并解压
- , 在你的html页面适当位置引入
-
- `` <script src="assets/jZego-rtc-1.0.3.js"></script>
- ``
-
- 如有录屏需求，使用chrome浏览器时需另外下载[zego-chrome录屏插件](https://storage.zego.im/downloads/jZego-screen-extention.zip)
-
- ### <a id="demoStep">使用示例</a>
  
  ## [常见问题](https://github.com/zegodev/webrtcDemo-js/issues)
 
