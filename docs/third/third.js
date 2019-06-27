@@ -1,6 +1,7 @@
-let localMedia
+var localMedia
 
 $('#externalCaptureV').click(function (){
+  $('#externerVideo')[0].play();
   localMedia = $('#externerVideo')[0]
   openRoom($('#roomId').val(), 1)
 })
