@@ -47,6 +47,9 @@ function loginSuccess(streamList, type) {
     mediastream = localMedia.captureStream()
   } else if(localMedia['mozCaptureStream']) {
     mediastream = localMedia.mozCaptureStream()
+  }else{
+     alert('浏览器暂不支持');
+     return;
   }
   
   previewVideo.srcObject = mediastream
