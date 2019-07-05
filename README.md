@@ -25,6 +25,10 @@
  <img src="http://zego-public.oss-cn-shanghai.aliyuncs.com/sdk-doc/webrtcDemo-config.png"/>
  - 启动： npm run start
 
+
+## 注意
+- demo里的sdk为实验版本，请不要用这里的sdk作为生产环境
+
  
  ## [常见问题](https://github.com/zegodev/webrtcDemo-js/issues)
 
