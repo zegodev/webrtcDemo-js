@@ -32,7 +32,7 @@ $(function () {
         ZegoClient.isSupportH264(result => {
             bindEvent();
             if (!result) {
-                alert('浏览器不支持视频h264编码，不能推拉音频流');
+                alert('浏览器不支持视频h264编码，不能推拉视频流');
             }
         }, err => {
             console.error(err);
