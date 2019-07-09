@@ -43,7 +43,7 @@ function loginSuccess(streamList,type) {
     for(var index=0;index<useLocalStreamList.length;index++){
         $('.remoteVideo').append($('<audio  autoplay muted playsinline controls></audio>') );
         $('#memberList').append('<option value="'+useLocalStreamList[index].anchor_id_name+'">'+useLocalStreamList[index].anchor_nick_name+'</option>');
-        play(useLocalStreamList[index].stream_id,$('.remoteVideo audio:eq('+index+')')[0]);
+        useLocalStreamList[index].extra_info && play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], useLocalStreamList[index].extra_info);
     }
     console.log(`login success`);
 
@@ -170,15 +170,15 @@ function listen() {
 
 }
 
-function play(streamId, video) {
-    var result = zg.startPlayingStream(streamId, video,null,{playType:"audio"});
+function play(streamId, video, streaminfo) {
+    let playType = JSON.parse(streaminfo)
+    var result = zg.startPlayingStream(streamId, video,null,playType);
 
     video.muted = false;
     if (!result) {
         alert('哎呀，播放失败啦');
         video.style = 'display:none';
         console.error("play " + el.nativeElement.id + " return " + result);
-
     }
 }
 
