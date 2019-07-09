@@ -26,8 +26,14 @@ function doPreviewPublish(config) {
     if (!result) alert('预览失败！')
 }
 
+function publish() {
+  zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"Audio"}')
+}
+
 
 function loginSuccess(streamList,type) {
+
+    let extraInfo
 
     //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
     if (streamList.length >= 4) {
@@ -43,7 +49,8 @@ function loginSuccess(streamList,type) {
     for(var index=0;index<useLocalStreamList.length;index++){
         $('.remoteVideo').append($('<audio  autoplay muted playsinline controls></audio>') );
         $('#memberList').append('<option value="'+useLocalStreamList[index].anchor_id_name+'">'+useLocalStreamList[index].anchor_nick_name+'</option>');
-        useLocalStreamList[index].extra_info && play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], useLocalStreamList[index].extra_info);
+        extraInfo = useLocalStreamList[index].extra_info || ''
+        play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], extraInfo);
     }
     console.log(`login success`);
 
@@ -170,8 +177,13 @@ function listen() {
 
 }
 
-function play(streamId, video, streaminfo) {
-    let playType = JSON.parse(streaminfo)
+function play(streamId, video, extraInfo) {
+
+    let playType = {playType: Audio}
+
+    if (extraInfo.indexOf('playType') !== -1) {
+      playType = JSON.parse(extraInfo)
+    }
     var result = zg.startPlayingStream(streamId, video,null,playType);
 
     video.muted = false;

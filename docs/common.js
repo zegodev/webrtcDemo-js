@@ -251,9 +251,7 @@ function doPreviewPublish(config) {
         console.log('preview success');
         isPreviewed = true;
         $('#previewLabel').html(_config.nickName);
-        let isAudio
-        $('#previewVideo')[0].srcObject.getAudioTracks().length === 0 ? isAudio = false : isAudio = true;
-        publish(isAudio);
+        publish();
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
         enumDevices();
     }, function (err) {
@@ -265,12 +263,8 @@ function doPreviewPublish(config) {
 }
 
 //推流
-function publish(isAudio) {
-    if (isAudio) {
-        zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"All"}');
-    } else {
-        zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"Video"}')
-    }
+function publish() {
+    zg.startPublishingStream(_config.idName, previewVideo);
 
 }
 
