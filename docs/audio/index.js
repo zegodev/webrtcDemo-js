@@ -33,8 +33,6 @@ function publish() {
 
 function loginSuccess(streamList,type) {
 
-    let extraInfo
-
     //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
     if (streamList.length >= 4) {
         alert('房间太拥挤，换一个吧！');
@@ -49,8 +47,7 @@ function loginSuccess(streamList,type) {
     for(var index=0;index<useLocalStreamList.length;index++){
         $('.remoteVideo').append($('<audio  autoplay muted playsinline controls></audio>') );
         $('#memberList').append('<option value="'+useLocalStreamList[index].anchor_id_name+'">'+useLocalStreamList[index].anchor_nick_name+'</option>');
-        extraInfo = useLocalStreamList[index].extra_info || ''
-        play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], extraInfo);
+        play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], useLocalStreamList[index].extra_info || '');
     }
     console.log(`login success`);
 
@@ -138,7 +135,7 @@ function listen() {
                   useLocalStreamList.push(streamList[i]);
                   $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
                   $('.remoteVideo').append($('<audio  autoplay muted playsinline controls></audio>'));
-                  play(streamList[i].stream_id, $('.remoteVideo audio:last-child')[0]);
+                  play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], useLocalStreamList[index].extra_info || '');
               }
 
           } else if (type == 1) {
@@ -179,7 +176,7 @@ function listen() {
 
 function play(streamId, video, extraInfo) {
 
-    let playType = {playType: Audio}
+    let playType = {playType: 'Audio'}
 
     if (extraInfo.indexOf('playType') !== -1) {
       playType = JSON.parse(extraInfo)
