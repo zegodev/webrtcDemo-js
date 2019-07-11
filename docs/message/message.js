@@ -68,17 +68,19 @@ function listenChild() {
       });
 
       num++
-      $('#chat-message-num').text(num)
+      $(".chat-message-num").text(num)
       $(".chatBox").show()
       $(".chatBox-kuang").show();
     },
     onRecvReliableMessage: function (type, seq, data) {
       console.log('onRecvReliableMessage', type, seq, data);
-      alert('onRecvReliableMessage|' + type + '|' + seq + '|' + data);
+      $('#exampleModalLabel').text('onRecvReliableMessage|' + type + '|' + seq + '|' + data);
+      $('#showAlert').click();
     },
     onRecvBigRoomMessage: function (messageList, roomId) {
       console.log('onRecvBigRoomMessage', messageList, roomId);
-      alert('onRecvBigRoomMessage|' + JSON.stringify(messageList) + '|' + roomId);
+      $('#exampleModalLabel').text('onRecvBigRoomMessage|' + JSON.stringify(messageList) + '|' + roomId);
+      $('#showAlert').click();
     }, onRecvCustomCommand: function (from_userid, from_idname, custom_content) {
       console.log('onRecvCustomCommand', from_userid, from_idname, custom_content);
     },
