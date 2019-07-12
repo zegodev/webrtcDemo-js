@@ -1,14 +1,10 @@
 var localMedia
 
 $('#externalCaptureV').click(function (){
-  $('#externerVideo')[0].play();
-  localMedia = $('#externerVideo')[0]
-  openRoom($('#roomId').val(), 1)
-})
-
-$('#externalCaptureA').click(function (){
-  localMedia = $('#externerAudio')[0]
-  openRoom($('#roomId').val(), 1)
+  preloadVideo('../assets/big_buck_bunny.mp4')
+  // $('#externerVideo')[0].play();
+  // localMedia = $('#externerVideo')[0]
+  // openRoom($('#roomId').val(), 1)
 })
 
 function loginSuccess(streamList, type) {
@@ -51,7 +47,7 @@ function loginSuccess(streamList, type) {
      alert('浏览器暂不支持');
      return;
   }
-  
+
   previewVideo.srcObject = mediastream
   var config = {
     externalCapture: null,
@@ -61,8 +57,23 @@ function loginSuccess(streamList, type) {
     bitRate: 1500
   }
   config.externalMediaStream = mediastream
-  config.video = false
+  config.video = false;
+  config.audio = false;
   //开始预览本地视频
   type === 1 && doPreviewPublish(config);
 
+}
+
+function preloadVideo(url) {
+  let xhr = new XMLHttpRequest();
+
+  xhr.open('GET', url, true);
+  xhr.responseType = 'arraybuffer';
+  xhr.onload = () => {
+
+    if(xhr.status == 200 || xhr.status == 304 ) {
+      console.log(xhr.response)
+    }
+  }
+  xhr.send();
 }
