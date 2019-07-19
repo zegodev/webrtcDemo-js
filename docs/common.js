@@ -440,6 +440,7 @@ function bindEvent() {
     init();
 
     $('#createRoom').click(function () {
+        zg.setUserStateUpdate(true);
         openRoom($('#roomId').val(), 1);
     });
 

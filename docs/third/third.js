@@ -1,10 +1,9 @@
 var localMedia
 
 $('#externalCaptureV').click(function (){
-  preloadVideo('../assets/big_buck_bunny.mp4')
-  // $('#externerVideo')[0].play();
-  // localMedia = $('#externerVideo')[0]
-  // openRoom($('#roomId').val(), 1)
+  $('#externerVideo')[0].play();
+  localMedia = $('#externerVideo')[0]
+  openRoom($('#roomId').val(), 1)
 })
 
 function loginSuccess(streamList, type) {
@@ -50,15 +49,15 @@ function loginSuccess(streamList, type) {
 
   previewVideo.srcObject = mediastream
   var config = {
-    externalCapture: null,
-    width: 1280,
-    height: 720,
-    frameRate: 20,
-    bitRate: 1500
+    externalCapture: true,
+    // width: 1280,
+    // height: 720,
+    // frameRate: 20,
+    // bitRate: 1500
   }
-  config.externalMediaStream = mediastream
-  config.video = false;
-  config.audio = false;
+  // config.externalMediaStream = mediastream
+  // config.video = false;
+  // config.audio = false;
   //开始预览本地视频
   type === 1 && doPreviewPublish(config);
 
