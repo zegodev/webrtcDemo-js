@@ -27,7 +27,7 @@ function doPreviewPublish(config) {
 }
 
 function publish() {
-  zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"Audio"}')
+  zg.startPublishingStream(_config.idName, previewVideo, '{"playType":"audio"}')
 }
 
 
@@ -176,7 +176,7 @@ function listen() {
 
 function play(streamId, video, extraInfo) {
 
-    let playType = {playType: 'Audio'}
+    let playType = {playType: 'audio'}
 
     if (extraInfo.indexOf('playType') !== -1) {
       playType = JSON.parse(extraInfo)
