@@ -438,7 +438,7 @@ function play(streamId, video) {
     playStreamList.push(streamId);
     var result = zg.startPlayingStream(streamId, video,null,{videoDecodeType:videoDecodeType});
 
-    video.muted = false;
+    // video.muted = false;
     if (!result) {
         alert('哎呀，播放失败啦');
         video.style = 'display:none';
