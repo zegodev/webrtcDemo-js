@@ -384,8 +384,8 @@ function mixStream() {
         streamId: _config.idName,
         top: 3,
         left: 3,
-        bottom: 240,
-        right: 320,
+        bottom: 320,
+        right: 240,
     }];
     zg.updateMixStream({
         outputStreamId: _config.MixIdName,
@@ -411,14 +411,14 @@ function leaveRoom() {
         zg.stopPreview(previewVideo);
         zg.stopPublishingStream(_config.idName);
         isPreviewed = false;
-        zg.stopMixStream(zg.stopMixStream({
+        zg.stopMixStream({
             outputStreamId: 'Mix' + _config.idName,
         }, function () {
             console.log('stopMixStream success: ');
         }, function (err) {
             console.log('stopMixStream err: ');
             console.log(err);
-        }))
+        })
     }
 
     for (var i = 0; i < playStreamList.length; i++) {
