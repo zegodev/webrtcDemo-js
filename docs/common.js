@@ -32,7 +32,7 @@ $(function () {
         ZegoClient.isSupportH264(result => {
             bindEvent();
             if (!result) {
-                alert('浏览器不支持视频h264编码，不能推拉视频流');
+                alert('浏览器不支持视频h264编码，建议使用vp8尝试');
             }
         }, err => {
             console.error(err);
@@ -440,6 +440,7 @@ function bindEvent() {
     init();
 
     $('#createRoom').click(function () {
+        zg.setUserStateUpdate(true);
         openRoom($('#roomId').val(), 1);
     });
 
