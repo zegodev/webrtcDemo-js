@@ -203,7 +203,8 @@ function loginSuccess(streamList, type) {
         if (extraInfo) {
             extraInfo = JSON.parse(extraInfo);
             if (extraInfo.currentVideoCode !== videoDecodeType) {
-                streamId = extraInfo.MixStreamId
+                streamId = extraInfo.MixStreamId;
+                extraInfo.currentVideoCode = videoDecodeType;
             }
         }
         play(streamId, $('.remoteVideo video:eq(' + index + ')')[0],extraInfo.currentVideoCode);
@@ -254,10 +255,11 @@ function listenChild() {
                     if (extraInfo) {
                         extraInfo = JSON.parse(extraInfo);
                         if (extraInfo.currentVideoCode !== videoDecodeType) {
-                            streamId = extraInfo.MixStreamId
+                            streamId = extraInfo.MixStreamId;
+                            extraInfo.currentVideoCode = videoDecodeType;
                         }
                     }
-                    play(streamId, $('.remoteVideo video:last-child')[0]);
+                    play(streamId, $('.remoteVideo video:last-child')[0],extraInfo.currentVideoCode);
                 }
 
             } else if (type == 1) {
@@ -434,9 +436,9 @@ function leaveRoom() {
     zg.logout();
 }
 
-function play(streamId, video) {
+function play(streamId, video,videoCode) {
     playStreamList.push(streamId);
-    var result = zg.startPlayingStream(streamId, video,null,{videoDecodeType:videoDecodeType});
+    var result = zg.startPlayingStream(streamId, video,null,{videoDecodeType:videoCode});
 
      video.muted = false;
     if (!result) {
