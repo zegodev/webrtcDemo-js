@@ -250,7 +250,7 @@ function listenChild() {
                     useLocalStreamList.push(streamList[i]);
                     $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
                     $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
-                    var extraInfo = streamList[index].extra_info, streamId = streamList[index].stream_id;
+                    var extraInfo = streamList[i].extra_info, streamId = streamList[i].stream_id;
                     if (extraInfo) {
                         extraInfo = JSON.parse(extraInfo);
                         if (extraInfo.currentVideoCode !== videoDecodeType) {
