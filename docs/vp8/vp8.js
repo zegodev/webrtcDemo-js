@@ -384,6 +384,7 @@ function publish() {
 function mixStream() {
     var streamList = [{
         streamId: _config.idName,
+        outputUrl: 'test.aliyun.zego.im/zegodemo',
         top: 3,
         left: 3,
         bottom: 320,
