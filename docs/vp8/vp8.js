@@ -207,7 +207,7 @@ function loginSuccess(streamList, type) {
                 extraInfo.currentVideoCode = videoDecodeType;
             }
         }
-        play(streamId, $('.remoteVideo video:eq(' + index + ')')[0],extraInfo.currentVideoCode);
+        play(streamId, $('.remoteVideo video:eq(' + index + ')')[0], extraInfo.currentVideoCode);
     }
     console.log(`login success`);
 
@@ -259,7 +259,7 @@ function listenChild() {
                             extraInfo.currentVideoCode = videoDecodeType;
                         }
                     }
-                    play(streamId, $('.remoteVideo video:last-child')[0],extraInfo.currentVideoCode);
+                    play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
                 }
 
             } else if (type == 1) {
@@ -360,7 +360,9 @@ function doPreviewPublish(config) {
         $('#previewLabel').html(_config.nickName);
         publish();
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
-        enumDevices();
+        if (!$('#videoList').val() && $('#videoList').val() != 0) {
+            enumDevices();
+        }
     }, function (err) {
         alert(JSON.stringify(err));
         console.error('preview failed', err);
@@ -398,7 +400,7 @@ function mixStream() {
         streamList: streamList,
         extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
     };
-    console.log('mixParam',mixParam);
+    console.log('mixParam', mixParam);
     zg.updateMixStream(mixParam, function (mixStreamId, mixStreamInfo) {
         console.log('mixStreamId: ' + mixStreamId);
         console.log('mixStreamInfo: ' + JSON.stringify(mixStreamInfo));
@@ -438,11 +440,11 @@ function leaveRoom() {
     zg.logout();
 }
 
-function play(streamId, video,videoCode) {
+function play(streamId, video, videoCode) {
     playStreamList.push(streamId);
-    var result = zg.startPlayingStream(streamId, video,null,{videoDecodeType:videoCode});
+    var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: videoCode});
 
-     video.muted = false;
+    video.muted = false;
     if (!result) {
         alert('哎呀，播放失败啦');
         video.style = 'display:none';
