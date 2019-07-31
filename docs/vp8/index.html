@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../assets/bootstrap.min.css">
+  <style>
+    .bg-f2{
+      background-color: #f8f9fa;
+    }
+    video{
+      width: 320px;
+      height: auto;
+        }
+    .videoRow{
+        margin-top: 30px;
+    }
+    #previewLabel{
+      display: block;
+      position: absolute;
+    }
+  </style>
+  <title>vp8(微信浏览器，safari互通)</title>
+</head>
+
+<body class="bg-f2">
+
+  <div class="container">
+
+    <div class="my-3 p-3 bg-white rounded box-shadow small">
+
+      <h6 class="border-bottom border-gray pb-2 mb-0">混流转码（支持vp8,h264互通)</h6>
+
+      <div class="row" style="margin-top:1%">
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
+            </div>
+            <select class="custom-select" id="audioList" style="width: 60%">
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
+            </div>
+            <select class="custom-select" id="videoList" style="width: 60%">
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
+              placeholder="请输入房间号">
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
+          <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
+          <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
+        </div>
+      </div>
+
+      <div class="row videoRow">
+        <div class="col-sm">
+          <label id="previewLabel" class="text-white"></label>
+          <video id="previewVideo" autoplay muted playsinline></video>
+        </div>
+        <div class="col-sm remoteVideo">
+          <!--<video  autoplay muted playsinline></video>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+<script src="https://wechatfe.github.io/vconsole/lib/vconsole.min.js?v=3.2.0"></script>
+<script>
+  // init vConsole
+  var vConsole = new VConsole();
+  console.log('Hello world');
+</script>
+<script src="../assets/jquery-3.3.1.min.js"></script>
+<script src="../assets/popper.min.js"></script>
+<script src="../assets/bootstrap.min.js"></script>
+<!-- zego js sdk -->
+<script src="../assets/jZego-rtc-1.2.4.js"></script>
+<script src="vp8.js?v=004"></script>
+
+</html>
