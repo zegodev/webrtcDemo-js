@@ -384,7 +384,6 @@ function publish() {
 function mixStream() {
     var streamList = [{
         streamId: _config.idName,
-        outputUrl: 'test.aliyun.zego.im/zegodemo',
         top: 3,
         left: 3,
         bottom: 320,
@@ -392,6 +391,7 @@ function mixStream() {
     }];
     zg.updateMixStream({
         outputStreamId: _config.MixIdName,
+        outputUrl: 'test.aliyun.zego.im/zegodemo',
         outputBitrate: 300,
         outputFps: 15,
         outputWidth: 240,
