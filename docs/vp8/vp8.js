@@ -389,16 +389,17 @@ function mixStream() {
         bottom: 320,
         right: 240,
     }];
-    zg.updateMixStream({
+    var mixParam = {
         outputStreamId: _config.MixIdName,
-        outputUrl: 'test.aliyun.zego.im/zegodemo',
         outputBitrate: 300,
         outputFps: 15,
         outputWidth: 240,
         outputHeight: 320,
         streamList: streamList,
-        extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'H264' : 'VP8'}]
-    }, function (mixStreamId, mixStreamInfo) {
+        extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
+    };
+    console.log('mixParam',mixParam);
+    zg.updateMixStream(mixParam, function (mixStreamId, mixStreamInfo) {
         console.log('mixStreamId: ' + mixStreamId);
         console.log('mixStreamInfo: ' + JSON.stringify(mixStreamInfo));
     }, function (err, errorInfo) {
