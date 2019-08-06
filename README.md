@@ -19,11 +19,7 @@
  ## 快速搭建自己demo
  - 安装依赖: npm i
  - 修改/docs/common.js中代码为自己的配置
-<<<<<<< HEAD
- > appid,appSigin，server为自己的配置（不清楚的请咨询即构技术支持）
-=======
  > appid,appSign,server地址 需要自行修改(请从控制台申请AppID时邮件内容里获取)
->>>>>>> master
  >
  > appSigin为即构给客户分配的秘钥，请勿泄漏；（生产环境下是生成token的密码，需要放到服务端）
  <img src="http://zego-public.oss-cn-shanghai.aliyuncs.com/sdk-doc/webrtcDemo-config.png"/>
