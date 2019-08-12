@@ -59,6 +59,13 @@ function bindEvent() {
         leaveRoom();
     });
 
+    $('#startLive').click(function () {
+        if(loginRoom){
+            doPreviewPublish()
+        }else{
+            alert('请先点击进入房间')
+        }
+    })
 
     //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要
     // var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
@@ -438,6 +445,7 @@ function leaveRoom() {
     $('.chatBox-content-demo').html('');
     $('.chat-message-num').text(0)
     zg.logout();
+    loginRoom = false;
 }
 
 function play(streamId, video, videoCode) {
