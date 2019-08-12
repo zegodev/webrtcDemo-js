@@ -450,6 +450,7 @@ function leaveRoom() {
 
 function play(streamId, video, videoCode) {
     playStreamList.push(streamId);
+    console.log('play:streamId, videoCode',streamId, videoCode)
     var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: videoCode});
 
     video.muted = false;
