@@ -135,7 +135,7 @@ function listen() {
                   useLocalStreamList.push(streamList[i]);
                   $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
                   $('.remoteVideo').append($('<audio  autoplay muted playsinline controls></audio>'));
-                  play(useLocalStreamList[index].stream_id, $('.remoteVideo audio:eq('+index+')')[0], useLocalStreamList[index].extra_info || '');
+                  play(useLocalStreamList[i].stream_id, $('.remoteVideo audio:eq('+i+')')[0], useLocalStreamList[i].extra_info || '');
               }
 
           } else if (type == 1) {
