@@ -504,44 +504,43 @@ function setConfig(zg) {
 }
 
 
-function desc() {
-    function addCssByLink(url) {
-        var doc = document;
-        var link = doc.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        link.setAttribute("type", "text/css");
-        link.setAttribute("href", url);
+function addCssByLink(url) {
+    var doc = document;
+    var link = doc.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("type", "text/css");
+    link.setAttribute("href", url);
 
-        var heads = doc.getElementsByTagName("head");
-        if (heads.length)
-            heads[0].appendChild(link);
-        else
-            doc.documentElement.appendChild(link);
-    }
+    var heads = doc.getElementsByTagName("head");
+    if (heads.length)
+        heads[0].appendChild(link);
+    else
+        doc.documentElement.appendChild(link);
+}
 
-    function loadJs(url, callback) {
-        var script = document.createElement('script');
-        script.type = "text/javascript";
-        if (typeof (callback) != "undefined") {
-            if (script.readyState) {
-                script.onreadystatechange = function () {
-                    if (script.readyState == "loaded" || script.readyState == "complete") {
-                        script.onreadystatechange = null;
-                        callback();
-                    }
-                }
-            } else {
-                script.onload = function () {
+function loadJs(url, callback) {
+    var script = document.createElement('script');
+    script.type = "text/javascript";
+    if (typeof (callback) != "undefined") {
+        if (script.readyState) {
+            script.onreadystatechange = function () {
+                if (script.readyState == "loaded" || script.readyState == "complete") {
+                    script.onreadystatechange = null;
                     callback();
                 }
             }
+        } else {
+            script.onload = function () {
+                callback();
+            }
         }
-        script.src = url;
-        document.body.appendChild(script);
     }
+    script.src = url;
+    document.body.appendChild(script);
+}
 
+function desc() {
     addCssByLink('../assets/desc.css');
-
     loadJs('../assets/desc.js', function () {
         var descAtag = document.createElement('a');
         descAtag.setAttribute('id', 'descModule');
@@ -552,7 +551,7 @@ function desc() {
         descAtag.setAttribute('title', '调用说明');
 
         var pageUrl = location.pathname.split('/');
-        pageUrl = pageUrl[pageUrl.length-2];
+        pageUrl = pageUrl[pageUrl.length - 2];
 
         var descArr = descObj[pageUrl] || [];
         descAtag.setAttribute('data-content', descArr.join(`<br/><br/>`));
@@ -565,6 +564,29 @@ function desc() {
         })
     })
 }
+
+// cordova test
+(function cordovaLoad() {
+    if (location.search && location.search.indexOf('platform=cordova') > -1) {
+        loadJs('../assets/cordova.js');
+        document.addEventListener('deviceready', function () {
+            var permissions = cordova.plugins.permissions;
+            permissions.checkPermission(permissions.CAMERA, function (status) {
+                if (status.hasPermission) {
+                    console.log("Yes :D ");
+                } else {
+                    permissions.requestPermissions([permissions.CAMERA, permissions.RECORD_AUDIO], function (status) {
+                        console.log("requestPermissions: ", status);
+                    }, function (err) {
+                        console.error("requestPermissions: ", err);
+                    })
+                    console.warn("No :( ");
+                }
+            });
+        }, false);
+    }
+})();
+
 
 
 
