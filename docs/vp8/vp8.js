@@ -412,17 +412,17 @@ function mixStream() {
     var outputBitrate = $('#mixStreamBitrate').val();
     var streamList = [{
         streamId: _config.idName,
-        top: 3,
-        left: 3,
-        bottom: 320,
-        right: 240,
+        top: 0,
+        left: 0,
+        bottom: 640,
+        right: 480,
     }];
     var mixParam = {
         outputStreamId: _config.MixIdName,
-        outputBitrate: outputBitrate ? outputBitrate * 1 : 300,
+        outputBitrate: outputBitrate ? outputBitrate * 1 : 800,
         outputFps: 15,
-        outputWidth: 240,
-        outputHeight: 320,
+        outputHeight: 640,
+        outputWidth: 480,
         outputAudioConfig: videoDecodeType !== 'VP8' ? 3 : 0,
         streamList: streamList,
         extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
