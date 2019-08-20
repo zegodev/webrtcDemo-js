@@ -34,6 +34,9 @@ $(function () {
     ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
         videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
         $("#videoCodeType option:eq(0)").val(videoDecodeType);
+
+        !H264 && $("#videoCodeType option:eq(1)").attr('disabled', "disabled");
+        !VP8 && $("#videoCodeType option:eq(2)").attr('disabled', "disabled");
         bindEvent();
     }, function () {
         alert('没有可用视频编码')
@@ -48,14 +51,14 @@ function bindEvent() {
 
     $('#createRoom').click(function () {
         zg.setUserStateUpdate(true);
-        if($("#videoCodeType").val()){
+        if ($("#videoCodeType").val()) {
             videoDecodeType = $("#videoCodeType").val();
         }
         openRoom($('#roomId').val(), 1);
     });
 
     $('#openRoom').click(function () {
-        if($("#videoCodeType").val()){
+        if ($("#videoCodeType").val()) {
             videoDecodeType = $("#videoCodeType").val();
         }
         openRoom($('#roomId').val(), 2);
@@ -67,12 +70,12 @@ function bindEvent() {
     });
 
     $('#startLive').click(function () {
-        if($("#videoCodeType").val()){
+        if ($("#videoCodeType").val()) {
             videoDecodeType = $("#videoCodeType").val();
         }
-        if(loginRoom){
+        if (loginRoom) {
             doPreviewPublish()
-        }else{
+        } else {
             alert('请先点击进入房间')
         }
     })
@@ -276,8 +279,8 @@ function listenChild() {
                             extraInfo.currentVideoCode = videoDecodeType;
                             setTimeout(function () {
                                 play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
-                            },2000);
-                        }else{
+                            }, 2000);
+                        } else {
                             play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
                         }
                     }
@@ -406,6 +409,7 @@ function publish() {
 
 
 function mixStream() {
+    var outputBitrate = $('#mixStreamBitrate').val();
     var streamList = [{
         streamId: _config.idName,
         top: 3,
@@ -415,11 +419,11 @@ function mixStream() {
     }];
     var mixParam = {
         outputStreamId: _config.MixIdName,
-        outputBitrate: 300,
+        outputBitrate: outputBitrate ? outputBitrate * 1 : 300,
         outputFps: 15,
         outputWidth: 240,
         outputHeight: 320,
-        outputAudioConfig:videoDecodeType !== 'VP8'?3:0,
+        outputAudioConfig: videoDecodeType !== 'VP8' ? 3 : 0,
         streamList: streamList,
         extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
     };
@@ -466,7 +470,7 @@ function leaveRoom() {
 
 function play(streamId, video, videoCode) {
     playStreamList.push(streamId);
-    console.log('play:streamId, videoCode',streamId, videoCode)
+    console.log('play:streamId, videoCode', streamId, videoCode)
     var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: videoCode});
 
     video.muted = false;
