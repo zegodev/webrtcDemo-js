@@ -33,6 +33,7 @@ $(function () {
 
     ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
         videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
+        $("#videoCodeType option:eq(0)").val(videoDecodeType);
         bindEvent();
     }, function () {
         alert('没有可用视频编码')
@@ -47,10 +48,16 @@ function bindEvent() {
 
     $('#createRoom').click(function () {
         zg.setUserStateUpdate(true);
+        if($("#videoCodeType").val()){
+            videoDecodeType = $("#videoCodeType").val();
+        }
         openRoom($('#roomId').val(), 1);
     });
 
     $('#openRoom').click(function () {
+        if($("#videoCodeType").val()){
+            videoDecodeType = $("#videoCodeType").val();
+        }
         openRoom($('#roomId').val(), 2);
     });
 
@@ -60,6 +67,9 @@ function bindEvent() {
     });
 
     $('#startLive').click(function () {
+        if($("#videoCodeType").val()){
+            videoDecodeType = $("#videoCodeType").val();
+        }
         if(loginRoom){
             doPreviewPublish()
         }else{
@@ -264,9 +274,14 @@ function listenChild() {
                         if (extraInfo.currentVideoCode !== videoDecodeType) {
                             streamId = extraInfo.MixStreamId;
                             extraInfo.currentVideoCode = videoDecodeType;
+                            setTimeout(function () {
+                                play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
+                            },2000);
+                        }else{
+                            play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
                         }
                     }
-                    play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
+
                 }
 
             } else if (type == 1) {
@@ -404,6 +419,7 @@ function mixStream() {
         outputFps: 15,
         outputWidth: 240,
         outputHeight: 320,
+        outputAudioConfig:videoDecodeType !== 'VP8'?3:0,
         streamList: streamList,
         extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
     };
