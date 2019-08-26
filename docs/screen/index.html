@@ -60,6 +60,30 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
+              <label class="input-group-text" for="videoCodeType"><strong class="text-gray-dark">推流编码</strong></label>
+            </div>
+            <select class="custom-select" id="videoCodeType" style="width: 60%">
+              <option value="H264">H264</option>
+              <option value="VP8">VP8</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="videoPlayCodeType"><strong class="text-gray-dark">拉流编码</strong></label>
+            </div>
+            <select class="custom-select" id="videoPlayCodeType" style="width: 60%">
+              <option value="H264">H264</option>
+              <option value="VP8">VP8</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
             <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
@@ -71,6 +95,7 @@
       <div class="row">
         <div class="col-sm">
           <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
+          <button type="button" id="openRoom" class=" btn btn-primary btn-sm">进入房间</button>
           <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
           <button type="button" id="screenShot" class="btn btn-primary btn-sm">捕捉屏幕</button>
           <button type="button" id="screenSharing" class="btn btn-primary btn-sm">捕捉屏幕(无需插件)</button>
