@@ -59,7 +59,7 @@
       justify-content: space-between;
       align-items: center;
     }
-    
+
   </style>
 </head>
 <body>
@@ -76,10 +76,34 @@
       </div>
 
       <div class="panel panel-primary panel-new" >
-        <div class="panel-heading" style="background-color:#347ef6"><h4>浏览器测试  <span v-cloak>{{state.webrtcState}}</span></h4></div>
+        <div class="panel-heading" style="background-color:#347ef6"><h4>webRTC  <span v-cloak>{{state.webrtcState}}</span></h4></div>
         <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
             <div v-if="webRTC" class="alert alert-success">当前浏览器支持webrtc！！！</div>
             <div v-else class="alert alert-danger">当前浏览器暂不支持webrtc！！！</div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary panel-new" >
+        <div class="panel-heading" style="background-color:#347ef6"><h4>获取设备  <span v-cloak>{{state.webrtcState}}</span></h4></div>
+        <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
+            <div v-if="capture" class="alert alert-success">当前浏览器支持获取设备！！！</div>
+            <div v-else class="alert alert-danger">当前浏览器不支持获取设备！！！</div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary panel-new" >
+        <div class="panel-heading" style="background-color:#347ef6"><h4>H264编码  <span v-cloak>{{state.webrtcState}}</span></h4></div>
+        <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
+            <div v-if="H264State" class="alert alert-success">当前浏览器支持H264编码！！！</div>
+            <div v-else class="alert alert-danger">当前浏览器不支持H264编码！！！</div>
+        </div>
+      </div>
+
+      <div class="panel panel-primary panel-new" >
+        <div class="panel-heading" style="background-color:#347ef6"><h4>VP8编码  <span v-cloak>{{state.webrtcState}}</span></h4></div>
+        <div class="panel-body" v-cloak v-if="state.webrtcState == '检测完成'">
+            <div v-if="VP8State" class="alert alert-success">当前浏览器支持VP8编码！！！</div>
+            <div v-else class="alert alert-danger">当前浏览器暂不支持VP8编码！！！</div>
         </div>
       </div>
 
@@ -95,7 +119,7 @@
                 </div>
               </div>
               <div v-else class="alert alert-danger">未检测到音频输入设备！！！</div>
-          
+
         </div>
       </div>
 
@@ -118,7 +142,7 @@
             <div class="alert alert-success">检测到视频输入设备！！！</div>
             {{videoinputInfos}}
           </div>
-          <div v-else class="alert alert-danger">未检测到视频输入设备！！！</div>    
+          <div v-else class="alert alert-danger">未检测到视频输入设备！！！</div>
         </div>
       </div>
 
@@ -136,27 +160,19 @@
       </div>
 
       <div class="panel panel-primary panel-new">
-        <div class="panel-heading" style="background-color:#347ef6"><h4>H264编码  <span v-cloak>{{state.H264State}}</span></h4></div>
-        <div class="panel-body" v-cloak v-if="state.H264State === '检测完成'">
-          <div v-if="isH264" class="alert alert-success">当前浏览器支持H264编码！！！</div>
-          <div v-else class="alert alert-danger">当前浏览器暂不支持！！！</div>
-        </div>
-      </div>
-      
-      <div class="panel panel-primary panel-new">
       <video muted autoplay playsinlne id="checkvideo" style="display:none"></video>
         <div class="panel-heading" style="background-color:#347ef6"><h4>连通性检测 <span v-cloak>{{state.connectivityState}}</span></h4></div>
         <div class="panel-body" v-cloak v-if="state.connectivityState === '检测完成'">
-          
+
           <div v-if="isConnectivity" class="alert alert-success">连通性检测成功！！！</div>
           <div v-else class="alert alert-danger">连通性检测失败！！！</div>
         </div>
       </div>
-  
+
     </div> <!-- /container -->
-  
-  </div> 
-  
+
+  </div>
+
 </body>
 <script src="../assets/jZego-rtc.js"></script>
 <script src="../assets/vue.min.js"></script>
@@ -178,6 +194,8 @@
         connectivityState:""
       },
       webRTC:false,
+      capture: false,
+      VP8State: false,
       isAudioInput:false,
       isVideoInput:false,
       isH264:false,
@@ -202,7 +220,18 @@
       startTest (){
         this.state.webrtcState = "正在检测..."
         setTimeout(()=>{
-          this.webRTC = ZegoClient.isSupportWebrtc()
+          ZegoClient.supportDetection( result => {
+            this.webRTC = result.webRtc
+            this.capture = result.capture
+            if (this.isAndroidWexin() && result.videoDecodeType.H264) {
+              this.H264State = false
+            } else {
+              this.H264State = result.videoDecodeType.H264
+            }
+            this.VP8State = result.videoDecodeType.VP8
+          }, err => {
+            console.error(err)
+          })
           this.state.webrtcState = "检测完成"
           this.state.audioinputState = "正在检测..."
           this.state.videoinputState = "正在检测..."
@@ -217,20 +246,11 @@
               this.state.resolutionState = "检测完成"
               this.state.H264State = "正在检测..."
               setTimeout(() =>{
-                ZegoClient.isSupportH264((param) => {
-                    this.isH264 = param
-                  },err => {
-                    console.log(err)
-                })
-                this.state.H264State = "检测完成"
-                this.state.connectivityState = "正在检测..."
-                setTimeout(() => {
-                  this.checkConnectivity()
-                },2500)
+                this.checkConnectivity()
               },2500)
             },2500)
           },2500)
-        },2500) 
+        },2500)
       },
 
       checkDeviceSupport() {
@@ -249,7 +269,7 @@
             that.isVideoInput = true
             that.videoinputInfos = cameras.join(" ")
           }
-          
+
           if (devicesinfo.microphones.length != 0){
             devicesinfo.microphones.forEach(item => {
               microphones.push(item.label)
@@ -265,12 +285,12 @@
             that.audiooutputInfos = speakers.join(" ")
           }
         })
-        
+
       },
-      
+
       checkMicrophoneSound () {
-        
-        
+
+
         window.AudioContext = window.AudioContext || window.webkitAudioContext || mozAudioContext
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia
         if(!window.AudioContext || !navigator.getUserMedia) return
@@ -294,12 +314,12 @@
           instant = Math.sqrt(sum/input.length)
           this.sounder = instant * 100
         }
-        
-        
+
+
       },
-      
+
       checkResolution (){
-        let videoInput 
+        let videoInput
         ZegoClient.enumDevices(devicesinfo => {
           videoInput = devicesinfo.cameras[0].label
           this.checkDeviceSupport()     //有些浏览器需调用过摄像头才能看到label
@@ -320,7 +340,7 @@
           "externalCapture": false,
           "externalMediaStream":null
         }
-        
+
         zg.startPreview(video,previewConfig,()=>{
           this.resolutionState.oneState = "支持"
           zg.stopPreview(video)
@@ -341,7 +361,7 @@
               zg.startPreview(video,previewConfig,()=>{
                 this.resolutionState.fourState = "支持"
                 zg.stopPreview(video)
-                
+
                 previewConfig.width = 360
                 previewConfig.height = 640
                 zg.startPreview(video,previewConfig,()=>{
@@ -382,14 +402,14 @@
           },err => {
             this.resolutionState.twoState = "不支持"
             zg.stopPreview(video)
-          })  
+          })
         },err => {
           this.resolutionState.oneState = "不支持"
           zg.stopPreview(video)
-        })  
-        
-        
-        
+        })
+
+
+
       },
 
       checkConnectivity (){
@@ -423,18 +443,21 @@
                     that.isConnectivity = zg.startPublishingStream(_config.idName, checkvideo);
                     that.state.connectivityState = "检测完成"
                   })
-                  
+
                 },err => {
                   console.log('login fail reason' + err)
                 })
             }
         }, 'text');
 
-        
-        
+
+
+      },
+
+      isAndroidWexin () {
+        let ua = navigator.userAgent.toLowerCase();
+        return ua.match(/MicroMessenger/i) == "micromessenger" && ua.match(/android/i)
       }
-
-
     }
   })
 </script>

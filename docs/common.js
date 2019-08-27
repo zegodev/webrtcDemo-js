@@ -3,7 +3,7 @@ var zg,
     appSigin = '',
     _config = {
         appid: appid * 1,
-        idName:  new Date().getTime() + '',
+        idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
         server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
         logLevel: 0,
@@ -28,18 +28,24 @@ var anchor_userid = '', anchro_username = '';
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
-    if (ZegoClient.isSupportWebrtc()) {
-        ZegoClient.isSupportH264(result => {
-            bindEvent();
-            if (!result) {
-                alert('浏览器不支持视频h264编码，建议使用vp8尝试');
-            }
-        }, err => {
-            console.error(err);
-        })
-    } else {
-        alert('浏览器不支持webrtc，换一个浏览器试试吧');
-    }
+    // if (ZegoClient.isSupportWebrtc()) {
+    //     ZegoClient.isSupportH264(result => {
+    //         bindEvent();
+    //         if (!result) {
+    //             alert('浏览器不支持视频h264编码，建议使用vp8尝试');
+    //         }
+    //     }, err => {
+    //         console.error(err);
+    //     })
+    // } else {
+    //     alert('浏览器不支持webrtc，换一个浏览器试试吧');
+    // }
+    ZegoClient.supportDetection(result => {
+        console.log(result);
+        bindEvent();
+    }, err => {
+        alert(err);
+    })
 
     desc()
 
@@ -143,7 +149,7 @@ function openRoom(roomId, type) {
 
 
     //get token   生产环境下获取token方式
-    if(!appSigin){
+    if (!appSigin) {
         $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
             function (token) {
                 if (!token) {
@@ -154,7 +160,7 @@ function openRoom(roomId, type) {
                 }
             }, 'text');
 
-    }else{//get token  前端开发绕过后端，临时获取token方式，需要填写appSign
+    } else {//get token  前端开发绕过后端，临时获取token方式，需要填写appSign
         var now = new Date().getTime();
         $.get('https://sig-wstoken.zego.im:8282/tokenverify',
             {
@@ -165,13 +171,13 @@ function openRoom(roomId, type) {
                 expired: Math.floor(now / 1000 + 30 * 60)
             },
             function (token) {
-                token = /token:(.+)/.exec(token)&&/token:(.+)/.exec(token)[1]&&/token:(.+)/.exec(token)[1].replace(' ','');
+                token = /token:(.+)/.exec(token) && /token:(.+)/.exec(token)[1] && /token:(.+)/.exec(token)[1].replace(' ', '');
 
                 if (!token) {
                     alert('get token failed')
                 } else {
                     console.log('gettoken success');
-                    startLogin(roomId,  token, type)
+                    startLogin(roomId, token, type)
                 }
             });
     }
@@ -179,7 +185,7 @@ function openRoom(roomId, type) {
 
 
 //login
-function startLogin(roomId, token,type) {
+function startLogin(roomId, token, type) {
     zg.login(roomId, type, token, function (streamList) {
         console.log('login success');
         loginSuccess(streamList, type);
@@ -253,7 +259,7 @@ function doPreviewPublish(config) {
         $('#previewLabel').html(_config.nickName);
         publish();
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
-        if (!$('#videoList').val() && $('#videoList').val() != 0) {
+        if (!$('#videoList').val() && $('#videoList').val() == 0) {
             enumDevices();
         }
     }, function (err) {
@@ -266,12 +272,14 @@ function doPreviewPublish(config) {
 
 //推流
 function publish() {
-    zg.startPublishingStream(_config.idName, previewVideo);
+    var videoCodeType = $('#videoCodeType').val();
+    zg.startPublishingStream(_config.idName, previewVideo, null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
 
 }
 
 function play(streamId, video) {
-    var result = zg.startPlayingStream(streamId, video);
+    var playVideoCodeType = $('#videoPlayCodeType').val()
+    var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: playVideoCodeType ? playVideoCodeType : 'H264'});
 
     video.muted = false;
     if (!result) {
@@ -455,6 +463,22 @@ function bindEvent() {
         leaveRoom();
     });
 
+    $('#switchVideo').click(function () {
+        zg.switchDevice('video', $('#previewVideo')[0], $('#videoList').val(), () => {
+            console.warn('switch camera success')
+        }, err => {
+            console.error(err)
+        })
+    });
+
+    $('#switchAudio').click(function () {
+        zg.switchDevice('audio', $('#previewVideo')[0], $('#audioList').val(), () => {
+            console.warn('switch audio success')
+        }, err => {
+            console.error(err)
+        })
+    })
+
 
     //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要
     // var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);
@@ -464,6 +488,22 @@ function bindEvent() {
     //     leaveRoom();
     // });
 
+}
+
+function onDeviceReady() {
+    var permissions = cordova.plugins.permissions;
+    permissions.checkPermission(permissions.CAMERA, function (status) {
+        if (status.hasPermission) {
+            console.log("Yes :D ");
+        } else {
+            console.warn("No :( ");
+        }
+    });
+    permissions.requestPermissions([permissions.CAMERA, permissions.RECORD_AUDIO], function (status) {
+        console.log("requestPermissions: ", status);
+    }, function (err) {
+        console.error("requestPermissions: ", err);
+    })
 }
 
 
@@ -501,6 +541,67 @@ function setConfig(zg) {
         })
     }
     //测试用代码，客户请忽略  end
+}
+
+function addCssByLink(url) {
+    var doc = document;
+    var link = doc.createElement("link");
+    link.setAttribute("rel", "stylesheet");
+    link.setAttribute("type", "text/css");
+    link.setAttribute("href", url);
+
+    var heads = doc.getElementsByTagName("head");
+    if (heads.length)
+        heads[0].appendChild(link);
+    else
+        doc.documentElement.appendChild(link);
+}
+
+function loadJs(url, callback) {
+    var script = document.createElement('script');
+    script.type = "text/javascript";
+    if (typeof (callback) != "undefined") {
+        if (script.readyState) {
+            script.onreadystatechange = function () {
+                if (script.readyState == "loaded" || script.readyState == "complete") {
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            }
+        } else {
+            script.onload = function () {
+                callback();
+            }
+        }
+    }
+    script.src = url;
+    document.body.appendChild(script);
+}
+
+function desc() {
+    addCssByLink('../assets/desc.css');
+
+    loadJs('../assets/desc.js', function () {
+        var descAtag = document.createElement('a');
+        descAtag.setAttribute('id', 'descModule');
+        descAtag.setAttribute('role', 'button');
+        descAtag.setAttribute('tabindex', '0');
+        // descAtag.setAttribute('data-trigger', 'focus');
+        descAtag.setAttribute('data-toggle', 'popover');
+        descAtag.setAttribute('title', '调用说明');
+
+        var pageUrl = location.pathname.split('/');
+        pageUrl = pageUrl[pageUrl.length - 2];
+        var descArr = descObj[pageUrl] || [];
+        descAtag.setAttribute('data-content', descArr.join(`<br/><br/>`));
+
+        console.log(descObj);
+        document.getElementsByTagName('body')[0].appendChild(descAtag);
+
+        $('#descModule').popover({
+            html: true
+        })
+    })
 }
 
 
@@ -586,7 +687,5 @@ function desc() {
         }, false);
     }
 })();
-
-
 
 
