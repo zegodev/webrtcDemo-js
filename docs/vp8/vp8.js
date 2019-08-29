@@ -94,6 +94,10 @@ function init() {
 
     zg = new ZegoClient();
 
+    //内调测试用代码，客户请忽略  start
+    setConfig(zg);
+    //内调测试用代码，客户请忽略  end
+
     zg.config(_config);
     enumDevices();
 
@@ -480,4 +484,40 @@ function play(streamId, video, videoCode) {
         console.error("play " + el.nativeElement.id + " return " + result);
 
     }
+}
+
+function setConfig(zg) {
+    //测试用代码，客户请忽略  start
+    if (location.search) {
+        let _arr_config = location.search.substr(1).split('&');
+        _arr_config.forEach(function (item) {
+            var key = item.split('=')[0], value = item.split('=')[1];
+
+            if (value && _config.hasOwnProperty(key)) {
+                _config[key] = decodeURIComponent(value);
+            } else if (value && _otherConfig.hasOwnProperty(key)) {
+                _otherConfig[key] = decodeURIComponent(value);
+            }
+        });
+    }
+    //测试用代码，客户请忽略  end
+
+
+    console.log("config param:" + JSON.stringify(_config));
+
+    _config.appid = _config.appid * 1;
+    _config.testEnvironment = !!(_config.testEnvironment * 1);
+
+    //测试用代码，客户请忽略  start
+    if (_otherConfig.signal) {
+        zg.setCustomSignalUrl(_otherConfig.signal);
+    }
+
+    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token') {
+        $.get(_otherConfig.cgi_token, function (cgi_token) {
+            _otherConfig.cgi_token = cgi_token.data;
+            console.log(_otherConfig.cgi_token);
+        })
+    }
+    //测试用代码，客户请忽略  end
 }
