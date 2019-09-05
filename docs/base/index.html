@@ -132,6 +132,11 @@
 
 
 </body>
+<script src="../assets/vconsole.min.js"></script>
+<script>
+  var vConsole = new VConsole();
+  console.log('Hello world');
+</script>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="../assets/popper.min.js"></script>
 <script src="../assets/bootstrap.min.js"></script>
@@ -265,16 +270,16 @@
     console.info('leave room  and close stream');
 
     if (isPreviewed) {
-        zg.stopPreview(previewVideo);
-        zg.stopPublishingStream(_config.idName);
-        isPreviewed = false;
+      zg.stopPreview(previewVideo);
+      zg.stopPublishingStream(_config.idName);
+      isPreviewed = false;
     }
 
     for (var i = 0; i < useLocalStreamList.length; i++) {
-        zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+      zg.stopPlayingStream(useLocalStreamList[i].stream_id);
     }
 
-    if(pcmBuffer.length !== 0) {
+    if (pcmBuffer.length !== 0) {
       ac = AudioContext || webkitAudioContext
       mediaUtil.mic.disconnect(mediaUtil.script)
       mediaUtil.script.disconnect(ac.destination)
@@ -284,9 +289,9 @@
     }
 
     if (window.souder) {
-        clearInterval(window.souderTimer);
-        window.souder.stop();
-        delete window.souder
+      clearInterval(window.souderTimer);
+      window.souder.stop();
+      delete window.souder
     }
 
 
