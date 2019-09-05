@@ -34,7 +34,6 @@ $(function () {
     ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
         videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
         $("#videoCodeType option:eq(0)").val(videoDecodeType);
-
         !H264 && $("#videoCodeType option:eq(1)").attr('disabled', "disabled");
         !VP8 && $("#videoCodeType option:eq(2)").attr('disabled', "disabled");
         bindEvent();
@@ -51,6 +50,7 @@ function bindEvent() {
 
     $('#createRoom').click(function () {
         zg.setUserStateUpdate(true);
+
         if ($("#videoCodeType").val()) {
             videoDecodeType = $("#videoCodeType").val();
         }
@@ -93,6 +93,10 @@ function bindEvent() {
 function init() {
 
     zg = new ZegoClient();
+
+    //内调测试用代码，客户请忽略  start
+    setConfig(zg);
+    //内调测试用代码，客户请忽略  end
 
     zg.config(_config);
     enumDevices();
@@ -414,15 +418,15 @@ function mixStream() {
         streamId: _config.idName,
         top: 0,
         left: 0,
-        bottom: 640,
-        right: 480,
+        bottom: 480,
+        right: 640,
     }];
     var mixParam = {
         outputStreamId: _config.MixIdName,
-        outputBitrate: outputBitrate ? outputBitrate * 1 : 800,
+        outputBitrate: outputBitrate ? outputBitrate * 1 : 800 * 1000,
         outputFps: 15,
-        outputHeight: 640,
-        outputWidth: 480,
+        outputHeight: 480,
+        outputWidth: 640,
         outputAudioConfig: videoDecodeType !== 'VP8' ? 3 : 0,
         streamList: streamList,
         extraParams: [{key: 'video_encode', value: videoDecodeType === 'VP8' ? 'h264' : 'vp8'}]
@@ -480,4 +484,40 @@ function play(streamId, video, videoCode) {
         console.error("play " + el.nativeElement.id + " return " + result);
 
     }
+}
+
+function setConfig(zg) {
+    //测试用代码，客户请忽略  start
+    if (location.search) {
+        let _arr_config = location.search.substr(1).split('&');
+        _arr_config.forEach(function (item) {
+            var key = item.split('=')[0], value = item.split('=')[1];
+
+            if (value && _config.hasOwnProperty(key)) {
+                _config[key] = decodeURIComponent(value);
+            } else if (value && _otherConfig.hasOwnProperty(key)) {
+                _otherConfig[key] = decodeURIComponent(value);
+            }
+        });
+    }
+    //测试用代码，客户请忽略  end
+
+
+    console.log("config param:" + JSON.stringify(_config));
+
+    _config.appid = _config.appid * 1;
+    _config.testEnvironment = !!(_config.testEnvironment * 1);
+
+    //测试用代码，客户请忽略  start
+    if (_otherConfig.signal) {
+        zg.setCustomSignalUrl(_otherConfig.signal);
+    }
+
+    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token') {
+        $.get(_otherConfig.cgi_token, function (cgi_token) {
+            _otherConfig.cgi_token = cgi_token.data;
+            console.log(_otherConfig.cgi_token);
+        })
+    }
+    //测试用代码，客户请忽略  end
 }
