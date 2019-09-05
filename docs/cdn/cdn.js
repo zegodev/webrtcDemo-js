@@ -36,11 +36,13 @@ function init() {
     var hasAudio = true
     var playType
 
-    if (streamList[0].extra_info.length !== 0) {
-      try {
-        playType = JSON.parse(streamList[0].extra_info).playType
-      } catch (err) {
-        alert(err)
+    if (streamList) {
+      if (streamList[0] && streamList[0].extra_info && streamList[0].extra_info.length !== 0) {
+        try {
+          playType = JSON.parse(streamList[0].extra_info).playType
+        } catch (err) {
+          alert(err)
+        }
       }
     }
 
@@ -96,13 +98,16 @@ function loginSuccess(streamList, type) {
     var hasAudio = true
     var playType
 
-    if (streamList[0].extra_info.length !== 0) {
-      try {
-        playType = JSON.parse(streamList[0].extra_info).playType
-      } catch (err) {
-        alert(err)
+    if (streamList) {
+      if (streamList[0] && streamList[0].extra_info && streamList[0].extra_info.length !== 0) {
+        try {
+          playType = JSON.parse(streamList[0].extra_info).playType
+        } catch (err) {
+          alert(err)
+        }
       }
     }
+
 
     playType === 'Video' ? hasAudio = false : hasAudio = true
 
