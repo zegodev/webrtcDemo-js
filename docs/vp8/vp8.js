@@ -31,9 +31,11 @@ var anchor_userid = '', anchro_username = '';
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
 
-    isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+    let ua = navigator.userAgent.toLowerCase();
+    isWeixin = ua.match(/MicroMessenger/i) == "micromessenger" && ua.match(/android/i)
+    isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
 
-    if (isiOS) {
+    if (isiOS && isWeixin) {
       $('#createRoom').attr('disabled', true)
     }
 
