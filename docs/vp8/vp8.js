@@ -31,6 +31,12 @@ var anchor_userid = '', anchro_username = '';
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
 
+    isiOS = !!navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+
+    if (isiOS) {
+      $('#createRoom').attr('disabled', true)
+    }
+
     ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
         videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
         $("#videoCodeType option:eq(0)").val(videoDecodeType);
