@@ -367,7 +367,12 @@
     })
 
     function go(url) {
+        if (url.indexOf('https') > -1) {
+            window.open(url + window.location.search);
+        } else {
             window.open(url + '/index.html' + window.location.search);
+        }
+
     }
 
     function scrollToPoint(point) {

@@ -6,12 +6,12 @@ var zg,
         appid: appid * 1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom-alpha.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
+        server: "wss://wssliveroom-test.zego.im/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
         audienceCreateRoom: true,
-        testEnvironment: false,
+        testEnvironment: true,
     },
     _otherConfig = {
         cgi_token: '',
@@ -30,6 +30,14 @@ var anchor_userid = '', anchro_username = '';
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
+
+    let ua = navigator.userAgent.toLowerCase();
+    isWeixin = ua.match(/MicroMessenger/i) == "micromessenger" && ua.match(/android/i)
+    isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
+
+    if (isiOS && isWeixin) {
+        $('#createRoom').attr('disabled', true)
+    }
 
     ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
         videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
