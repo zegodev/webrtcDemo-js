@@ -39,11 +39,11 @@ $(function () {
         $('#createRoom').attr('disabled', true)
     }
 
-    ZegoClient.supportVideoCodeType(function ({H264, VP8}) {
-        videoDecodeType = VP8 ? 'VP8' : (H264 ? 'H264' : null);
+    ZegoClient.supportDetection(function (res) {
+        videoDecodeType = res.videoDecodeType.VP8 ? 'VP8' : (res.videoDecodeType.H264 ? 'H264' : null);
         $("#videoCodeType option:eq(0)").val(videoDecodeType);
-        !H264 && $("#videoCodeType option:eq(1)").attr('disabled', "disabled");
-        !VP8 && $("#videoCodeType option:eq(2)").attr('disabled', "disabled");
+        !res.videoDecodeType.H264 && $("#videoCodeType option:eq(1)").attr('disabled', "disabled");
+        !res.videoDecodeType.VP8 && $("#videoCodeType option:eq(2)").attr('disabled', "disabled");
         bindEvent();
     }, function () {
         alert('没有可用视频编码')
