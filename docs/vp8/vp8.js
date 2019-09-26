@@ -507,6 +507,7 @@ function setConfig(zg) {
                 _otherConfig[key] = decodeURIComponent(value);
             }
         });
+        appSigin = '';
     }
     //测试用代码，客户请忽略  end
 
