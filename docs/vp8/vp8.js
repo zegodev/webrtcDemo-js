@@ -30,7 +30,7 @@ var anchor_userid = '', anchro_username = '';
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
-
+    console.log('appSigin is', appSigin);
     let ua = navigator.userAgent.toLowerCase();
     isWeixin = ua.match(/MicroMessenger/i) == "micromessenger" && ua.match(/android/i)
     isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
