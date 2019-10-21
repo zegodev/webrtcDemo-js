@@ -1,7 +1,7 @@
 var videoDecodeType = null, playStreamList = [];
 var zg,
     appid = 96527232,
-    appSigin = "0x51,0xf9,0x60,0x56,0x5e,0xa6,0xb2,0xe1,0x3a,0x8b,0x25,0x27,0x15,0xa0,0x91,0xec,0xce,0xdc,0x87,0xf3,0x3e,0xd3,0x08,0x46,0x22,0xb1,0xb7,0xe9,0xda,0xc9,0x16,0xc3",
+    zgAppSigin = "0x51,0xf9,0x60,0x56,0x5e,0xa6,0xb2,0xe1,0x3a,0x8b,0x25,0x27,0x15,0xa0,0x91,0xec,0xce,0xdc,0x87,0xf3,0x3e,0xd3,0x08,0x46,0x22,0xb1,0xb7,0xe9,0xda,0xc9,0x16,0xc3",
     _config = {
         appid: appid * 1,
         idName: new Date().getTime() + '',
@@ -30,7 +30,7 @@ var anchor_userid = '', anchro_username = '';
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
-    console.log('appSigin is', appSigin);
+    console.log('zgAppSigin is', zgAppSigin);
     let ua = navigator.userAgent.toLowerCase();
     isWeixin = ua.match(/MicroMessenger/i) == "micromessenger" && ua.match(/android/i)
     isiOS = !!ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)
@@ -124,9 +124,9 @@ function openRoom(roomId, type) {
 
     screenCaptrue && zg.stopScreenShot();
 
-    console.log('appSigin is', appSigin,!appSigin);
+    console.log('appSigin is', zgAppSigin,!zgAppSigin);
     //get token   生产环境下获取token方式
-    if (!appSigin) {
+    if (!zgAppSigin) {
         $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
             function (token) {
                 if (!token) {
@@ -143,7 +143,7 @@ function openRoom(roomId, type) {
             {
                 app_id: _config.appid,
                 id_name: _config.idName,
-                app_secret: appSigin,
+                app_secret: zgAppSigin,
                 nonce: now,
                 expired: Math.floor(now / 1000 + 30 * 60)
             },
@@ -507,7 +507,7 @@ function setConfig(zg) {
                 _otherConfig[key] = decodeURIComponent(value);
             }
         });
-        appSigin = '';
+        zgAppSigin = '';
     }
     //测试用代码，客户请忽略  end
 
