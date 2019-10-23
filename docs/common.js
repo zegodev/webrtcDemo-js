@@ -57,7 +57,7 @@ function getBrowser() {
     var isFirefox = ua.indexOf("Firefox") != -1;
     var isOpera = window.opr != undefined;
     var isChrome = ua.indexOf("Chrome") && window.chrome;
-    var isSafari = ua.indexOf("Safari") != -1 && ua.indexOf("Version") != -1;
+    var isSafari = (ua.indexOf("Safari") != -1 && ua.indexOf("Version") != -1) || ua.indexOf('iPhone');
     if (isIE) {
         return "IE";
     } else if (isFirefox) {
