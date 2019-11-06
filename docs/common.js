@@ -1,11 +1,11 @@
 var zg,
-    appid = getParamByName('appid') || 1739272706,
-    appSigin = '',
+    appid = getParamByName('appid') || 1739272706, // 必填，应用id，请从 即构管理控制台-https://console.zego.im/acount/register 或邮件中获取
+    appSigin = '', // appSigin为即构给客户分配的秘钥，请勿泄漏；（测试环境下是生成token的密码，必填，正式环境需要放到服务端）
     _config = {
         appid: appid * 1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//"wss://wsliveroom-alpha.zego.im:8282/ws",
+        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//必填，接入服务器地址，请从 即构管理控制台-https://console.zego.im/acount/register 或邮件中获取
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
