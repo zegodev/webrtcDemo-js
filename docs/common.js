@@ -450,6 +450,7 @@ function bindEvent() {
     init();
 
     $('#createRoom').click(function () {
+        $('#signalUrl').val() && zg.setCustomSignalUrl($('#signalUrl').val())
         zg.setUserStateUpdate(true);
         openRoom($('#roomId').val(), 1);
     });
