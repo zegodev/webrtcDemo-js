@@ -19,10 +19,10 @@ $(function () {
               width:640,
               height:480,
               frameRate:15,
-              bitRate:800
+              bitRate:2000
           };
 
-          getBrowser() === 'Firefox' && zg.startScreenShotFirFox({width: 1280, height: 720, frameRate: 15}, 'window',true,function (suc,mediastream) {
+          getBrowser() === 'Firefox' && zg.startScreenShotFirFox({frameRate: 15}, 'window',true,function (suc,mediastream) {
               console.log('startScreenShot:'+suc);
               screenCaptrue = suc;
               previewVideo.srcObject = mediastream;
@@ -34,13 +34,13 @@ $(function () {
               }
           });
 
-          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({width: 1280, height:720, frameRate: 15}, false, function (suc,mediastream) {
+          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({frameRate: 15}, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
             previewVideo.srcObject = mediastream;
             config.externalMediaStream = mediastream;
             if(loginRoom) {
-                doPreviewPublish({externalCapture:true});
+                doPreviewPublish(config);
             }
           })
 
