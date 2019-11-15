@@ -19,10 +19,10 @@ $(function () {
               width:640,
               height:480,
               frameRate:15,
-              bitRate:2000
+              bitRate:$('#screenBitRate').val() * 1
           };
 
-          getBrowser() === 'Firefox' && zg.startScreenShotFirFox({frameRate: 15}, 'window',true,function (suc,mediastream) {
+          getBrowser() === 'Firefox' && zg.startScreenShotFirFox({frameRate: $('#screenFrameRate').val() * 1}, 'window',true,function (suc,mediastream) {
               console.log('startScreenShot:'+suc);
               screenCaptrue = suc;
               previewVideo.srcObject = mediastream;
@@ -34,7 +34,7 @@ $(function () {
               }
           });
 
-          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({frameRate: 15}, false, function (suc,mediastream) {
+          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({frameRate: $('#screenFrameRate').val() * 1}, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
             previewVideo.srcObject = mediastream;
