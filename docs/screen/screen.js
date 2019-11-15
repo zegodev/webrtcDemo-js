@@ -19,10 +19,10 @@ $(function () {
               width:640,
               height:480,
               frameRate:15,
-              bitRate:1000
+              bitRate:800
           };
 
-          getBrowser() === 'Firefox' && zg.startScreenShotFirFox('window',true,function (suc,mediastream) {
+          getBrowser() === 'Firefox' && zg.startScreenShotFirFox({width: 1280, height: 720, frameRate: 15}, 'window',true,function (suc,mediastream) {
               console.log('startScreenShot:'+suc);
               screenCaptrue = suc;
               previewVideo.srcObject = mediastream;
@@ -34,25 +34,26 @@ $(function () {
               }
           });
 
-          getBrowser() === 'Chrome' && bool &&zg.startScreenShotChrome(function (suc,mediastream) {
-              console.log('startScreenShot:'+suc);
-              screenCaptrue = suc;
-            // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
-            //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
-              previewVideo.srcObject = mediastream;
-              if(loginRoom) {
-                  doPreviewPublish({externalCapture:true});
-              }
-          })
-
-          getBrowser() === 'Chrome' && !bool && zg.startScreenSharingChrome(false, function (suc,mediastream) {
+          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({width: 1280, height:720, frameRate: 15}, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
             previewVideo.srcObject = mediastream;
+            config.externalMediaStream = mediastream;
             if(loginRoom) {
                 doPreviewPublish({externalCapture:true});
             }
           })
+
+          getBrowser() === 'Chrome' && bool &&zg.startScreenShotChrome(function (suc,mediastream) {
+            console.log('startScreenShot:'+suc);
+            screenCaptrue = suc;
+          // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
+          //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
+            previewVideo.srcObject = mediastream;
+            if(loginRoom) {
+                doPreviewPublish({externalCapture:true});
+            }
+        })
       }
     }
 
