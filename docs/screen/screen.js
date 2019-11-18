@@ -34,7 +34,10 @@ $(function () {
               }
           });
 
-          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({frameRate: $('#screenFrameRate').val() * 1}, false, function (suc,mediastream) {
+          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({
+            frameRate: $('#screenFrameRate').val() * 1,
+            displaySurface: $('#displaySurface').val()
+          }, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
             previewVideo.srcObject = mediastream;
