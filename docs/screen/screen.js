@@ -98,9 +98,10 @@ $(function () {
 
         idName = 'zego-'+ new Date().getTime()
 
+        var videoCodeType = $('#videoCodeType').val();
         var result = zg.startPreview($('#previewVideo2')[0],previewConfig,function () {
           console.log('preview twice success');
-          zg.startPublishingStream(idName, $('#previewVideo2')[0])
+          zg.startPublishingStream(idName, $('#previewVideo2')[0], null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'})
           //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
           enumDevices();
         },function (err) {
