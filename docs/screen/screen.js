@@ -35,8 +35,7 @@ $(function () {
           });
 
           getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({
-            frameRate: $('#screenFrameRate').val() * 1,
-            displaySurface: $('#displaySurface').val()
+            frameRate: $('#screenFrameRate').val() * 1
           }, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
             screenCaptrue = suc;
