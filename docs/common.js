@@ -5,7 +5,7 @@ var zg,
         appid: appid * 1,
         idName: new Date().getTime() + '',
         nickName: 'u' + new Date().getTime(),
-        server: "wss://wsliveroom" + appid + "-api.zego.im:8282/ws",//必填，接入服务器地址，请从 即构管理控制台-https://console.zego.im/acount/register 或邮件中获取
+        server: "wss://webliveroom-test.zego.im/ws",//必填，接入服务器地址，请从 即构管理控制台-https://console.zego.im/acount/register 或邮件中获取
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
@@ -363,7 +363,7 @@ function listen() {
                     console.info(streamList[i].stream_id + ' was added');
                     useLocalStreamList.push(streamList[i]);
                     $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
-                    $('.remoteVideo').append($('<video  autoplay muted playsinline></video>'));
+                    $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
                     play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
                 }
 
