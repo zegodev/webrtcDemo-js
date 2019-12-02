@@ -18,6 +18,8 @@ function init() {
   listen()
 
   zg.onStreamUpdated = function (type, streamList) {
+    var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4;
+
     if (type == 0) {
       //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
       if (streamList.length >= maxNumber) {
@@ -27,7 +29,7 @@ function init() {
       }
     }
 
-    seLocalStreamList = filterStreamList()
+    useLocalStreamList = filterStreamList()
 
     console.log(useLocalStreamList)
 
