@@ -202,6 +202,10 @@
         alert('请先预览视频')
         return
       }
+      if (mediaUtil) {
+        alert('pcm数据已在获取');
+        return
+      }
       mediaUtil = ZegoClient.getAudioInfo($('#previewVideo')[0], (err) => {
         err && console.error(err)
       }, {
