@@ -10,8 +10,7 @@ var zg,
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
-        audienceCreateRoom: true,
-        testEnvironment: true,
+        audienceCreateRoom: true
     },
     _otherConfig = {
         cgi_token: '',
