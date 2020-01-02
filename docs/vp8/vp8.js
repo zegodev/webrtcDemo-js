@@ -238,7 +238,7 @@ function loginSuccess(streamList, type) {
                 extraInfo.currentVideoCode = videoDecodeType;
             }
         }
-        play(streamId, $('.remoteVideo video:eq(' + index + ')')[0], extraInfo.currentVideoCode);
+        play(streamId, $('.remoteVideo video:eq(' + index + ')')[0], extraInfo.currentVideoCode || $('#videoCodeType').val());
     }
     console.log(`login success`);
 
@@ -289,10 +289,10 @@ function listenChild() {
                             streamId = extraInfo.MixStreamId;
                             extraInfo.currentVideoCode = videoDecodeType;
                             setTimeout(function () {
-                                play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
+                                play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode || $('#videoCodeType').val());
                             }, 2000);
                         } else {
-                            play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode);
+                            play(streamId, $('.remoteVideo video:last-child')[0], extraInfo.currentVideoCode || $('#videoCodeType').val());
                         }
                     }
 
