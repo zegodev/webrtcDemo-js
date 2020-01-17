@@ -50,10 +50,10 @@ function loginSuccess(streamList, type) {
   previewVideo.srcObject = mediastream
   var config = {
     externalCapture: true,
-    width: 1280,
-    height: 720,
-    frameRate: 20,
-    bitRate: {minBitRate: 300, maxBitRate: 1500}
+    // width: 1280,
+    // height: 720,
+    // frameRate: 20,
+    // bitRate: 1000
   }
   // config.externalMediaStream = mediastream
   // config.video = false;
