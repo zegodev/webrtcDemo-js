@@ -71,6 +71,9 @@ function init() {
           });
           flvPlayer.attachMediaElement(videoElement);
           flvPlayer.load();
+          flvPlayer.on('LOADING_COMPLETE', () => {
+            flvPlayer.play();
+          })
           videoElement.muted = false;
         }
     }
