@@ -70,6 +70,7 @@ function init() {
             hasAudio: hasAudio
           });
           flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
+            console.error('LOADING_COMPLETE')
             flvPlayer.play();
           })
           flvPlayer.attachMediaElement(videoElement);
@@ -136,6 +137,7 @@ function loginSuccess(streamList, type) {
             hasAudio: hasAudio
           });
           flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
+            console.error('LOADING_COMPLETE')
             flvPlayer.play();
           })
           flvPlayer.attachMediaElement(videoElement);
