@@ -69,11 +69,11 @@ function init() {
             url: flvUrl,
             hasAudio: hasAudio
           });
-          flvPlayer.attachMediaElement(videoElement);
-          flvPlayer.load();
-          flvPlayer.on('LOADING_COMPLETE', () => {
+          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
             flvPlayer.play();
           })
+          flvPlayer.attachMediaElement(videoElement);
+          flvPlayer.load();
           videoElement.muted = false;
         }
     }
@@ -135,6 +135,9 @@ function loginSuccess(streamList, type) {
             url: flvUrl,
             hasAudio: hasAudio
           });
+          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
+            flvPlayer.play();
+          })
           flvPlayer.attachMediaElement(videoElement);
           flvPlayer.load();
           videoElement.muted = false;
@@ -252,4 +255,8 @@ function leaveRoom() {
   $('.remoteVideo').html('');
   zg.logout();
 }
+
+$('#playCDN').click(() => {
+  flvPlayer.play()
+})
 
