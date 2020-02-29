@@ -1,5 +1,12 @@
 var videoElement = document.getElementById('test');
 var flvPlayer = null
+var ua = navigator.userAgent.toLowerCase();
+var isAndWechat = false;
+
+if ((ua.indexOf('android') > -1 || u.indexOf('linux') > -1) && ua.match(/MicroMessenger/i) == 'micromessenger') {
+  console.warn('当前浏览器为微信浏览器');
+  isAndWechat = true;
+}
 
 //覆盖common.js中的init
 function init() {
@@ -50,7 +57,7 @@ function init() {
 
     playType === 'Video' ? hasAudio = false : hasAudio = true
 
-    if (browser == "Safari" && useLocalStreamList.length !== 0) {
+    if (browser == "Safari" && !isAndWechat && useLocalStreamList.length !== 0) {
 
       videoElement.src = useLocalStreamList[0];
       //videoElement.load();
@@ -117,7 +124,7 @@ function loginSuccess(streamList, type) {
 
     playType === 'Video' ? hasAudio = false : hasAudio = true
 
-    if (browser == "Safari" && useLocalStreamList.length !== 0) {
+    if (browser == "Safari" && !isAndWechat && useLocalStreamList.length !== 0) {
 
       videoElement.src = useLocalStreamList[0];
       //videoElement.load();
@@ -186,7 +193,7 @@ function filterStreamList(streamId) {
   let pro = window.location.protocol
   let browser = getBrowser()
 
-  if (browser == 'Safari') {
+  if (browser == 'Safari' && !isAndWechat) {
     for (let key in hls) {
       if (hls[key]) {
         hls[key].forEach(item => {
