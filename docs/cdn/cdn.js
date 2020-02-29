@@ -3,7 +3,7 @@ var flvPlayer = null
 var ua = navigator.userAgent.toLowerCase();
 var isAndWechat = false;
 
-if ((ua.indexOf('android') > -1 || u.indexOf('linux') > -1) && ua.match(/MicroMessenger/i) == 'micromessenger') {
+if ((ua.indexOf('android') > -1 || ua.indexOf('linux') > -1) && ua.match(/MicroMessenger/i) == 'micromessenger') {
   console.warn('当前浏览器为微信浏览器');
   isAndWechat = true;
 }
