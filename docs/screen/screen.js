@@ -35,6 +35,8 @@ $(function () {
           });
 
           getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({
+            width: $('#screenWidth').val() * 1,
+            height: $('#screenHeight').val() * 1,
             frameRate: $('#screenFrameRate').val() * 1
           }, false, function (suc,mediastream) {
             console.log('startScreenShot:'+suc);
@@ -54,7 +56,7 @@ $(function () {
             previewVideo.srcObject = mediastream;
             if(loginRoom) {
                 doPreviewPublish({externalCapture:true});
-            }
+            } 
         })
       }
     }
@@ -69,10 +71,10 @@ $(function () {
 
     $('#stopScreenShot').click(function () {
         zg.stopScreenShot()
-        zg.stopPreview(previewVideo);
-        zg.stopPublishingStream(_config.idName);
+        isPreviewed && zg.stopPreview(previewVideo);
+        isPreviewed && zg.stopPublishingStream(_config.idName);
 
-        doPreviewPublish();
+        loginRoom && doPreviewPublish();
     });
 
     $('#pushTwoStreams').click(function ()  {

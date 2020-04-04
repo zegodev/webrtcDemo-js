@@ -9,17 +9,20 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="../assets/bootstrap.min.css">
   <style>
-    .bg-f2{
+    .bg-f2 {
       background-color: #f8f9fa;
     }
-    video{
+
+    video {
       width: 320px;
       height: auto;
-        }
-    .videoRow{
-        margin-top: 30px;
     }
-    #previewLabel{
+
+    .videoRow {
+      margin-top: 30px;
+    }
+
+    #previewLabel {
       display: block;
       position: absolute;
     }
@@ -72,7 +75,8 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="videoPlayCodeType"><strong class="text-gray-dark">拉流编码</strong></label>
+              <label class="input-group-text" for="videoPlayCodeType"><strong
+                  class="text-gray-dark">拉流编码</strong></label>
             </div>
             <select class="custom-select" id="videoPlayCodeType" style="width: 60%">
               <option value="H264">H264</option>
@@ -86,8 +90,8 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
-            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
-              placeholder="请输入房间号">
+            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%"
+              aria-describedby="emailHelp" placeholder="请输入房间号">
           </div>
         </div>
 
@@ -127,6 +131,26 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
+              <label class="input-group-text" for="screenWidth"><strong class="text-gray-dark">共享宽</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="screenWidth" aria-describedby="emailHelp"
+              placeholder="" value="1280">
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="screenHeight"><strong class="text-gray-dark">共享高</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="screenHeight" aria-describedby="emailHelp"
+              placeholder="" value="720">
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
               <label class="input-group-text" for="signalUrl"><strong class="text-gray-dark">信令地址</strong></label>
             </div>
             <input type="email" class="form-control d-inline" id="signalUrl" aria-describedby="emailHelp"
@@ -151,7 +175,7 @@
         <div class="col-sm">
           <label id="previewLabel" class="text-white"></label>
           <video id="previewVideo" autoplay muted playsinline></video>
-          <video id="previewVideo2"autoplay muted playsinline></video>
+          <video id="previewVideo2" autoplay muted playsinline></video>
         </div>
         <div class="col-sm remoteVideo">
           <!--<video  autoplay muted playsinline></video>-->
