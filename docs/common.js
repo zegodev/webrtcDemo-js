@@ -284,7 +284,7 @@ function play(streamId, video) {
     if (!result) {
         alert('哎呀，播放失败啦');
         video.style = 'display:none';
-        console.error("play " + el.nativeElement.id + " return " + result);
+        console.error("play " + streamId + " return " + result);
 
     }
 }
