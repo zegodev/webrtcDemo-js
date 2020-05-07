@@ -14,6 +14,14 @@ $(function () {
           loginRoom && zg.stopPublishingStream(_config.idName);
           loginRoom && zg.stopPreview(previewVideo);
 
+          let width = $('#screenWidth').val() * 1;
+          let height = $('#screenHeight').val() * 1;
+
+          if (isNaN(width) || isNaN(height)) {
+            alert('width and height must be number');
+            return;
+          }
+
           var config = {
               externalMediaStream:null,
               width:640,
@@ -35,11 +43,11 @@ $(function () {
           });
 
           getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({
-            width: $('#screenWidth').val() * 1,
-            height: $('#screenHeight').val() * 1,
+            width: width < 320? 320: $('#screenWidth').val() * 1,
+            height: height < 240? 240: $('#screenHeight').val() * 1,
             frameRate: $('#screenFrameRate').val() * 1
           }, false, function (suc,mediastream) {
-            console.log('startScreenShot:'+suc);
+            console.warn('startScreenShot:'+suc);
             screenCaptrue = suc;
             previewVideo.srcObject = mediastream;
             config.externalMediaStream = mediastream;
@@ -56,7 +64,7 @@ $(function () {
             previewVideo.srcObject = mediastream;
             if(loginRoom) {
                 doPreviewPublish({externalCapture:true});
-            } 
+            }
         })
       }
     }

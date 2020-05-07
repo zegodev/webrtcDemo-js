@@ -389,6 +389,10 @@ function listen() {
                 }
             }
 
+        },
+
+        onScreenSharingEnded: function() {
+            console.warn('screen sharing end')
         }
     };
 

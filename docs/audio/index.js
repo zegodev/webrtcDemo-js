@@ -191,3 +191,26 @@ function play(streamId, video, extraInfo) {
     }
 }
 
+$('#startRecordAudio').click(() => {
+  ZegoClient.startRecord(null, {audio: true, audioInput: $('#audioList').val()}, err => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.warn('start record');
+    }
+  });
+
+  $('#stopRecordAudio')[0].disabled = false;
+  $('#startRecordAudio')[0].disabled = true;
+})
+
+$('#stopRecordAudio').click(function () {
+  // ZegoClient.stopRecordAudio();
+  ZegoClient.stopRecord();
+
+  var audio = document.createElement('audio');
+  audio.src = ZegoClient.saveRecord();
+  audio.play();
+  $('#stopRecordAudio')[0].disabled = true;
+  $('#startRecordAudio')[0].disabled = false;
+});
