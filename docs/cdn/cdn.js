@@ -261,7 +261,7 @@ function leaveRoom() {
     }
   }
 
-  $('.remoteVideo').html('');
+  // $('.remoteVideo').html('');
   zg.logout();
 }
 
