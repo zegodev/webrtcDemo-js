@@ -1,5 +1,7 @@
 $(function (){
 
+  let isMixingAudio = false;
+
   let audioEffectList = [{
     effectId: 1,
     path: '../assets/laugh.mp3'
@@ -24,8 +26,10 @@ $(function (){
       streamId: _config.idName,
       effectId: 1
     }, () => {
+      isMixingAudio = true;
       console.warn('start play')
     }, () => {
+      isMixingAudio = false;
       console.warn('play end')
     })
   })
@@ -44,6 +48,7 @@ $(function (){
 
 
     $('#applaud')[0].play()
+    isMixingAudio = true;
     $('#applaud').on('ended', () => {
       zg.stopMixingAudio(_config.idName)
       $('#applaud').unbind()
@@ -55,8 +60,10 @@ $(function (){
       streamId: _config.idName,
       effectId: 2
     }, () => {
+      isMixingAudio = true;
       console.warn('start play')
     }, () => {
+      isMixingAudio = false;
       console.warn('play end')
     })
   })
@@ -71,6 +78,7 @@ $(function (){
 
   $('#stopEffect').click(() => {
     zg.stopMixingAudio(_config.idName)
+    isMixingAudio = false;
   })
 
   $('#unloadEffect').click(() => {
@@ -90,4 +98,9 @@ $(function (){
   $('#volume').on('input', () => {
     zg.setMixingAudioVolume(_config.idName, parseInt($('#volume').val()))
   })
+
+  $('#leaveRoom').click(function () {
+    isMixingAudio && isPreviewed && zg.stopMixingAudio(_config.idName);
+    leaveRoom();
+});
 })
