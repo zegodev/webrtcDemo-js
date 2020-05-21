@@ -52,6 +52,12 @@
       </div>
       <div class="row">
         <div class="col-sm">
+          <button type="button" onclick="setTestEnv2()" class="btn btn-primary btn-sm">切换为测试环境</button>
+          <button type="button" onclick="setTestEnv1()" class="btn btn-primary btn-sm">切换为正式环境（默认）</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
           <input onchange="changeHandle(event)" type="file">
         </div>
       </div>
@@ -103,6 +109,14 @@
       userID: userID,
       token: token
     });
+  }
+
+  function setTestEnv1() {
+    zegoDocs.setTestEnv(false);
+  }
+
+  function setTestEnv2() {
+    zegoDocs.setTestEnv(true);
   }
 
   let myFile // 当前文档对象
