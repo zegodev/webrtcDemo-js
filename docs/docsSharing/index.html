@@ -112,10 +112,18 @@
   }
 
   function setTestEnv1() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
     zegoDocs.setTestEnv(false);
   }
 
   function setTestEnv2() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
     zegoDocs.setTestEnv(true);
   }
 
