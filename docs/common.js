@@ -39,12 +39,13 @@ $(function () {
     // } else {
     //     alert('浏览器不支持webrtc，换一个浏览器试试吧');
     // }
-    ZegoClient.supportDetection(result => {
-        console.log(result);
-        bindEvent();
-    }, err => {
-        alert(err);
-    })
+    bindEvent();
+    // ZegoClient.supportDetection(function (result) {
+    //     console.log(result);
+    //     bindEvent();
+    // }, function (err) {
+    //     alert(err);
+    // })
 
     desc()
 
@@ -88,7 +89,7 @@ function IsPC() {
 
 function enumDevices() {
     var audioInputList = [], videoInputList = [];
-    zg.enumDevices(deviceInfo => {
+    zg.enumDevices(function (deviceInfo) {
         console.log('enumDevices' + JSON.stringify(deviceInfo));
         if (deviceInfo.microphones) {
             for (var i = 0; i < deviceInfo.microphones.length; i++) {
@@ -468,17 +469,17 @@ function bindEvent() {
     });
 
     $('#switchVideo').click(function () {
-        zg.switchDevice('video', $('#previewVideo')[0], $('#videoList').val(), () => {
+        zg.switchDevice('video', $('#previewVideo')[0], $('#videoList').val(), function () {
             console.warn('switch camera success')
-        }, err => {
+        }, function (err) {
             console.error(err)
         })
     });
 
     $('#switchAudio').click(function () {
-        zg.switchDevice('audio', $('#previewVideo')[0], $('#audioList').val(), () => {
+        zg.switchDevice('audio', $('#previewVideo')[0], $('#audioList').val(), function () {
             console.warn('switch audio success')
-        }, err => {
+        }, function (err) {
             console.error(err)
         })
     })
@@ -514,7 +515,7 @@ function onDeviceReady() {
 function setConfig(zg) {
     //测试用代码，客户请忽略  start
     if (location.search) {
-        let _arr_config = location.search.substr(1).split('&');
+        var _arr_config = location.search.substr(1).split('&');
         _arr_config.forEach(function (item) {
             var key = item.split('=')[0], value = item.split('=')[1];
 

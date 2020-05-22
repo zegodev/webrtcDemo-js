@@ -76,7 +76,7 @@ function init() {
             url: flvUrl,
             hasAudio: hasAudio
           });
-          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
+          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
             console.error('LOADING_COMPLETE')
             flvPlayer.play();
           })
@@ -143,7 +143,7 @@ function loginSuccess(streamList, type) {
             url: flvUrl,
             hasAudio: hasAudio
           });
-          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
+          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
             console.error('LOADING_COMPLETE')
             flvPlayer.play();
           })
@@ -165,20 +165,20 @@ function loginSuccess(streamList, type) {
 }
 
 function filterStreamList(streamId) {
-  let flv = {};
-  let hls = {};
-  let rtmp = {};
+  var flv = {};
+  var hls = {};
+  var rtmp = {};
 
-  let streamListUrl = []
-  let index = 0
+  var streamListUrl = []
+  var index = 0
 
   console.log(zg.stateCenter.streamList)
 
-  zg.stateCenter.streamList.forEach((item, ind) => {
+  zg.stateCenter.streamList.forEach(function (item, ind) {
     if (item.stream_id == streamId) index = ind
   })
 
-  for (let key in zg.stateCenter.streamList[index]) {
+  for (var key in zg.stateCenter.streamList[index]) {
     if (key == 'urls_flv' || key == 'urls_https_flv') {
       flv[key] = zg.stateCenter.streamList[index][key]
     }
@@ -190,13 +190,13 @@ function filterStreamList(streamId) {
     }
   }
 
-  let pro = window.location.protocol
-  let browser = getBrowser()
+  var pro = window.location.protocol
+  var browser = getBrowser()
 
   if (browser == 'Safari' && !isAndWechat) {
-    for (let key in hls) {
+    for (var key in hls) {
       if (hls[key]) {
-        hls[key].forEach(item => {
+        hls[key].forEach(function (item) {
           if (item.indexOf(pro) !== -1) streamListUrl.push(item)
           else if (pro == 'https:' && item.indexOf('https') === -1) {
             streamListUrl.push(item.replace('http', 'https'))
@@ -205,17 +205,17 @@ function filterStreamList(streamId) {
       }
     }
   } else if (pro == 'http:') {
-    for (let key in flv) {
+    for (var key in flv) {
       if (flv[key]) {
-        flv[key].forEach(item => {
+        flv[key].forEach(function (item) {
           if (item.indexOf('http') !== -1 || item.indexOf('https') !== -1) streamListUrl.push(item)
         })
       }
     }
   } else if (pro == 'https:') {
-    for (let key in flv) {
+    for (var key in flv) {
       if (flv[key]) {
-        flv[key].forEach(item => {
+        flv[key].forEach(function (item) {
           if (item.indexOf('https') === -1) streamListUrl.push(item.replace('http', 'https'))
           else if (item.indexOf(pro) !== -1) {
             streamListUrl.push(item)
@@ -224,16 +224,16 @@ function filterStreamList(streamId) {
       }
     }
   } else if (pro == 'rtmp:') {
-    for (let key in rtmp) {
+    for (var key in rtmp) {
       if (rtmp[key]) {
-        rtmp[key].forEach(item => {
+        rtmp[key].forEach(function (item) {
           if (item.indexOf(pro) !== -1) streamListUrl.push(item)
         })
       }
     }
   }
 
-  return streamListUrl.filter((ele, index, self) => self.indexOf(ele) == index)
+  return streamListUrl.filter(function (ele, index, self){self.indexOf(ele) == index} )
 }
 
 function leaveRoom() {
@@ -265,7 +265,7 @@ function leaveRoom() {
   zg.logout();
 }
 
-$('#playCDN').click(() => {
+$('#playCDN').click(function () {
   flvPlayer.play()
 })
 
