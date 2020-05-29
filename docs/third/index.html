@@ -98,17 +98,30 @@
 
 </body>
 <script src="../assets/vconsole.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     // init vConsole
     var vConsole = new VConsole();
     console.log('Hello world');
+    console.log(wx)
+    wx.config({
+    // 配置信息, 即使不正确也能使用 wx.ready
+    debug: false,
+    appId: '',
+    timestamp: 1,
+    nonceStr: '',
+    signature: '',
+    jsApiList: []
+  });
+  wx.ready(function() {
+    document.getElementById('externerVideo').play();
+  });
 </script>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="../assets/popper.min.js"></script>
 <script src="../assets/bootstrap.min.js"></script>
 <!-- zego js sdk -->
 <script src="../assets/jZego-rtc.js"></script>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script src="../common.js?v=014"></script>
 <script src="./third.js"></script>
 </html>

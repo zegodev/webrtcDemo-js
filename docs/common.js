@@ -24,20 +24,6 @@ var zg,
     useLocalStreamList = [];
 var anchor_userid = '', anchro_username = '';
 
-wx.config({
-  // 配置信息, 即使不正确也能使用 wx.ready
-  debug: false,
-  appId: '',
-  timestamp: 1,
-  nonceStr: '',
-  signature: '',
-  jsApiList: []
-});
-wx.ready(function() {
-  document.getElementById('externerVideo').play();
-});
-
-
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
     // if (ZegoClient.isSupportWebrtc()) {
