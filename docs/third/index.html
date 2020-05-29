@@ -119,14 +119,14 @@
   }
   wx.ready(function() {
     console.warn('wx ready')
-    play();
+    autoplay();
   });
-  function play(){
+  function autoplay(){
     if(isready){
       video.play();
     }else{
       setTimeout(()=>{
-        play();
+        autoplay();
       },500)
 
     }
