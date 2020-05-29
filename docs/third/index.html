@@ -114,7 +114,8 @@
   });
   let video = document.getElementById('externerVideo');
   let isready= false;
-  video.oncanplay=()=>{
+  video.onload=()=>{
+      console.warn('video onload')
       isready= true;
   }
   wx.ready(function() {
