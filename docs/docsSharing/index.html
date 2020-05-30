@@ -34,7 +34,7 @@
               <label class="input-group-text" for="userID"><strong class="text-gray-dark">userID</strong></label>
             </div>
             <input class="form-control d-inline" style="width: 60%;" type="text" id="userID"
-              placeholder="请输入userID（选填）" />
+              placeholder="请输入userID（必填）" />
           </div>
         </div>
         <div class="col-sm">
@@ -95,6 +95,11 @@
 
     if (!appID) {
       alert('请输入appID');
+      return;
+    }
+
+    if (!userID) {
+      alert('请输入userID');
       return;
     }
 
