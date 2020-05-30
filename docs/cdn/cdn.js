@@ -233,7 +233,7 @@ function filterStreamList(streamId) {
     }
   }
 
-  return streamListUrl.filter(function (ele, index, self){self.indexOf(ele) == index} )
+  return streamListUrl.filter(function (ele, index, self){return self.indexOf(ele) == index} )
 }
 
 function leaveRoom() {

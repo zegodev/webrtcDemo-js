@@ -84,7 +84,7 @@
             <div class="col-sm">
                 <label id="previewLabel" class="text-white"></label>
                 <video id="previewVideo" autoplay muted playsinline controls></video>
-                <video id="externerVideo" muted controls src="http://zego-public.oss-cn-shanghai.aliyuncs.com/sdk-doc/assets/big_buck_bunny.mp4" loop></video>
+                <video id="externerVideo" autoplay controls src="http://zego-public.oss-cn-shanghai.aliyuncs.com/sdk-doc/assets/big_buck_bunny.mp4" loop></video>
 <!--                <audio id="externerAudio" muted controls src="../assets/bike.mp3" loop></audio>-->
             </div>
             <div class="col-sm remoteVideo">
@@ -98,10 +98,40 @@
 
 </body>
 <script src="../assets/vconsole.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script>
     // init vConsole
     var vConsole = new VConsole();
     console.log('Hello world');
+    wx.config({
+    // 配置信息, 即使不正确也能使用 wx.ready
+    debug: false,
+    appId: '',
+    timestamp: 1,
+    nonceStr: '',
+    signature: '',
+    jsApiList: []
+  });
+  let video = document.getElementById('externerVideo');
+  let isready= false;
+  video.onload=()=>{
+      console.warn('video onload')
+      isready= true;
+  }
+  wx.ready(function() {
+    console.warn('wx ready')
+    autoplay();
+  });
+  function autoplay(){
+    if(isready){
+      video.play();
+    }else{
+      setTimeout(()=>{
+        autoplay();
+      },500)
+
+    }
+  }
 </script>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="../assets/popper.min.js"></script>
