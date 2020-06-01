@@ -177,7 +177,8 @@
   let pre_time = 0
   let intervals = 0
   let pre_intervals = 0
-  let flag
+  let flag;
+  let playTime,flvPlayTimer;
 
   function handleTimerClick() {
     if (handleTimer.innerText === '开始' || handleTimer.innerText === '继续') {
@@ -262,7 +263,28 @@
         flvPlayer.attachMediaElement($('#flvVideo')[0]);
         flvPlayer.load();
         $('#flvVideo')[0].muted = false;
-        $('#flvVideo')[0].play()
+        $('#flvVideo')[0].play();
+
+
+         // 监听播放进度
+        $('#flvVideo')[0].ontimeupdate = function () { 
+             console.log('ontimeupdate',$('#flvVideo')[0].currentTime);  
+             playTime = $('#flvVideo')[0].currentTime;
+         };
+         if(flvPlayTimer){
+          clearInterval(flvPlayTimer);
+         } 
+
+         // 定时去检测
+         flvPlayTimer = setInterval(()=>{
+           // 如果检测到进度没有变化,重新拉流
+          if(playTime>0 && $('#flvVideo')[0].currentTime === playTime){
+              // console.log
+              flvPlayer.unload();
+              flvPlayer.load();
+              $('#flvVideo')[0].play();
+             }
+         },1000);
       }
     }
 
