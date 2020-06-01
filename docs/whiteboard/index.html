@@ -172,7 +172,8 @@
           <h6 class="pb-2 mb-0">
             白板容器（1000 * 600）
           </h6>
-          <div id="mywhiteboard" style="width: 1000px; height: 600px; border: 1px dashed #ddd;"></div>
+          <div id="mywhiteboard" style="width: 1000px; height: 600px; border: 1px dashed #ddd;position: relative;">
+          </div>
         </div>
       </div>
     </div>
@@ -180,7 +181,7 @@
 </body>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="../assets/bootstrap.min.js"></script>
-<script src="./whiteboard.js"></script>
+<script src="./jZego-rtc.js"></script>
 <script>
   var zg,
     isLogin = false;
@@ -320,7 +321,7 @@
     });
 
     $("#attachView").click(function () {
-      zg.attachView(zgWbView, "#mywhiteboard");
+      zg.attachView(zgWbView, "mywhiteboard");
     });
 
     $("#destroyView").click(function () {
