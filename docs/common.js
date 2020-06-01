@@ -24,7 +24,6 @@ var zg,
     useLocalStreamList = [];
 var anchor_userid = '', anchro_username = '';
 
-
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
     // if (ZegoClient.isSupportWebrtc()) {
