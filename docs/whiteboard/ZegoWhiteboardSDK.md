@@ -45,7 +45,7 @@ whiteboardManager.destroyView(whiteboardView: WhiteboardView)
 #### 1.1.4 添加白板到视图（渲染）
 
 ```typescript
-whiteboardManager.attachView(parent: string, whiteboardView: WhiteboardView)
+whiteboardManager.attachView(whiteboardView: WhiteboardView, parent: string)
 ```
 
 | 字段                                  | 含义   | 是否必填                   |
