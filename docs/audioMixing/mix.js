@@ -127,6 +127,10 @@ $(function (){
           } else {
             console.warn("real time effect success");
             isMixingAudio = true;
+            $('#playClapEffect')[0].disabled = true;
+            $('#pauseEffect')[0].disabled = true;
+            $('#resumeEffect')[0].disabled = true;
+            $('#stopEffect')[0].disabled = true;
           }
         });
       } else {
@@ -142,5 +146,9 @@ $(function (){
   $('#stopMixingBuffer').click(function () {
     zg.stopMixingBuffer(_config.idName, null);
     isMixingAudio = false;
+    $('#playClapEffect')[0].disabled = false;
+    $('#pauseEffect')[0].disabled = false;
+    $('#resumeEffect')[0].disabled = false;
+    $('#stopEffect')[0].disabled = false;
   })
 })
