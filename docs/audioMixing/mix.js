@@ -38,7 +38,13 @@ $(function (){
 
   $('#playClapEffect').click(() => {
 
-    zg.startMixingAudio(_config.idName, $('#applaud')[0])
+    if (isMixingAudio) {
+      console.error("当前正在混其它音效,不要想鼓掌了");
+      return;
+    }
+
+    zg.startMixingAudio(_config.idName, $('#applaud')[0]) && ($('#pauseEffect')[0].disabled = true);
+
 
     // *****chrome和firfox在混音的时候，会有表现不一致的问题： chrome标签被混音，标签本身依旧能正常播放出声音，firfox则被静音；推流端一般静音 ******
     if(getBrowser()==='Chrome'){
@@ -51,7 +57,8 @@ $(function (){
     isMixingAudio = true;
     $('#applaud').on('ended', () => {
       zg.stopMixingAudio(_config.idName)
-      $('#applaud').unbind()
+      $('#applaud').unbind();
+      $('#pauseEffect')[0].disabled = false;
     })
   })
 
@@ -118,7 +125,8 @@ $(function (){
           if (err) {
             console.error(err);
           } else {
-            console.warn("real time effect success")
+            console.warn("real time effect success");
+            isMixingAudio = true;
           }
         });
       } else {
@@ -133,5 +141,6 @@ $(function (){
 
   $('#stopMixingBuffer').click(function () {
     zg.stopMixingBuffer(_config.idName, null);
+    isMixingAudio = false;
   })
 })
