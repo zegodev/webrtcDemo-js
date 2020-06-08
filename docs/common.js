@@ -203,11 +203,11 @@ function loginSuccess(streamList, type) {
     var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
 
     //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
-    if (streamList.length >= maxNumber) {
-        alert('房间太拥挤，换一个吧！');
-        leaveRoom();
-        return;
-    }
+    // if (streamList.length >= maxNumber) {
+    //     alert('房间太拥挤，换一个吧！');
+    //     leaveRoom();
+    //     return;
+    // }
     if ($('#streamID').val()) {
         useLocalStreamList = [{
             anchor_id_name: 'custom',
