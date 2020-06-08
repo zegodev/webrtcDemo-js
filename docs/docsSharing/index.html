@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>文件共享</title>
+  <link rel="stylesheet" href="../assets/bootstrap.min.css" />
+  <style>
+    .bg-f2 {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="my-3 p-3 bg-white rounded box-shadow small">
+      <h6 class="border-bottom border-gray pb-2 mb-0">文件共享基础功能</h6>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="appID"><strong class="text-gray-dark">appID</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 60%;" type="text" id="appID"
+              placeholder="请输入appID（必填）" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="userID"><strong class="text-gray-dark">userID</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 60%;" type="text" id="userID"
+              placeholder="请输入userID（必填）" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="token"><strong class="text-gray-dark">token</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 60%;" type="text" id="token"
+              placeholder="请输入token（必填）" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <button type="button" onclick="initHandle()" class="btn btn-primary btn-sm">初始化</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" onclick="setTestEnv2()" class="btn btn-primary btn-sm">切换为测试环境</button>
+          <button type="button" onclick="setTestEnv1()" class="btn btn-primary btn-sm">切换为正式环境（默认）</button>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
+          <input onchange="changeHandle(event)" type="file">
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm-1">
+          <button type="button" onclick="uploadHandle()" id="upload" class="btn btn-primary btn-sm">上传</button>
+        </div>
+        <div class="col-sm-5">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend" onclick="loadHandle()">
+              <label class="input-group-text" style="cursor: pointer;" for="fileID"><strong
+                  class="text-gray-dark">加载指定fileID文档</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 60%;" type="text" id="fileID" placeholder="请输入fileID" />
+          </div>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
+          <div id="load-result-con"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../assets/jquery-3.3.1.min.js"></script>
+<script src="../assets/bootstrap.min.js"></script>
+<script src="./ZegoExpressDocs.js"></script>
+<script>
+  let zegoDocs
+  function initHandle() {
+    let appID = document.getElementById('appID').value,
+      userID = document.getElementById('userID').value,
+      token = document.getElementById('token').value
+
+    if (!appID) {
+      alert('请输入appID');
+      return;
+    }
+
+    if (!userID) {
+      alert('请输入userID');
+      return;
+    }
+
+    if (!token) {
+      alert('请输入token');
+      return;
+    }
+
+    appID = appID ? parseInt(appID) : '';
+    zegoDocs = new ZegoDocs({
+      appID: appID,
+      userID: userID,
+      token: token
+    });
+  }
+
+  function setTestEnv1() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
+    zegoDocs.setTestEnv(false);
+  }
+
+  function setTestEnv2() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
+    zegoDocs.setTestEnv(true);
+  }
+
+  let myFile // 当前文档对象
+  function changeHandle(event) {
+    myFile = event.target.files[0];
+    console.log(myFile);
+  }
+
+  function uploadHandle() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
+    if (!myFile) {
+      alert('请先选择文件');
+      return;
+    }
+    zegoDocs.upload({
+      file: myFile,
+      renderType: 3,
+      onProgress: data => {
+        console.log(data);
+      }
+    }).then(uploadResult => {
+      alert('上传成功');
+      console.log(uploadResult);
+      document.getElementById('fileID').value = uploadResult.fileID;
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
+  function showLoadResult(loadResult) {
+    let dom = document.getElementById('load-result-con');
+    let str = '<h6>加载成功后返回文档内容如下：</h6>';
+    loadResult.fileUrls.forEach(fileUrl => {
+      str += `<p class="text-muted">${fileUrl}</p>`;
+    });
+    dom.innerHTML = str;
+  }
+
+  function loadHandle() {
+    if (!zegoDocs) {
+      alert('请先初始化');
+      return;
+    }
+    const fileID = document.getElementById('fileID').value;
+    if (!fileID) {
+      alert('请输入fileID或上传文档生成fileID');
+      return;
+    }
+    zegoDocs.load({
+      fileID
+    }).then(loadResult => {
+      alert('加载成功');
+      showLoadResult(loadResult);
+      console.log(loadResult);
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+</script>
+
+</html>

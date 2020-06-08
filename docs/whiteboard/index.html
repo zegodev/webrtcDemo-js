@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>whiteboard</title>
+  <link rel="stylesheet" href="../assets/bootstrap.min.css" />
+  <style>
+    .bg-f2 {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="my-3 p-3 bg-white rounded box-shadow small">
+      <h6 class="border-bottom border-gray pb-2 mb-0">白板基础功能</h6>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="appID"><strong class="text-gray-dark">appID</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 75%;" type="text" id="appID" placeholder="请输入appID" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="server"><strong class="text-gray-dark">server</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 75%;" type="text" id="server" placeholder="请输入server" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="idName"><strong class="text-gray-dark">idName</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 75%;" type="text" id="idName" placeholder="请输入idName" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">roomID</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 75%;" type="text" id="roomID" placeholder="请输入roomID" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="token"><strong class="text-gray-dark">token</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 75%;" type="text" id="token" placeholder="请输入token" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <button type="button" id="init" class="btn btn-primary btn-sm">
+            初始化
+          </button>
+          <button type="button" id="createRoom" class="btn btn-primary btn-sm">
+            创建房间
+          </button>
+          <button type="button" id="openRoom" class="btn btn-primary btn-sm">
+            进入房间
+          </button>
+          <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">
+            退出
+          </button>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm-5">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend" id="getViewList">
+              <label class="input-group-text">
+                <strong class="text-gray-dark">获取白板列表</strong>
+              </label>
+            </div>
+            <select id="remoteView" class="form-control d-inline" style="width: 260px;"
+              onchange="selectRemoteView(this)"></select>
+          </div>
+        </div>
+        <div class="col-sm">
+          <button type="button" id="attachView" class="btn btn-primary btn-sm">
+            渲染当前白板
+          </button>
+          <button type="button" id="destroyView" class="btn btn-secondary btn-sm">
+            销毁当前白板
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="aspectWidth"><strong class="text-gray-dark">等比宽</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 65%;" type="text" id="aspectWidth"
+              placeholder="请输入aspectWidth" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="aspectHeight"><strong class="text-gray-dark">等比高</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 65%;" type="text" id="aspectHeight"
+              placeholder="请输入aspectHeight" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="whiteboardName"><strong class="text-gray-dark">白板名称</strong></label>
+            </div>
+            <input class="form-control d-inline" style="width: 65%;" type="text" id="whiteboardName"
+              placeholder="请输入白板名称" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <button type="button" id="createView" class="btn btn-primary btn-sm">
+            创建白板
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm">
+          <button id="path" type="button" class="btn btn-primary btn-sm">
+            涂鸦
+          </button>
+          <button id="text" type="button" class="btn btn-primary btn-sm">
+            文本
+          </button>
+          <button id="line" type="button" class="btn btn-primary btn-sm">
+            直线
+          </button>
+          <button id="rect" type="button" class="btn btn-primary btn-sm">
+            矩形
+          </button>
+          <button id="ellipse" type="button" class="btn btn-primary btn-sm">
+            椭圆
+          </button>
+          <button id="selector" type="button" class="btn btn-primary btn-sm">
+            选择
+          </button>
+          <button id="eraser" type="button" class="btn btn-primary btn-sm">
+            橡皮擦
+          </button>
+          <button id="undo" type="button" class="btn btn-primary btn-sm">
+            撤销
+          </button>
+          <button id="redo" type="button" class="btn btn-primary btn-sm">
+            重做
+          </button>
+          <button id="clear" type="button" class="btn btn-secondary btn-sm">
+            清空图元
+          </button>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 1%;">
+        <div class="col-sm">
+          <h6 class="pb-2 mb-0">
+            白板容器（1000 * 600）
+          </h6>
+          <div id="mywhiteboard" style="width: 1000px; height: 600px; border: 1px dashed #ddd;position: relative;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="../assets/jquery-3.3.1.min.js"></script>
+<script src="../assets/bootstrap.min.js"></script>
+<script src="./jZego-rtc.js"></script>
+<script>
+  var zg,
+    isLogin = false;
+
+  // 监听sdk回调
+  function listen() {
+    zg.on("error", (errorData) => {
+      console.log("on error");
+      console.log(errorData);
+    });
+    zg.on("viewAdd", (wbView) => {
+      console.log("on viewAdd");
+      console.log(wbView);
+    });
+    zg.on("viewRemoved", (whiteboardID) => {
+      console.log("on viewRemoved");
+      console.log(`whiteboardID: ${whiteboardID}`);
+    });
+    zg.on(
+      "viewScroll",
+      (whiteboardID, horizontalPercent, verticalPercent) => {
+        console.log("on viewScroll");
+        console.log(whiteboardID);
+        console.log(horizontalPercent);
+        console.log(verticalPercent);
+      }
+    );
+  }
+
+  function init(appID, server, idName) {
+    if (!appID) {
+      alert("请输入appID");
+      return;
+    }
+
+    if (!server) {
+      alert("请输入server");
+      return;
+    }
+
+    if (!idName) {
+      alert("请输入idName");
+      return;
+    }
+
+    zg = new ZegoClient();
+
+    zg.config({
+      appid: appID,
+      idName: idName,
+      nickName: `u${idName}`,
+      server: server,
+      logLevel: 0,
+      logUrl: "",
+      remoteLogLevel: 0,
+      audienceCreateRoom: false,
+    });
+
+    listen();
+  }
+
+  function leaveRoom() {
+    console.alert("leave room");
+    isLogin = false;
+    zg.logout();
+  }
+
+  function openRoom(roomID, token, type) {
+    if (isLogin) {
+      return leaveRoom();
+    }
+
+    if (!roomID) {
+      alert("请输入roomID");
+      return;
+    }
+
+    if (!token) {
+      alert("请输入token");
+      return;
+    }
+
+    //login
+    async function startLogin(token, type) {
+      zg.login(
+        roomID,
+        type,
+        token,
+        function (...args) {
+          alert("登录成功");
+        },
+        function (err) {
+          alert("登录失败");
+          console.log(err);
+        }
+      );
+    }
+    startLogin(token, type);
+  }
+
+  $(function () {
+    $("#init").click(function () {
+      init(Number($("#appID").val()), $("#server").val(), $("#idName").val());
+    });
+
+    $("#createRoom").click(function () {
+      openRoom($("#roomID").val(), $("#token").val(), 1);
+    });
+
+    $("#openRoom").click(function () {
+      openRoom($("#roomID").val(), $("#token").val(), 2);
+    });
+
+    $("#leaveRoom").click(function () {
+      leaveRoom();
+    });
+
+    $("#getViewList").click(async function () {
+      try {
+        zgViewList = await zg.getViewList();
+        if (zgViewList && zgViewList.length) {
+          const html = zgViewList
+            .map(
+              (v) =>
+                `<option value=${v.getID()}>${v.getID()}-${v.getName()}</option>`
+            )
+            .join("");
+          document.getElementById("remoteView").innerHTML =
+            "<option>--</option>" + html;
+        } else {
+          document.getElementById("remoteView").innerHTML = "";
+        }
+        alert("获取成功");
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    $("#attachView").click(function () {
+      zg.attachView(zgWbView, "mywhiteboard");
+    });
+
+    $("#destroyView").click(function () {
+      zg.destroyView(zgWbView);
+    });
+
+    $("#createView").click(async function () {
+      try {
+        zgWbView = await zg.createView({
+          roomID: document.getElementById("roomID").value,
+          name: document.getElementById("whiteboardName").value,
+          aspectWidth: Number(document.getElementById("aspectWidth").value),
+          aspectHeight: Number(document.getElementById("aspectHeight").value),
+        });
+        console.log(zgWbView);
+        alert("创建成功");
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    $("#undo").click(function () {
+      zgWbView.undo();
+    });
+
+    $("#redo").click(function () {
+      zgWbView.redo();
+    });
+
+    $("#clear").click(function () {
+      zgWbView.clear();
+    });
+
+    $("#path").click(function () {
+      zgWbView.setToolType(1);
+    });
+
+    $("#text").click(function () {
+      zgWbView.setToolType(2);
+    });
+
+    $("#line").click(function () {
+      zgWbView.setToolType(4);
+    });
+
+    $("#rect").click(function () {
+      zgWbView.setToolType(8);
+    });
+
+    $("#ellipse").click(function () {
+      zgWbView.setToolType(16);
+    });
+
+    $("#selector").click(function () {
+      zgWbView.setToolType(32);
+    });
+
+    $("#eraser").click(function () {
+      zgWbView.setToolType(64);
+    });
+  });
+
+  function selectRemoteView(target) {
+    const id = target.value;
+    if (id) {
+      zgWbView = zgViewList.find((v) => id == v.getID());
+    }
+    console.log("selectRemoteView", id);
+  }
+</script>
+
+</html>

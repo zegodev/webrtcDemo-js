@@ -267,7 +267,7 @@
         alert('请先获取pcm数据')
         return
       }
-      ac = AudioContext || webkitAudioContext
+      ac = window.AudioContext ? window.AudioContext: webkitAudioContext;
       mediaUtil.mic.disconnect(mediaUtil.script)
       mediaUtil.script.disconnect(ac.destination)
       pcmBuffer = []
