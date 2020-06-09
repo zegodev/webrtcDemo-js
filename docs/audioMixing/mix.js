@@ -7,7 +7,7 @@ $(function (){
     path: '../assets/laugh.mp3'
   }, {
     effectId: 2,
-    path: '../assets/aoisora.mp3',
+    path: '../assets/homage.m4a',
   }]
 
   $('#preloadEffect').click(() => {
@@ -106,8 +106,10 @@ $(function (){
     zg.setMixingAudioVolume(_config.idName, parseInt($('#volume').val()))
   })
 
-  $('#leaveRoom').click(function () {
-    isMixingAudio && isPreviewed && zg.stopMixingAudio(_config.idName);
+  $('#leaveMixRoom').click(function () {
+    isMixingAudio && zg.stopMixingAudio(_config.idName);
+    isMixingAudio && $('#stopMixingBuffer').click();
+    isMixingAudio = false;
     leaveRoom();
   });
 
