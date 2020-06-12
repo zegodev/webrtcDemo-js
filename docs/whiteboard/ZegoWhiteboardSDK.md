@@ -195,6 +195,18 @@ whiteboardView.redo(): void
 whiteboardView.getID(): string
 ```
 
+#### 1.1.26 获取关联roomID
+
+```typescript
+whiteboardView.getRoomID(): string
+```
+
+#### 1.1.27 获取白板页数
+
+```typescript
+whiteboardView.getPageCount(): number | undefined
+```
+
 ### 2、回调
 #### 2.1.1 错误回调
 ```typescript
