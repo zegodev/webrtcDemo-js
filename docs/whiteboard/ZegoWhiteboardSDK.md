@@ -16,7 +16,7 @@ whiteboardManager.createView(options: {
     name: string,
     aspectWidth: number,
     aspectHeight: number,
-    pageCount?: number,
+    pageCount: number,
     fileInfo?: {
         fileID: string,
         fileName: string,
@@ -32,7 +32,7 @@ whiteboardManager.createView(options: {
 | name                 | 白板名称       | 是                          |
 | aspectWidth                 | 等比宽       | 是                          |
 | aspectHeight                 | 等比高       | 是                          |
-| pageCount                 | 白板页数       | 否                          |
+| pageCount                 | 白板页数       | 是                          |
 | fileInfo                 | 关联文件信息       | 否                          |
 
 fileInfo参数解释：
