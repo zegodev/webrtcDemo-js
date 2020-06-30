@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>whiteboard</title>
+  <title>互动白板</title>
   <link rel="stylesheet" href="../assets/bootstrap.min.css" />
   <style>
     .bg-f2 {
@@ -24,7 +24,8 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="appID"><strong class="text-gray-dark">appID</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 75%;" type="text" id="appID" placeholder="请输入appID" />
+            <input class="form-control d-inline" value="1739272706" style="width: 75%;" type="text" id="appID"
+              placeholder="请输入appID" />
           </div>
         </div>
         <div class="col-sm">
@@ -32,7 +33,8 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="server"><strong class="text-gray-dark">server</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 75%;" type="text" id="server" placeholder="请输入server" />
+            <input class="form-control d-inline" value="wss://webliveroom-test.zego.im/ws" style="width: 75%;"
+              type="text" id="server" placeholder="请输入server" />
           </div>
         </div>
         <div class="col-sm">
@@ -50,7 +52,8 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">roomID</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 75%;" type="text" id="roomID" placeholder="请输入roomID" />
+            <input class="form-control d-inline" value="141592653" style="width: 75%;" type="text" id="roomID"
+              placeholder="请输入roomID" />
           </div>
         </div>
         <div class="col-sm">
@@ -180,11 +183,30 @@
   </div>
 </body>
 <script src="../assets/jquery-3.3.1.min.js"></script>
-<script src="../assets/bootstrap.min.js"></script>
 <script src="./jZego-rtc.js"></script>
 <script>
   var zg,
     isLogin = false;
+  $("#idName").val(new Date().getTime() + '');
+
+  // 获取token
+  const tokenUrl = 'https://wsliveroom-alpha.zego.im:8282/token';
+  $.get(
+    tokenUrl,
+    {
+      app_id: $("#appID").val(),
+      id_name: $("#idName").val()
+    },
+    function (token) {
+      if (!token) {
+        alert('get token failed');
+      } else {
+        $("#token").val(token);
+        alert('get token success');
+      }
+    },
+    'text'
+  );
 
   // 监听sdk回调
   function listen() {
@@ -202,7 +224,7 @@
     });
     zg.on(
       "viewScroll",
-      (whiteboardID, horizontalPercent, verticalPercent) => {
+      (whiteboardID, horizontalPercent, verticalPercent, page) => {
         console.log("on viewScroll");
         console.log(whiteboardID);
         console.log(horizontalPercent);
@@ -244,7 +266,7 @@
   }
 
   function leaveRoom() {
-    console.alert("leave room");
+    alert("leave room");
     isLogin = false;
     zg.logout();
   }
