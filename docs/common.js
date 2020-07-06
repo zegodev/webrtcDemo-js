@@ -21,7 +21,8 @@ var zg,
     previewVideo,
     screenCaptrue,
     isPreviewed = false,
-    useLocalStreamList = [];
+    useLocalStreamList = [],
+    isPublish = true;
 var anchor_userid = '', anchro_username = '';
 
 $(function () {
@@ -47,7 +48,6 @@ $(function () {
     // })
 
     desc()
-
 });
 
 function getBrowser() {
@@ -237,7 +237,7 @@ function loginSuccess(streamList, type) {
 }
 
 //预览
-function doPreviewPublish(config) {
+function doPreviewPublish(config, streamID,video) {
     var quality = ($('#videoQuality') && $('#videoQuality').val()) || 2;
 
     var previewConfig = {
@@ -252,11 +252,11 @@ function doPreviewPublish(config) {
     };
     previewConfig = $.extend(previewConfig, config);
     console.log('previewConfig', previewConfig);
-    var result = zg.startPreview(previewVideo, previewConfig, function () {
+    var result = zg.startPreview(video? video: previewVideo, previewConfig, function () {
         console.log('preview success');
         isPreviewed = true;
-        $('#previewLabel').html(_config.nickName);
-        publish();
+        !video && $('#previewLabel').html(_config.nickName);
+        isPublish && publish(streamID, video);
         //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
         if (!$('#videoList').val() && $('#videoList').val() == 0) {
             enumDevices();
@@ -270,15 +270,15 @@ function doPreviewPublish(config) {
 }
 
 //推流
-function publish() {
+function publish(streamID, video) {
     var videoCodeType = $('#videoCodeType').val();
-    zg.startPublishingStream(_config.idName, previewVideo, null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
+    zg.startPublishingStream(streamID? streamID: _config.idName, video? video: previewVideo, null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
 
 }
 
 function play(streamId, video) {
     var playVideoCodeType = $('#videoPlayCodeType').val()
-    var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: playVideoCodeType ? playVideoCodeType : 'H264'});
+    var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: playVideoCodeType ? playVideoCodeType : 'H264', playType: $('#playMode').val()});
 
     video.muted = false;
     if (!result) {
@@ -361,7 +361,7 @@ function listen() {
                 for (var i = 0; i < streamList.length; i++) {
                     console.info(streamList[i].stream_id + ' was added');
                     useLocalStreamList.push(streamList[i]);
-                    $('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
+                    //$('#memberList').append('<option value="' + streamList[i].anchor_id_name + '">' + streamList[i].anchor_nick_name + '</option>');
                     $('.remoteVideo').append($('<video  autoplay muted playsinline controls></video>'));
                     play(streamList[i].stream_id, $('.remoteVideo video:last-child')[0]);
                 }
@@ -393,6 +393,19 @@ function listen() {
 
         onScreenSharingEnded: function() {
             console.warn('screen sharing end')
+        },
+
+        onSoundLevelUpdate(result) {
+          result.forEach(stream => {
+            console.warn(stream.streamID, Math.round(stream.soundLevel), stream.type)
+          })
+        },
+
+        onRemoteCameraStatusUpdate(streamID, status) {
+          console.warn(streamID, 'camera status: ' + status);
+        },
+        onRemoteMicStatusUpdate(streamID, status) {
+          console.warn(streamID, 'mic status: ' + status);
         }
     };
 
@@ -424,7 +437,10 @@ function leaveRoom() {
     $('.remoteVideo').html('');
     $('.chatBox-content-demo').html('');
     $('.chat-message-num').text(0)
+    $('.screenShareVideos').html('')
     zg.logout();
+    isPublish = true;
+    loginRoom = false;
 }
 
 
@@ -442,7 +458,7 @@ function init() {
     // 监听sdk回掉
     listen();
 
-
+    zg.setSoundLevelDelegate(true, 1000);
 }
 
 
@@ -483,6 +499,24 @@ function bindEvent() {
         })
     })
 
+    $('#createRoomNoPublish').click(function () {
+        isPublish = false;
+        openRoom($('#roomId').val(), 1);
+    })
+
+    $('#toggleCamera').click(function() {
+        zg.enableCamera(previewVideo, $(this).hasClass('disabled'));
+        $(this).toggleClass('disabled');
+    });
+
+    $('#toggleSpeaker').click(function() {
+        zg.enableMicrophone(previewVideo, $(this).hasClass('disabled'));
+        $(this).toggleClass('disabled');
+    });
+
+    $('#publishStream').click(function() {
+      isPreviewed && zg.startPublishingStream(_config.idName, previewVideo);
+    })
 
     //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要
     // var isOnIOS = navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPhone/i);

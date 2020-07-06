@@ -77,24 +77,29 @@
                 <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
                 <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
                 <button type="button" id="leaveMixRoom" class="btn btn-secondary btn-sm">退出</button>
-
-                <button type="button" id="preloadEffect" class="btn btn-primary btn-sm">预加载音效资源</button>
-                <button type="button" id="playLaughEffect" class="btn btn-primary btn-sm" disabled>笑声</button>
-                <button type="button" id="playBgEffect" class="btn btn-primary btn-sm" disabled>播放背景音</button>
-                <button type="button" id="playClapEffect" class="btn btn-primary btn-sm">鼓掌声</button>
-                <button type="button" id="pauseEffect" class="btn btn-primary btn-sm">暂停音效</button>
-                <button type="button" id="resumeEffect" class="btn btn-primary btn-sm">恢复音效</button>
-                <button type="button" id="stopEffect" class="btn btn-primary btn-sm">停止音效</button>
-                <button type="button" id="unloadEffect" class="btn btn-primary btn-sm">释放音效</button>
+                <button type="button" id="mixAudio" class="btn btn-primary btn-sm">混音</button>
+                <button type="button" id="stopEffect" class="btn btn-secondary btn-sm">停止混音</button>
                 <button type="button" id="mixingBuffer" class="btn btn-primary btn-sm">实时混音</button>
                 <button type="button" id="stopMixingBuffer" class="btn btn-primary btn-sm">停止实时混音</button>
-                音效音量 <input type="range" id="volume" min="0" max="100" value="100">
             </div>
         </div>
 
+        <div class="row" style="margin-top: 5px;">
+          <div class="col-sm">
+              <button type="button" id="preloadEffect" class="btn btn-primary btn-sm">预加载音效资源</button>
+              <button type="button" id="playLaughEffect" class="btn btn-primary btn-sm" disabled>笑声</button>
+              <!-- <button type="button" id="playBgEffect" class="btn btn-primary btn-sm" disabled>播放背景音</button> -->
+              <button type="button" id="pauseEffect" class="btn btn-primary btn-sm" disabled>暂停音效</button>
+              <button type="button" id="resumeEffect" class="btn btn-primary btn-sm" disabled>恢复音效</button>
+              <button type="button" id="unloadEffect" class="btn btn-primary btn-sm" disabled>释放音效</button>
+              音效音量 <input type="range" id="volume" min="0" max="100" value="100">
+          </div>
+      </div>
+
         <div class="row videoRow">
             <div class="col-sm">
-                <audio src="../assets/applaud.mp3" id="applaud" controls ></audio>
+                <audio src="../assets/applaud.mp3" id="applaud" controls muted loop></audio>
+                <audio src="../assets/station.mp3" id="station" controls muted loop></audio>
                 <label id="previewLabel" class="text-white"></label>
                 <video id="previewVideo" autoplay muted playsinline controls></video>
             </div>

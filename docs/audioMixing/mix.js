@@ -15,10 +15,12 @@ $(function (){
     audioEffectList.forEach(effect => {
       zg.preloadEffect(effect.effectId, effect.path, () => {
         console.warn('preload success')
-        $('#playLaughEffect')[0].disabled = false
-        $('#playBgEffect')[0].disabled = false
+        $('#playLaughEffect')[0].disabled = false;
+        $('#unloadEffect')[0].disabled = false;
       })
     })
+
+
   })
 
   $('#playLaughEffect').click(() => {
@@ -28,38 +30,30 @@ $(function (){
     }, () => {
       isMixingAudio = true;
       console.warn('start play')
+      $('#pauseEffect')[0].disabled = false;
+      $('#resumeEffect')[0].disabled = false;
     }, () => {
       isMixingAudio = false;
       console.warn('play end')
+      $('#pauseEffect')[0].disabled = true;
+      $('#resumeEffect')[0].disabled = true;
     })
   })
 
   //zego sdk 提供两种混音方式，上面播放笑声为预加载音效的方式，下面播放鼓掌音效为混audio元素的方式 推荐客户使用预加载的方式，播放标签方式safari不支持
 
-  $('#playClapEffect').click(() => {
+  $('#mixAudio').click(() => {
 
-    if (isMixingAudio) {
-      console.error("当前正在混其它音效,不要想鼓掌了");
-      return;
-    }
+    // if (isMixingAudio) {
+    //   console.error("当前正在混其它音效,不要想鼓掌了");
+    //   return;
+    // }
 
-    zg.startMixingAudio(_config.idName, $('#applaud')[0]) && ($('#pauseEffect')[0].disabled = true);
+    zg.startMixingAudio(_config.idName, [$('#applaud')[0], $('#station')[0]]);
 
-
-    // *****chrome和firfox在混音的时候，会有表现不一致的问题： chrome标签被混音，标签本身依旧能正常播放出声音，firfox则被静音；推流端一般静音 ******
-    if(getBrowser()==='Chrome'){
-      $('#applaud')[0].muted = true
-    }
-
-
-
-    $('#applaud')[0].play()
+    $('#applaud')[0].play();
+    $('#station')[0].play();
     isMixingAudio = true;
-    $('#applaud').on('ended', () => {
-      zg.stopMixingAudio(_config.idName)
-      $('#applaud').unbind();
-      $('#pauseEffect')[0].disabled = false;
-    })
   })
 
   $('#playBgEffect').click(() => {
@@ -84,8 +78,10 @@ $(function (){
   })
 
   $('#stopEffect').click(() => {
-    zg.stopMixingAudio(_config.idName)
+    zg.stopMixingAudio(_config.idName, [$('#applaud')[0], $('#station')[0]])
     isMixingAudio = false;
+    $('#pauseEffect')[0].disabled = true;
+    $('#resumeEffect')[0].disabled = true;
   })
 
   $('#unloadEffect').click(() => {
@@ -98,7 +94,7 @@ $(function (){
     if (num === audioEffectList.length) {
       console.warn('all unload success')
       $('#playLaughEffect')[0].disabled = true
-        $('#playBgEffect')[0].disabled = true
+      $('#unloadEffect')[0].disabled = true;
     }
   })
 
@@ -129,10 +125,6 @@ $(function (){
           } else {
             console.warn("real time effect success");
             isMixingAudio = true;
-            $('#playClapEffect')[0].disabled = true;
-            $('#pauseEffect')[0].disabled = true;
-            $('#resumeEffect')[0].disabled = true;
-            $('#stopEffect')[0].disabled = true;
           }
         });
       } else {
@@ -148,9 +140,5 @@ $(function (){
   $('#stopMixingBuffer').click(function () {
     zg.stopMixingBuffer(_config.idName, null);
     isMixingAudio = false;
-    $('#playClapEffect')[0].disabled = false;
-    $('#pauseEffect')[0].disabled = false;
-    $('#resumeEffect')[0].disabled = false;
-    $('#stopEffect')[0].disabled = false;
   })
 })

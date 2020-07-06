@@ -174,14 +174,14 @@ $(function () {
     }, function (err, seq) {
       console.log('requestJoinLive err', err, seq);
     }, function (result, fromUserId, fromUserName) {
-      window._fromUserId = fromUserId;
-      // alert(result ? '同意连麦' : '拒绝连麦');
-      $('#exampleModalLabel').text("收到id为" + fromUserName + "的连麦请求")
-      $('#liveConfirm').click();
-      $('#liveAgree').on('click', function () {
+      if (result) {
+        //alert('对方同意了你的连麦请求');
         doPreviewPublish()
         console.log('requestJoinLive callback', result, fromUserId, fromUserName);
-      })
+      } else {
+        //alert('对方拒绝了你的连麦请求')
+      }
+      window._fromUserId = fromUserId;
     })
   });
 

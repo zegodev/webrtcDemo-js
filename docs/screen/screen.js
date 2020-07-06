@@ -7,12 +7,17 @@ $(function () {
       $('#screenSharing')[0].disabled = true
     }
 
-    function scrennShot(bool) {
+    function scrennShot(bool, streamID, video) {
 
       if(IsPC()){
 
-          loginRoom && zg.stopPublishingStream(_config.idName);
-          loginRoom && zg.stopPreview(previewVideo);
+          // loginRoom && zg.stopPublishingStream(_config.idName);
+          // loginRoom && zg.stopPreview(previewVideo);
+
+          if ($('#screenWidth').val() == '' || $('#screenHeight').val() == '') {
+            alert('请输入正确的宽高');
+            return;
+          }
 
           let width = $('#screenWidth').val() * 1;
           let height = $('#screenHeight').val() * 1;
@@ -33,12 +38,12 @@ $(function () {
           getBrowser() === 'Firefox' && zg.startScreenShotFirFox({frameRate: $('#screenFrameRate').val() * 1}, 'window',true,function (suc,mediastream) {
               console.log('startScreenShot:'+suc);
               screenCaptrue = suc;
-              previewVideo.srcObject = mediastream;
+              video.srcObject = mediastream;
               config.externalMediaStream = mediastream;
               // 推送屏幕可有两种形式，一是作为流媒体直接推送 即下面这种形式
               //另一种是作为externalCapture，前提是需要先将流喂给video标签；，下面chrome推送方式就是这种形式；可任意选择其中之一
-              if(loginRoom) {
-                  doPreviewPublish(config);
+              if(suc && loginRoom && mediastream) {
+                  doPreviewPublish(config, streamID, video);
               }
           });
 
@@ -49,10 +54,10 @@ $(function () {
           }, false, function (suc,mediastream) {
             console.warn('startScreenShot:'+suc);
             screenCaptrue = suc;
-            previewVideo.srcObject = mediastream;
+            video.srcObject = mediastream;
             config.externalMediaStream = mediastream;
-            if(loginRoom) {
-                doPreviewPublish(config);
+            if(suc && loginRoom && mediastream) {
+                doPreviewPublish(config, streamID, video);
             }
           })
 
@@ -61,91 +66,80 @@ $(function () {
             screenCaptrue = suc;
           // 推送屏幕可有两种形式，一是作为externalCapture，前提是需要先将流喂给video标签；即下面这种形式
           //另一种是作为流媒体直接推送，上面火狐推送方式就是这种形式；可任意选择其中之一
-            previewVideo.srcObject = mediastream;
-            if(loginRoom) {
-                doPreviewPublish({externalCapture:true});
+            suc && (video.srcObject = mediastream);
+            if(suc && loginRoom && mediastream) {
+                doPreviewPublish({externalCapture:true}, streamID, video);
             }
         })
       }
     }
 
     $('#screenShot').click(function () {
-      scrennShot(true)
+      $('.screenShareVideos').append($(`<video id="${new Date().getTime()}" autoplay muted playsinline controls></video>`));
+      scrennShot(true, $('.screenShareVideos video:last-child')[0].id, $('.screenShareVideos video:last-child')[0])
     });
 
     $('#screenSharing').click(function () {
-      scrennShot(false)
+      $('.screenShareVideos').append($(`<video id="${new Date().getTime()}" autoplay muted playsinline controls></video>`));
+      scrennShot(false, $('.screenShareVideos video:last-child')[0].id, $('.screenShareVideos video:last-child')[0])
     })
 
     $('#stopScreenShot').click(function () {
-        zg.stopScreenShot()
-        isPreviewed && zg.stopPreview(previewVideo);
-        isPreviewed && zg.stopPublishingStream(_config.idName);
-
-        loginRoom && doPreviewPublish();
-    });
-
-    $('#pushTwoStreams').click(function ()  {
-
-      if(!loginRoom) {
-        alert('请先登录房间')
-        return
-      }
-
-      if(screenCaptrue) {
-
-        var previewConfig = {
-          "audio": $('#audioList').val() === '0' ? false : true,
-          "audioInput": $('#audioList').val() || null,
-          "video": $('#videoList').val() === '0' ? false : true,
-          "videoInput": $('#videoList').val() || null,
-          "videoQuality": 1,
-          "horizontal": true,
-          "externalCapture": false,
-          "externalMediaStream": null
-        }
-
-        idName = 'zego-'+ new Date().getTime()
-
-        var videoCodeType = $('#videoCodeType').val();
-        var result = zg.startPreview($('#previewVideo2')[0],previewConfig,function () {
-          console.log('preview twice success');
-          zg.startPublishingStream(idName, $('#previewVideo2')[0], null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'})
-          //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
-          enumDevices();
-        },function (err) {
-          alert(JSON.stringify(err));
-          console.error('preview failed', err);
+        $('.screenShareVideos video').each((ind, video) => {
+          zg.stopScreenShot(video.srcObject)
+          zg.stopPreview(video);
+          zg.stopPublishingStream(video.id);
         })
+        $('.screenShareVideos').html('')
 
-        if (!result) alert('预览失败！')
-
-      }else {
-        alert('请先开启屏幕共享')
-      }
-
-
-
+        //loginRoom && doPreviewPublish();
     });
+
+    // $('#pushTwoStreams').click(function ()  {
+
+    //   if(!loginRoom) {
+    //     alert('请先登录房间')
+    //     return
+    //   }
+
+    //   if(screenCaptrue) {
+
+    //     var previewConfig = {
+    //       "audio": $('#audioList').val() === '0' ? false : true,
+    //       "audioInput": $('#audioList').val() || null,
+    //       "video": $('#videoList').val() === '0' ? false : true,
+    //       "videoInput": $('#videoList').val() || null,
+    //       "videoQuality": 1,
+    //       "horizontal": true,
+    //       "externalCapture": false,
+    //       "externalMediaStream": null
+    //     }
+
+    //     idName = 'zego-'+ new Date().getTime()
+
+    //     var videoCodeType = $('#videoCodeType').val();
+    //     var result = zg.startPreview($('#previewVideo2')[0],previewConfig,function () {
+    //       console.log('preview twice success');
+    //       zg.startPublishingStream(idName, $('#previewVideo2')[0], null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'})
+    //       //部分浏览器会有初次调用摄像头后才能拿到音频和视频设备label的情况，
+    //       enumDevices();
+    //     },function (err) {
+    //       alert(JSON.stringify(err));
+    //       console.error('preview failed', err);
+    //     })
+
+    //     if (!result) alert('预览失败！')
+
+    //   }else {
+    //     alert('请先开启屏幕共享')
+    //   }
+
+
+
+    // });
 
     $('#leaveRoom').click(function () {
-      console.info('leave room  and close stream');
-
-      if (isPreviewed) {
-          zg.stopPreview(previewVideo);
-          zg.stopPublishingStream(_config.idName);
-          zg.stopPreview($('#previewVideo2')[0]);
-          zg.stopPublishingStream(_config.idName);
-          isPreviewed = false;
-      }
-
-      for (var i = 0; i < useLocalStreamList.length; i++) {
-          zg.stopPlayingStream(useLocalStreamList[i].stream_id);
-      }
-
-      useLocalStreamList = [];
-      $('.remoteVideo').html('');
-      zg.logout();
+      $('#stopScreenShot').click()
     })
 
 });

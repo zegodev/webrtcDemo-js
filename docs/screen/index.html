@@ -45,7 +45,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
             </div>
-            <select class="custom-select" id="audioList" style="width: 60%">
+            <select class="custom-select" id="audioList">
             </select>
           </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
             </div>
-            <select class="custom-select" id="videoList" style="width: 60%">
+            <select class="custom-select" id="videoList">
             </select>
           </div>
         </div>
@@ -65,7 +65,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="videoCodeType"><strong class="text-gray-dark">推流编码</strong></label>
             </div>
-            <select class="custom-select" id="videoCodeType" style="width: 60%">
+            <select class="custom-select" id="videoCodeType">
               <option value="H264">H264</option>
               <option value="VP8">VP8</option>
             </select>
@@ -78,7 +78,7 @@
               <label class="input-group-text" for="videoPlayCodeType"><strong
                   class="text-gray-dark">拉流编码</strong></label>
             </div>
-            <select class="custom-select" id="videoPlayCodeType" style="width: 60%">
+            <select class="custom-select" id="videoPlayCodeType">
               <option value="H264">H264</option>
               <option value="VP8">VP8</option>
             </select>
@@ -90,17 +90,21 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
-            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%"
+            <input type="email" class="form-control d-inline" id="roomId"
               aria-describedby="emailHelp" placeholder="请输入房间号">
           </div>
         </div>
+
+      </div>
+
+      <div class="row">
 
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="screenFrameRate"><strong class="text-gray-dark">共享帧率</strong></label>
             </div>
-            <select class="custom-select" id="screenFrameRate" style="width: 60%">
+            <select class="custom-select" id="screenFrameRate">
               <option value="5">5</option>
               <option value="10" selected>10</option>
               <option value="15">15</option>
@@ -115,7 +119,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="screenBitRate"><strong class="text-gray-dark">共享码率</strong></label>
             </div>
-            <select class="custom-select" id="screenBitRate" style="width: 60%">
+            <select class="custom-select" id="screenBitRate">
               <option value="800">800</option>
               <option value="1500">1500</option>
               <option value="2000" selected>2000</option>
@@ -123,10 +127,6 @@
             </select>
           </div>
         </div>
-
-      </div>
-
-      <div class="row">
 
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
@@ -167,7 +167,7 @@
           <button type="button" id="screenShot" class="btn btn-primary btn-sm">捕捉屏幕</button>
           <button type="button" id="screenSharing" class="btn btn-primary btn-sm">捕捉屏幕(无需插件)</button>
           <button type="button" id="stopScreenShot" class="btn btn-primary btn-sm">停止捕捉</button>
-          <button type="button" id="pushTwoStreams" class="btn btn-primary btn-sm">推两路流</button>
+          <!-- <button type="button" id="pushTwoStreams" class="btn btn-primary btn-sm">推两路流</button> -->
         </div>
       </div>
 
@@ -175,7 +175,7 @@
         <div class="col-sm">
           <label id="previewLabel" class="text-white"></label>
           <video id="previewVideo" autoplay muted playsinline></video>
-          <video id="previewVideo2" autoplay muted playsinline></video>
+          <div class="screenShareVideos"></div>
         </div>
         <div class="col-sm remoteVideo">
           <!--<video  autoplay muted playsinline></video>-->
