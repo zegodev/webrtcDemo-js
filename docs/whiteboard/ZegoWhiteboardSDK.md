@@ -11,15 +11,28 @@ whiteboardManager.getVersion(): string
 #### 1.1.2 创建白板
 
 ```typescript
-whiteboardManager.createView(options: {roomID: string, pageCount?: number, aspectWidth: number, aspectHeight: number, name: string, fileInfo?: {fileID: string, fileName: string, authKey: string, fileType: number}}): WhiteboardView
+whiteboardManager.createView(options: {
+    roomID: string,
+    name: string,
+    aspectWidth: number,
+    aspectHeight: number,
+    pageCount: number,
+    fileInfo?: {
+        fileID: string,
+        fileName: string,
+        fileType: number,
+        authKey: string
+    }
+}): Promise<WhiteboardView>
 ```
+
 | 字段                                  | 含义   | 是否必填                   |
 | ----------------------------------------- | ------- | ----------------------------- |
 | roomID                 | roomId       | 是                          |
+| name                 | 白板名称       | 是                          |
 | aspectWidth                 | 等比宽       | 是                          |
 | aspectHeight                 | 等比高       | 是                          |
-| name                 | 白板名称       | 是                          |
-| pageCount                 | 白板页数       | 否                          |
+| pageCount                 | 白板页数       | 是                          |
 | fileInfo                 | 关联文件信息       | 否                          |
 
 fileInfo参数解释：
@@ -28,24 +41,23 @@ fileInfo参数解释：
 | ----------------------------------------- | ------- | ----------------------------- |
 | fileID                 | 文件转换完成唯一ID       | 是                          |
 | fileName                 | 文件名称       | 是                          |
-| authKey                 | 预留字段       | 否                          |
 | fileType                 | 文件类型       | 是                          |
+| authKey                 | 预留字段       | 否                          |
 
 #### 1.1.3 销毁白板
 
 ```typescript
-whiteboardManager.destroyView(whiteboardView: WhiteboardView)
+whiteboardManager.destroyView(whiteboardView: WhiteboardView): Promise<void>
 ```
 
 | 字段                                  | 含义   | 是否必填                   |
 | ----------------------------------------- | ------- | ----------------------------- |
 | whiteboardView                 | 白板view实例       | 是                          |
 
-
 #### 1.1.4 添加白板到视图（渲染）
 
 ```typescript
-whiteboardManager.attachView(whiteboardView: WhiteboardView, parent: string)
+whiteboardManager.attachView(whiteboardView: WhiteboardView, parent: string): Promise<void>
 ```
 
 | 字段                                  | 含义   | 是否必填                   |
@@ -68,7 +80,7 @@ whiteboardView.clear(): boolean
 #### 1.1.7 获取该白板view关联的文件信息
 
 ```typescript
-whiteboardView.getFileInfo(): {fileID: string, fileName: string, authKey: string, fileType: number} | boolean
+whiteboardView.getFileInfo(): {fileID: string, fileName: string, authKey: string, fileType: number} | undefined
 ```
 
 #### 1.1.8 设置白板允许涂鸦权限
@@ -106,6 +118,7 @@ whiteboardView.getAspectRatio(): string
 ```typescript
 whiteboardView.setToolType(type: ViewTool): boolean
 ```
+
 | 字段                                  | 含义   | 是否必填                   |
 | ----------------------------------------- | ------- | ----------------------------- |
 | type                 | 工具类型1:path 涂鸦，2:text 文本框，4:line 线段，8:rect 矩形，16:ellipse 椭圆，32: selector 选择       | 是                          |
@@ -174,7 +187,7 @@ whiteboardView.scroll(horizontalPercent: number, verticalPercent: number): boole
 #### 1.1.22 获取滚动百分比
 
 ```typescript
-whiteboardView.getCurrentScrollPercent(): { horizontalPercent: number; verticalPercent: number } 
+whiteboardView.getCurrentScrollPercent(): { horizontalPercent: number; verticalPercent: number }
 ```
 
 #### 1.1.23 撤销
@@ -204,11 +217,19 @@ whiteboardView.getRoomID(): string
 #### 1.1.27 获取白板页数
 
 ```typescript
-whiteboardView.getPageCount(): number | undefined
+whiteboardView.getPageCount(): number
+```
+
+#### 1.1.28 获取白板当前页码，从1开始
+
+```typescript
+whiteboardView.getPage(): number
 ```
 
 ### 2、回调
+
 #### 2.1.1 错误回调
+
 ```typescript
 whiteboardManager.on('error', (errorData: ErrorData) => {})
 ```
@@ -219,6 +240,7 @@ whiteboardManager.on('error', (errorData: ErrorData) => {})
 | msg                 | 错误描述       |
 
 #### 2.1.2 创建view
+
 ```typescript
 whiteboardManager.on('viewAdd', (whiteboardView: WhiteboardView) => {})
 ```
@@ -228,6 +250,7 @@ whiteboardManager.on('viewAdd', (whiteboardView: WhiteboardView) => {})
 | whiteboardView                 | 白板view实例       |
 
 #### 2.1.3 销毁view
+
 ```typescript
 whiteboardManager.on('viewRemoved', (whiteboardID: string) => {})
 ```
@@ -237,8 +260,9 @@ whiteboardManager.on('viewRemoved', (whiteboardID: string) => {})
 | whiteboardID                 | 白板ID       |
 
 #### 2.1.4 滚动view
+
 ```typescript
-whiteboardManager.on('viewScroll', (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => {})
+whiteboardManager.on('viewScroll', (whiteboardID: string, horizontalPercent: number, verticalPercent: number, page: number) => {})
 ```
 
 | 字段                                  | 含义   |
@@ -246,3 +270,4 @@ whiteboardManager.on('viewScroll', (whiteboardID: string, horizontalPercent: num
 | whiteboardID                 | 白板ID       |
 | horizontalPercent                 | 水平滚动百分比       |
 | verticalPercent                 | 垂直滚动百分比       |
+| page                 | 翻页模式时当前页码       |
