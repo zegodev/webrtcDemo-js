@@ -381,7 +381,7 @@ function listen() {
                             useLocalStreamList.splice(k, 1);
 
                             $('.remoteVideo video:eq(' + k + ')').remove();
-                            $('#memberList option:eq(' + k + ')').remove();
+                            //$('#memberList option:eq(' + k + ')').remove();
 
                             break;
                         }
@@ -438,6 +438,7 @@ function leaveRoom() {
     $('.chatBox-content-demo').html('');
     $('.chat-message-num').text(0)
     $('.screenShareVideos').html('')
+    $('#memberList').html('')
     zg.logout();
     isPublish = true;
     loginRoom = false;
