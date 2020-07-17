@@ -22,7 +22,7 @@ $(function () {
           let width = $('#screenWidth').val() * 1;
           let height = $('#screenHeight').val() * 1;
 
-          let screenHasAudio = $('#screenHasAudio') === 0 ? false : true;
+          let screenHasAudio = $('#screenHasAudio').val() * 1 == 0 ? false : true;
 
           if (isNaN(width) || isNaN(height)) {
             alert('width and height must be number');
