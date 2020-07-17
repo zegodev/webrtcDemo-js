@@ -92,13 +92,16 @@
               onchange="selectRemoteView(this)"></select>
           </div>
         </div>
-        <div class="col-sm">
-          <button type="button" id="attachView" class="btn btn-primary btn-sm">
-            渲染当前白板
-          </button>
-          <button type="button" id="destroyView" class="btn btn-secondary btn-sm">
-            销毁当前白板
-          </button>
+        <div class="col-sm-5">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <strong class="text-gray-dark">Excel Sheets</strong>
+              </label>
+            </div>
+            <select id="excelSheets" class="form-control d-inline" style="width: 260px;"
+              onchange="selectExcelSheets(this)"></select>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -107,7 +110,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="aspectWidth"><strong class="text-gray-dark">等比宽</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 65%;" type="text" id="aspectWidth"
+            <input class="form-control d-inline" value="5" style="width: 65%;" type="text" id="aspectWidth"
               placeholder="请输入aspectWidth" />
           </div>
         </div>
@@ -116,7 +119,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="aspectHeight"><strong class="text-gray-dark">等比高</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 65%;" type="text" id="aspectHeight"
+            <input class="form-control d-inline" value="3" style="width: 65%;" type="text" id="aspectHeight"
               placeholder="请输入aspectHeight" />
           </div>
         </div>
@@ -125,7 +128,7 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="whiteboardName"><strong class="text-gray-dark">白板名称</strong></label>
             </div>
-            <input class="form-control d-inline" style="width: 65%;" type="text" id="whiteboardName"
+            <input class="form-control d-inline" value="测试白板" style="width: 65%;" type="text" id="whiteboardName"
               placeholder="请输入白板名称" />
           </div>
         </div>
@@ -135,7 +138,50 @@
           </button>
         </div>
       </div>
+      <pre style="margin-bottom: 0;">tips：多端同步时，aspectWidth、aspectHeight请与白板容器尺寸比例保持一致
+      若父容器 宽:高=w:h
+        创建单页白板 aspectWidth=w，aspectHeight=h
+        创建m页横向白板 aspectWidth=w*m，aspectHeight=h
+        创建m页纵向白板 aspectWidth=w，aspectHeight=h*m
+        创建文件白板，不区分方向，固定 aspectWidth=w，aspectHeight=h*m
+      </pre>
       <div class="row">
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="fileID"><strong class="text-gray-dark">文件ID</strong></label>
+            </div>
+            <input class="form-control d-inline" readonly style="width: 65%;" type="text" id="fileID"
+              placeholder="文件ID" />
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <strong class="text-gray-dark">文件列表</strong>
+              </label>
+            </div>
+            <select id="fileType" class="form-control d-inline" style="width: 260px;" onchange="onFileIdChange(this)">
+              <option value="">--</option>
+              <option value="Z6SfBhPNkHuGYQwV">jpg</option>
+              <option value="bO_ptIYGusHPa3Uq">jpeg</option>
+              <option value="xAKHOEjtpHRFQAJi">png</option>
+              <option value="-gu5ZUA7TlrRbA-E">bmp</option>
+              <option value="d0KvOFgae0kt3w5R">ppt</option>
+              <option value="OuRCC82ojjnt0yGb">pdf</option>
+              <option value="YI_H8iLnoF0iRghn">doc</option>
+              <option value="OgG3AKuEdWGwW4H0">txt</option>
+              <option value="iUrfzJ6PM3R04l3u">xls</option>
+              <option value="NLQDz-6SGveZKCOq">动态PPT</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm">
+          <button id="createFileView" class="btn btn-primary btn-sm"">创建文件白板</button>
+        </div>
+      </div>
+      <div class=" row">
         <div class="col-sm">
           <button id="path" type="button" class="btn btn-primary btn-sm">
             涂鸦
@@ -170,6 +216,21 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1%;">
+        <div class="col-sm-3">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="curPage"><strong class="text-gray-dark">当前页</strong></label>
+            </div>
+            <input class="form-control d-inline" value="1" readonly style="width: 65%;" type="text" id="curPage"
+              placeholder="当前页" />
+          </div>
+        </div>
+        <div class="col-sm">
+          <button id="previousPage" type="button" class="btn btn-primary btn-sm">上一页</button>
+          <button id="nextPage" type="button" class="btn btn-primary btn-sm">下一页</button>
+        </div>
+      </div>      
+      <div class="row" style="margin-top: 1%;">
         <div class="col-sm">
           <h6 class="pb-2 mb-0">
             白板容器（1000 * 600）
@@ -183,9 +244,17 @@
 </body>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="./jZego-rtc.js"></script>
+<script src="./ZegoExpressDocs.js"></script>
 <script>
   var zg,
-    isLogin = false;
+    isLogin = false,
+    parentId = 'mywhiteboard',
+    zgViewList = [],
+    zgWbView,
+    zgDocsViewClient,
+    zgDocsView,
+    excelWBMap = {},
+    isRemote;
   $("#idName").val(new Date().getTime() + '');
 
   // 获取token
@@ -228,8 +297,48 @@
         console.log(whiteboardID);
         console.log(horizontalPercent);
         console.log(verticalPercent);
+        console.log(page);
+        page && (document.getElementById('curPage').value = page);
       }
     );
+    zgDocsViewClient.on('onLoadFile', async function (res) {
+      const { fileID, fileType, fileName, viewID, authKey, pageCount } = res;
+      if (!isRemote) {
+        zg.createView({
+          roomID: document.getElementById('roomID').value,
+          name: fileName,
+          aspectWidth: Number(document.getElementById('aspectWidth').value),
+          aspectHeight: Number(document.getElementById('aspectHeight').value),
+          pageCount,
+          fileInfo: { fileID, fileName, fileType, authKey }
+        }).then(async function (view) {
+          const flag = zgViewList.some(function (v) {
+            const file = v.getFileInfo();
+            return file && file.fileID === fileID;
+          });
+          if (!flag) {
+            zgWbView = view;
+            zgViewList.push(zgWbView);
+            await zg.attachView(zgWbView, viewID);
+          }
+          // Excel Sheet
+          if (fileType === 4) {
+            excelWBMap[fileID] = excelWBMap[fileID] || { _ids_: '' };
+            excelWBMap[fileID][fileName] = view;
+            excelWBMap[fileID]._ids_ += view.getID() + ',';
+          }
+        });
+      } else {
+        // Excel Sheet
+        if (fileType === 4) {
+          excelWBMap[fileID] = excelWBMap[fileID] || { _ids_: '' };
+          excelWBMap[fileID][fileName] = zgWbView;
+          excelWBMap[fileID]._ids_ += zgWbView.getID() + ',';
+        }
+        await zg.attachView(zgWbView, viewID);
+      }
+      console.log('docsview onLoadFile', isRemote, fileName, excelWBMap, res);
+    });
   }
 
   function init(appID, server, idName) {
@@ -259,6 +368,13 @@
       logUrl: "",
       remoteLogLevel: 0,
       audienceCreateRoom: false,
+    });
+
+    zgDocsViewClient = new ZegoExpressDocs({
+      appID: appID,
+      token: '',
+      userID: idName,
+      isTestEnv: true // 测试环境
     });
 
     listen();
@@ -322,31 +438,35 @@
 
     $("#getViewList").click(async function () {
       try {
-        zgViewList = await zg.getViewList();
-        if (zgViewList && zgViewList.length) {
-          const html = zgViewList
-            .map(
-              (v) =>
-                `<option value=${v.getID()}>${v.getID()}-${v.getName()}</option>`
-            )
-            .join("");
-          document.getElementById("remoteView").innerHTML =
-            "<option>--</option>" + html;
+        list = await zg.getViewList();
+        zgViewList = [];
+        if (list && list.length) {
+          // excel sheets 只显示一个
+          const map = {};
+          let html = '';
+          list.forEach(function(v) {
+            const id = v.getID();
+            const file = v.getFileInfo();
+            if (file && file.fileType === 4) {
+              const fileID = file.fileID;
+              excelWBMap[fileID] = excelWBMap[fileID] || { _ids_: '' };
+              excelWBMap[fileID][file.fileName] = v;
+              excelWBMap[fileID]._ids_ += id + ',';
+              if (map[fileID]) return;
+              map[fileID] = true;
+            }
+            html += '<option value=' + id + '>' + id + '-' + v.getName() + '</option>';
+            zgViewList.push(v);
+          });
+          document.getElementById('remoteView').innerHTML = '<option>--</option>' + html;
+          console.log('docsview getViewList', excelWBMap);
         } else {
-          document.getElementById("remoteView").innerHTML = "";
+          document.getElementById('remoteView').innerHTML = '';
         }
         alert("获取成功");
       } catch (error) {
         console.log(error);
       }
-    });
-
-    $("#attachView").click(function () {
-      zg.attachView(zgWbView, "mywhiteboard");
-    });
-
-    $("#destroyView").click(function () {
-      zg.destroyView(zgWbView);
     });
 
     $("#createView").click(async function () {
@@ -359,11 +479,73 @@
         });
         console.log(zgWbView);
         alert("创建成功");
+
+        await zg.attachView(zgWbView, parentId);
       } catch (error) {
         console.log(error);
       }
     });
 
+    $("#createFileView").click(async function () {
+      try {
+        // 同一个fileID只能创建一个白板（Excel时每个sheet都创建一个白板）
+        const fileID = document.getElementById('fileID').value;
+        const view = zgViewList.find(function(v) {
+          const file = v.getFileInfo();
+          return file && file.fileID === fileID;
+        });
+        if (view) {
+          isRemote = true;
+          zgWbView = view;
+          zgDocsView = zgDocsViewClient.createView(parentId, view.getID(), view.getFileInfo().fileName);
+          await zgDocsView.loadFile(fileID, '');
+          return;
+        }
+        isRemote = false;
+        zgDocsView = zgDocsViewClient.createView(parentId);
+        await zgDocsView.loadFile(fileID, '').then(function(res) {
+          const excelDom = document.getElementById('excelSheets');
+          // Excel每个sheet都创建一个白板
+          if (res.fileType == 4) {
+            
+            const sheets = res.file_list.map(function(v, i) {
+              const name = v.file_name.replace(/.pdf/, "");
+              if (i > 0) {
+                const view = zgDocsViewClient.createView(parentId, '', name);
+                view.loadFile(fileID, '');
+              }
+              return '<option value="' + name + '">' + name + '</option>';
+            });
+            if (!excelDom.innerHTML) {
+              excelDom.innerHTML = sheets.join('');
+            }
+          } else {
+            excelDom.innerHTML = '';
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    $("#previousPage").click(async function () {
+      zgWbView.scroll((zgWbView.getPage() - 2) / zgWbView.getPageCount(), 0);
+      if (zgDocsView) {
+        const page = zgDocsView.getCurrentPage();
+        if (page > 1) zgDocsView.flipPage(page - 1);
+      }
+      document.getElementById('curPage').value = zgWbView.getPage();
+    });
+
+    $("#nextPage").click(async function () {
+      zgWbView.scroll(zgWbView.getPage() / zgWbView.getPageCount(), 0);
+      if (zgDocsView) {
+        const page = zgDocsView.getCurrentPage();
+        if (page < zgDocsView.getPageCount()) zgDocsView.flipPage(page + 1);
+      }
+      document.getElementById('curPage').value = zgWbView.getPage();
+    });
+    
     $("#undo").click(function () {
       zgWbView.undo();
     });
@@ -405,12 +587,48 @@
     });
   });
 
-  function selectRemoteView(target) {
+  async function selectRemoteView(target) {
     const id = target.value;
     if (id) {
-      zgWbView = zgViewList.find((v) => id == v.getID());
+      zgWbView = zgViewList.filter(function (v) {
+        return id === v.getID();
+      })[0];
+      if (!zgWbView) {
+        alert('远端白板不存在');
+        return;
+      }
+      const fileInfo = zgWbView.getFileInfo();
+      if (fileInfo) {
+        isRemote = true;
+        zgDocsView = zgDocsViewClient.createView(parentId, id, fileInfo.fileName);
+        await zgDocsView.loadFile(fileInfo.fileID, fileInfo.authKey);
+        document.getElementById('fileID').value = fileInfo.fileID;
+        console.log('docsview selectRemoteView', fileInfo.fileName, id);
+      } else {
+        zgDocsView = null;
+        await zg.attachView(zgWbView, parentId);
+      }
+
+      document.getElementById('curPage').value = zgWbView.getPage();
     }
-    console.log("selectRemoteView", id);
+    console.log('selectRemoteView', id);
+  }
+
+  function onFileIdChange(target) {
+    document.getElementById('fileID').value = target.value;
+  }
+
+  async function selectExcelSheets(target) {
+    const name = target.value;
+    const fileID = document.getElementById('fileID').value;
+    const view = excelWBMap[fileID][name];
+    if (view) {
+      isRemote = true;
+      zgWbView = view;
+      zgDocsView = zgDocsViewClient.createView(parentId, view.getID(), name);
+      await zgDocsView.loadFile(fileID, '');
+      console.log('docsview selectExcelSheets', isRemote, fileID, name, view && view.getID());
+    }
   }
 </script>
 
