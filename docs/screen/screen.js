@@ -22,6 +22,8 @@ $(function () {
           let width = $('#screenWidth').val() * 1;
           let height = $('#screenHeight').val() * 1;
 
+          let screenHasAudio = $('#screenHasAudio') === 0 ? false : true;
+
           if (isNaN(width) || isNaN(height)) {
             alert('width and height must be number');
             return;
@@ -51,7 +53,7 @@ $(function () {
             width: width < 320? 320: $('#screenWidth').val() * 1,
             height: height < 240? 240: $('#screenHeight').val() * 1,
             frameRate: $('#screenFrameRate').val() * 1
-          }, false, function (suc,mediastream) {
+          }, screenHasAudio, function (suc,mediastream) {
             console.warn('startScreenShot:'+suc);
             screenCaptrue = suc;
             video.srcObject = mediastream;
