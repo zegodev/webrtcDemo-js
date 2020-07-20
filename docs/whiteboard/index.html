@@ -477,10 +477,10 @@
           aspectWidth: Number(document.getElementById("aspectWidth").value),
           aspectHeight: Number(document.getElementById("aspectHeight").value),
         });
-        console.log(zgWbView);
-        alert("创建成功");
-
         await zg.attachView(zgWbView, parentId);
+        zgViewList.push(zgWbView);
+        zgDocsView = null;
+        alert("创建成功");
       } catch (error) {
         console.log(error);
       }
