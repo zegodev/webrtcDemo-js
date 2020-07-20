@@ -1,5 +1,5 @@
 import './view/assets/index.css';
-import { ZegoClient as ZegoWebrtc } from '../../public/jZego-rtc-1.7.0';
+import { ZegoClient as ZegoWebrtc } from '../webrtc/sdk/webrtc/zego.client.web';
 export declare const PROTO_VERSION: any;
 export declare class ZegoClient extends ZegoWebrtc {
     private getRoom;
