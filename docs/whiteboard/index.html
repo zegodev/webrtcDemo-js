@@ -105,34 +105,41 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm">
+        <div class="col-sm-2">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="aspectWidth"><strong class="text-gray-dark">等比宽</strong></label>
             </div>
-            <input class="form-control d-inline" value="5" style="width: 65%;" type="text" id="aspectWidth"
-              placeholder="请输入aspectWidth" />
+            <input class="form-control d-inline" value="5" type="text" id="aspectWidth" placeholder="请输入aspectWidth" />
           </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-2">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <label class="input-group-text" for="aspectHeight"><strong class="text-gray-dark">等比高</strong></label>
             </div>
-            <input class="form-control d-inline" value="3" style="width: 65%;" type="text" id="aspectHeight"
+            <input class="form-control d-inline" value="3" type="text" id="aspectHeight"
               placeholder="请输入aspectHeight" />
           </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-2">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="whiteboardName"><strong class="text-gray-dark">白板名称</strong></label>
+              <label class="input-group-text" for="pageCount"><strong class="text-gray-dark">页数</strong></label>
             </div>
-            <input class="form-control d-inline" value="测试白板" style="width: 65%;" type="text" id="whiteboardName"
+            <input class="form-control d-inline" value="1" type="text" id="pageCount" placeholder="请输入白板页数" />
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="whiteboardName"><strong class="text-gray-dark">名称</strong></label>
+            </div>
+            <input class="form-control d-inline" value="测试白板（单页）" style="width: 65%;" type="text" id="whiteboardName"
               placeholder="请输入白板名称" />
           </div>
         </div>
-        <div class="col-sm">
+        <div class="col-sm-1">
           <button type="button" id="createView" class="btn btn-primary btn-sm">
             创建白板
           </button>
@@ -140,10 +147,10 @@
       </div>
       <pre style="margin-bottom: 0;">tips：多端同步时，aspectWidth、aspectHeight请与白板容器尺寸比例保持一致
       若父容器 宽:高=w:h
-        创建单页白板 aspectWidth=w，aspectHeight=h
-        创建m页横向白板 aspectWidth=w*m，aspectHeight=h
-        创建m页纵向白板 aspectWidth=w，aspectHeight=h*m
-        创建文件白板，不区分方向，固定 aspectWidth=w，aspectHeight=h*m
+        创建单页白板 aspectWidth=w，aspectHeight=h，pageCount=1
+        创建m页横向白板 aspectWidth=w*m，aspectHeight=h，pageCount=m
+        创建m页纵向白板 aspectWidth=w，aspectHeight=h*m，pageCount=m
+        创建文件白板，直接使用onLoadFile完成后返回的值 aspectWidth=width，aspectHeight=height，pageCount=pageCount
       </pre>
       <div class="row">
         <div class="col-sm">
@@ -182,65 +189,65 @@
         </div>
       </div>
       <div class=" row">
-        <div class="col-sm">
-          <button id="path" type="button" class="btn btn-primary btn-sm">
-            涂鸦
-          </button>
-          <button id="text" type="button" class="btn btn-primary btn-sm">
-            文本
-          </button>
-          <button id="line" type="button" class="btn btn-primary btn-sm">
-            直线
-          </button>
-          <button id="rect" type="button" class="btn btn-primary btn-sm">
-            矩形
-          </button>
-          <button id="ellipse" type="button" class="btn btn-primary btn-sm">
-            椭圆
-          </button>
-          <button id="selector" type="button" class="btn btn-primary btn-sm">
-            选择
-          </button>
-          <button id="eraser" type="button" class="btn btn-primary btn-sm">
-            橡皮擦
-          </button>
-          <button id="undo" type="button" class="btn btn-primary btn-sm">
-            撤销
-          </button>
-          <button id="redo" type="button" class="btn btn-primary btn-sm">
-            重做
-          </button>
-          <button id="clear" type="button" class="btn btn-secondary btn-sm">
-            清空图元
-          </button>
-        </div>
-      </div>
-      <div class="row" style="margin-top: 1%;">
-        <div class="col-sm-3">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="curPage"><strong class="text-gray-dark">当前页</strong></label>
+            <div class="col-sm">
+              <button id="path" type="button" class="btn btn-primary btn-sm">
+                涂鸦
+              </button>
+              <button id="text" type="button" class="btn btn-primary btn-sm">
+                文本
+              </button>
+              <button id="line" type="button" class="btn btn-primary btn-sm">
+                直线
+              </button>
+              <button id="rect" type="button" class="btn btn-primary btn-sm">
+                矩形
+              </button>
+              <button id="ellipse" type="button" class="btn btn-primary btn-sm">
+                椭圆
+              </button>
+              <button id="selector" type="button" class="btn btn-primary btn-sm">
+                选择
+              </button>
+              <button id="eraser" type="button" class="btn btn-primary btn-sm">
+                橡皮擦
+              </button>
+              <button id="undo" type="button" class="btn btn-primary btn-sm">
+                撤销
+              </button>
+              <button id="redo" type="button" class="btn btn-primary btn-sm">
+                重做
+              </button>
+              <button id="clear" type="button" class="btn btn-secondary btn-sm">
+                清空图元
+              </button>
             </div>
-            <input class="form-control d-inline" value="1" readonly style="width: 65%;" type="text" id="curPage"
-              placeholder="当前页" />
+        </div>
+        <div class="row" style="margin-top: 1%;">
+          <div class="col-sm-3">
+            <div class="input-group input-group-sm mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="curPage"><strong class="text-gray-dark">当前页</strong></label>
+              </div>
+              <input class="form-control d-inline" value="1" readonly style="width: 65%;" type="text" id="curPage"
+                placeholder="当前页" />
+            </div>
+          </div>
+          <div class="col-sm">
+            <button id="previousPage" type="button" class="btn btn-primary btn-sm">上一页</button>
+            <button id="nextPage" type="button" class="btn btn-primary btn-sm">下一页</button>
           </div>
         </div>
-        <div class="col-sm">
-          <button id="previousPage" type="button" class="btn btn-primary btn-sm">上一页</button>
-          <button id="nextPage" type="button" class="btn btn-primary btn-sm">下一页</button>
-        </div>
-      </div>      
-      <div class="row" style="margin-top: 1%;">
-        <div class="col-sm">
-          <h6 class="pb-2 mb-0">
-            白板容器（1000 * 600）
-          </h6>
-          <div id="mywhiteboard" style="width: 1000px; height: 600px; border: 1px dashed #ddd;position: relative;">
+        <div class="row" style="margin-top: 1%;">
+          <div class="col-sm">
+            <h6 class="pb-2 mb-0">
+              白板容器（1000 * 600）
+            </h6>
+            <div id="mywhiteboard" style="width: 1000px; height: 600px; border: 1px dashed #ddd;position: relative;">
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </body>
 <script src="../assets/jquery-3.3.1.min.js"></script>
 <script src="./jZego-rtc.js"></script>
@@ -302,13 +309,13 @@
       }
     );
     zgDocsViewClient.on('onLoadFile', async function (res) {
-      const { fileID, fileType, fileName, viewID, authKey, pageCount } = res;
+      const { fileID, fileType, fileName, viewID, authKey, width, height, pageCount } = res;
       if (!isRemote) {
         zg.createView({
           roomID: document.getElementById('roomID').value,
           name: fileName,
-          aspectWidth: Number(document.getElementById('aspectWidth').value),
-          aspectHeight: Number(document.getElementById('aspectHeight').value),
+          aspectWidth: width,
+          aspectHeight: height,
           pageCount,
           fileInfo: { fileID, fileName, fileType, authKey }
         }).then(async function (view) {
@@ -444,7 +451,7 @@
           // excel sheets 只显示一个
           const map = {};
           let html = '';
-          list.forEach(function(v) {
+          list.forEach(function (v) {
             const id = v.getID();
             const file = v.getFileInfo();
             if (file && file.fileType === 4) {
@@ -471,11 +478,13 @@
 
     $("#createView").click(async function () {
       try {
+        debugger;
         zgWbView = await zg.createView({
           roomID: document.getElementById("roomID").value,
           name: document.getElementById("whiteboardName").value,
           aspectWidth: Number(document.getElementById("aspectWidth").value),
           aspectHeight: Number(document.getElementById("aspectHeight").value),
+          pageCount: Number(document.getElementById("pageCount").value),
         });
         await zg.attachView(zgWbView, parentId);
         zgViewList.push(zgWbView);
@@ -490,7 +499,7 @@
       try {
         // 同一个fileID只能创建一个白板（Excel时每个sheet都创建一个白板）
         const fileID = document.getElementById('fileID').value;
-        const view = zgViewList.find(function(v) {
+        const view = zgViewList.find(function (v) {
           const file = v.getFileInfo();
           return file && file.fileID === fileID;
         });
@@ -503,12 +512,12 @@
         }
         isRemote = false;
         zgDocsView = zgDocsViewClient.createView(parentId);
-        await zgDocsView.loadFile(fileID, '').then(function(res) {
+        await zgDocsView.loadFile(fileID, '').then(function (res) {
           const excelDom = document.getElementById('excelSheets');
           // Excel每个sheet都创建一个白板
           if (res.fileType == 4) {
-            
-            const sheets = res.file_list.map(function(v, i) {
+
+            const sheets = res.file_list.map(function (v, i) {
               const name = v.file_name.replace(/.pdf/, "");
               if (i > 0) {
                 const view = zgDocsViewClient.createView(parentId, '', name);
@@ -545,7 +554,7 @@
       }
       document.getElementById('curPage').value = zgWbView.getPage();
     });
-    
+
     $("#undo").click(function () {
       zgWbView.undo();
     });
