@@ -145,7 +145,8 @@
           </button>
         </div>
       </div>
-      <pre style="margin-bottom: 0;">tips：多端同步时，aspectWidth、aspectHeight请与白板容器尺寸比例保持一致
+      <pre style="margin-bottom: 0;">tips: 父容器请使用相对定位并保证在渲染白板时宽高不为0
+      多端同步时，aspectWidth、aspectHeight请与白板容器尺寸比例保持一致
       若父容器 宽:高=w:h
         创建单页白板 aspectWidth=w，aspectHeight=h，pageCount=1
         创建m页横向白板 aspectWidth=w*m，aspectHeight=h，pageCount=m
