@@ -80,7 +80,7 @@ whiteboardView.clear(): boolean
 #### 1.1.7 获取该白板view关联的文件信息
 
 ```typescript
-whiteboardView.getFileInfo(): {fileID: string, fileName: string, authKey: string, fileType: number} | undefined
+whiteboardView.getFileInfo(): {fileID: string, fileName: string, authKey: string, fileType: number} | null
 ```
 
 #### 1.1.8 设置白板允许涂鸦权限
@@ -121,7 +121,7 @@ whiteboardView.setToolType(type: ViewTool): boolean
 
 | 字段                                  | 含义   | 是否必填                   |
 | ----------------------------------------- | ------- | ----------------------------- |
-| type                 | 工具类型1:path 涂鸦，2:text 文本框，4:line 线段，8:rect 矩形，16:ellipse 椭圆，32: selector 选择       | 是                          |
+| type                 | 工具类型1:path 涂鸦，2:text 文本框，4:line 线段，8:rect 矩形，16:ellipse 椭圆，32: selector 选择，64: eraser 橡皮擦       | 是                          |
 
 #### 1.1.14 获取正在使用的白板工具
 
@@ -187,7 +187,7 @@ whiteboardView.scroll(horizontalPercent: number, verticalPercent: number): boole
 #### 1.1.22 获取滚动百分比
 
 ```typescript
-whiteboardView.getCurrentScrollPercent(): { horizontalPercent: number; verticalPercent: number }
+whiteboardView.getCurrentScrollPercent(): { horizontalPercent: number; verticalPercent: number; direction: number; }
 ```
 
 #### 1.1.23 撤销
