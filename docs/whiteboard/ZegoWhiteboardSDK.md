@@ -252,22 +252,22 @@ whiteboardManager.on('viewAdd', (whiteboardView: WhiteboardView) => {})
 #### 2.1.3 销毁view
 
 ```typescript
-whiteboardManager.on('viewRemoved', (whiteboardID: string) => {})
+whiteboardManager.on('viewRemoved', (id: string) => {})
 ```
 
 | 字段                                  | 含义   |
 | ----------------------------------------- | ------- |
-| whiteboardID                 | 白板ID       |
+| id                 | 白板ID       |
 
 #### 2.1.4 滚动view
 
 ```typescript
-whiteboardManager.on('viewScroll', (whiteboardID: string, horizontalPercent: number, verticalPercent: number, page: number) => {})
+whiteboardManager.on('viewScroll', (res: {id: string; horizontalPercent: number; verticalPercent: number; page: number; }) => {}) => {})
 ```
 
 | 字段                                  | 含义   |
 | ----------------------------------------- | ------- |
-| whiteboardID                 | 白板ID       |
+| id                 | 白板ID       |
 | horizontalPercent                 | 水平滚动百分比       |
 | verticalPercent                 | 垂直滚动百分比       |
 | page                 | 翻页模式时当前页码       |
