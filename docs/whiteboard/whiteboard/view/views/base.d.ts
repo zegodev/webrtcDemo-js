@@ -1,4 +1,4 @@
-import { ViewTool } from '../entities/viewEntity';
+import { ViewTool, FileInfo } from '../entities/viewEntity';
 export declare abstract class WhiteboardView {
     abstract enable(enable: boolean): boolean;
     abstract isEnable(): boolean;
@@ -11,12 +11,7 @@ export declare abstract class WhiteboardView {
     abstract undo(): void;
     abstract redo(): void;
     abstract getAspectRatio(): string;
-    abstract getFileInfo(): {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    } | undefined;
+    abstract getFileInfo(): FileInfo | null;
     abstract getID(): string;
     abstract getName(): string;
     abstract getRoomID(): string;
@@ -24,8 +19,8 @@ export declare abstract class WhiteboardView {
     abstract getPageCount(): number | undefined;
     abstract setBackgroundColor(color: string): boolean;
     abstract getBackgroundColor(): string;
-    abstract setToolType(type: ViewTool): boolean;
-    abstract getToolType(): ViewTool;
+    abstract setToolType(type: ViewTool | null): boolean;
+    abstract getToolType(): ViewTool | null;
     abstract setBrushColor(color: string): boolean;
     abstract getBrushColor(): string;
     abstract setBrushSize(thin: number): boolean;

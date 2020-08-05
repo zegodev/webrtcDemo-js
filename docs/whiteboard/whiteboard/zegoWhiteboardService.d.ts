@@ -1,6 +1,6 @@
 import { WhiteboardServiceBase } from './view/services/base';
 import { WhiteboardError } from './view/entities/error';
-import { ProtoGraphic } from './view/entities/viewEntity';
+import { ProtoGraphic, FileInfo } from './view/entities/viewEntity';
 import { View, ErrorData, PushType } from './view/entities/entity';
 declare enum GetModListType {
     Initiative = 1,
@@ -43,7 +43,7 @@ export declare class WhiteboardService extends WhiteboardServiceBase {
     private updateMapByMod;
     private updateMapByModifyModOption;
     private updateMapByGraphicListSeqs;
-    private getPopTaskIndex;
+    private getPopDoTaskIndex;
     private getUndoHandle;
     private addUndoHandle;
     private deleteUndoHandle;
@@ -52,9 +52,15 @@ export declare class WhiteboardService extends WhiteboardServiceBase {
     private deleteRedoHandle;
     private setInProgress;
     private getInProgress;
-    private setSendSwitch;
-    private getSendSwitch;
+    private setModSendSwitch;
+    private getModSendSwitch;
+    private setGraphicSendSwitch;
+    private getGraphicSendSwitch;
     private clearPullMarks;
+    private moveSendBefore;
+    private moveSendAfter;
+    private mergeGraphicList;
+    private updateMoveTaskList;
     private updateModifyModTaskList;
     private modifyModSendBefore;
     private cachePushModifyModTaskHandle;
@@ -62,9 +68,10 @@ export declare class WhiteboardService extends WhiteboardServiceBase {
     private getOldModInfoByModifyModOption;
     private checkScroll;
     getModName(whiteboardID: string): string;
+    getUserName(): string;
     getCreateTime(whiteboardID: string): number;
     getRoomID(whiteboardID: string): string;
-    getPageCount(whiteboardID: string): number | undefined;
+    getPageCount(whiteboardID: string): number;
     setSize(whiteboardID: string, viewWidth: number, viewHeight: number): boolean;
     setViewportSize(whiteboardID: string, viewportWidth: number, viewportHeight: number): void;
     undo(whiteboardID: string, success: (graphicList: ProtoGraphic[]) => void, error: (graphicList: ProtoGraphic[]) => void): void;
@@ -80,21 +87,17 @@ export declare class WhiteboardService extends WhiteboardServiceBase {
     updateToRemote(whiteboardID: string, graphicList: ProtoGraphic[], error: (graphicList: ProtoGraphic[]) => void): void;
     private updateToRemoteHandle;
     getModList(type: GetModListType, success?: (whiteboardIDList: string[]) => void, error?: (errorData: ErrorData) => void): void;
-    scroll(whiteboardID: string, horizontalPercent: number, verticalPercent: number, success?: (whiteboardID: string) => void, error?: (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => void): void;
+    scroll(whiteboardID: string, horizontalPercent: number, verticalPercent: number, pptStep: number, success?: (whiteboardID: string) => void, error?: (whiteboardID: string, horizontalPercent: number, verticalPercent: number, step?: number) => void): void;
     reload(): void;
     loadCurrentGraphics(whiteboardID: string, horizontalPercent: number, verticalPercent: number): void;
     getScrollPercent(whiteboardID: string): {
         horizontalPercent: number;
         verticalPercent: number;
+        pptStep: number;
     };
     getAspectRatio(whiteboardID: string): string;
-    getFileInfo(whiteboardID: string): {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    } | undefined;
-    getCurrentPages(whiteboardID: string, horizontalPercent: number, verticalPercent: number): {
+    getFileInfo(whiteboardID: string): FileInfo | null;
+    getCurrentPages(whiteboardID: string, hPercent: number, vPercent: number): {
         minPage: number;
         maxPage: number;
     };

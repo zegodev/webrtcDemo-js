@@ -1,6 +1,9 @@
 import { CustomListener } from '../entities';
 export declare abstract class ZegoDocsViewServiceBase {
+    private store;
     private customListeners;
+    setStore(obj: any): void;
+    getStore(): any;
     addEventListener<k extends keyof CustomListener>(event: k, callBack: CustomListener[k]): boolean;
     removeEventListener<k extends keyof CustomListener>(event: k, callBack: CustomListener[k]): boolean;
     triggerEventListener<k extends keyof CustomListener>(event: k, res: any): void;

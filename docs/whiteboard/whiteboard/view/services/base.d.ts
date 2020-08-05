@@ -1,5 +1,5 @@
 import { View, ErrorData, CustomListener } from '../entities/entity';
-import { ProtoGraphic } from '../entities/viewEntity';
+import { ProtoGraphic, FileInfo } from '../entities/viewEntity';
 import { WhiteboardError } from '../entities/error';
 export declare abstract class WhiteboardServiceBase {
     platform: string;
@@ -20,22 +20,19 @@ export declare abstract class WhiteboardServiceBase {
     abstract getScrollPercent(whiteboardID: string): {
         horizontalPercent: number;
         verticalPercent: number;
+        pptStep: number;
     };
     abstract getAspectRatio(whiteboardID: string): string;
     abstract setSize(whiteboardID: string, viewWidth: number, viewHeight: number): boolean;
     abstract setViewportSize(whiteboardID: string, viewportWidth: number, viewportHeight: number): void;
     abstract undo(whiteboardID: string, success: (graphicList: ProtoGraphic[]) => void, error: (graphicList: ProtoGraphic[]) => void): void;
     abstract redo(whiteboardID: string, success: (graphicList: ProtoGraphic[]) => void, error: (graphicList: ProtoGraphic[]) => void): void;
-    abstract scroll(whiteboardID: string, horizontalPercent: number, verticalPercent: number, success?: (whiteboardID: string) => void, error?: (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => void): void;
+    abstract scroll(whiteboardID: string, horizontalPercent: number, verticalPercent: number, pptStep: number, success?: (whiteboardID: string) => void, error?: (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => void): void;
     abstract loadCurrentGraphics(whiteboardID: string, horizontalPercent: number, verticalPercent: number): void;
-    abstract getFileInfo(whiteboardID: string): {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    } | undefined;
+    abstract getFileInfo(whiteboardID: string): FileInfo | null;
     abstract getModName(whiteboardID: string): string;
     abstract getCreateTime(whiteboardID: string): number;
     abstract getRoomID(whiteboardID: string): string;
-    abstract getPageCount(whiteboardID: string): number | undefined;
+    abstract getPageCount(whiteboardID: string): number;
+    abstract getUserName(): string;
 }

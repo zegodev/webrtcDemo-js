@@ -1,4 +1,4 @@
-import { ProtoGraphic } from './viewEntity';
+import { FileInfo } from './viewEntity';
 import { WhiteboardView } from '../views/base';
 export interface ReqHeader {
     sdk_version: number;
@@ -16,12 +16,7 @@ export interface View {
     aspectWidth: number;
     aspectHeight: number;
     pageCount?: number;
-    fileInfo?: {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    };
+    fileInfo?: FileInfo;
 }
 export interface CustomListener {
     error: (errorData: ErrorData) => void;
@@ -43,12 +38,7 @@ export interface ErrorData {
 }
 export interface ModContent {
     room_id: string;
-    file_info?: {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    };
+    file_info?: FileInfo;
     whiteboard_page_count?: number;
 }
 export interface ModPos {
@@ -59,10 +49,6 @@ export interface ModPos {
     z: number;
     ar_w: number;
     ar_h: number;
-}
-export interface GraphicTask {
-    cmdSeq: number;
-    task: ProtoGraphic[];
 }
 export interface PushMsgData {
     body: PushMsgBody;
@@ -117,7 +103,7 @@ export interface ProtoMod {
     mod_content: string;
     /** 扩展buffer 1024 bytes */
     mod_extra: string;
-    /** 预留字段 */
+    /** 预留字段 ppt step */
     mod_reserve: number;
     /** mod创建时的时间戳 */
     mod_create_time: string;
