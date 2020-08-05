@@ -1,3 +1,5 @@
+export declare const MAX_PAGE = 5;
+export declare const INTERVAL_PAGE = 100;
 export declare enum FileType {
     PPT = 1,
     DOC = 2,
@@ -26,5 +28,6 @@ export interface CustomListener {
     onLoadFile: (res: any) => void;
     onUpload: (res: any) => void;
     onScroll: (res: any) => void;
+    onStepChange: (res: any) => void;
 }
 export declare const transError: (code: number) => number;

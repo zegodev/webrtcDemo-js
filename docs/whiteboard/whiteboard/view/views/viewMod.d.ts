@@ -1,7 +1,8 @@
 import { WhiteboardView } from './base';
 import { WhiteboardServiceBase } from '../services/base';
 import { WhiteboardStore } from '../entities/store';
-import { ProtoGraphic, ViewTool, ScrollMode } from '../entities/viewEntity';
+import { Direction } from '../entities/entity';
+import { ProtoGraphic, ViewTool, FileInfo, ScrollMode } from '../entities/viewEntity';
 export declare class WhiteboardViewMod extends WhiteboardView {
     private parentDom;
     private whiteboardID;
@@ -12,7 +13,6 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     private serviceHandle;
     private viewEvent;
     private whiteboardNode;
-    private svgNode;
     private graphicsBoxConNode;
     private graphicsConNode;
     private graphicsBgContainerNode;
@@ -20,20 +20,20 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     private graphicList;
     private mousePointList;
     private flowData;
+    private calStandard;
+    private drawState;
     constructor(whiteboardID: string, whiteboardStore: WhiteboardStore, serviceHandle: WhiteboardServiceBase);
     private scrollHandle;
-    private mouseleaveHandle;
-    private mousemoveHandle;
-    private mousedownHandle;
-    private eraserMousemoveHandle;
     private checkMultipoint;
     private bindEvents;
     destroy(): void;
+    private setWhiteboardTransform;
+    private handleDragEvent;
+    private initDragEvents;
     private updateBindEvents;
     init(parent: string): void;
+    private updateStateSizeHandle;
     private calculateHandle;
-    private isScrollMode;
-    private hasFileInfo;
     private createModule;
     setActivited(val: boolean): void;
     isActivited(): boolean;
@@ -59,8 +59,10 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     private updateTextareaGraphic;
     private foucsTextarea;
     private moveByOffset;
+    private appendOtherGraphics;
     private drawGraphicsLine;
     private drawGraphicsRect;
+    private drawGraphicsLaser;
     private drawGraphicsPath;
     private drawGraphicsEllipse;
     private drawGraphicsHandle;
@@ -69,6 +71,8 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     private getInstanceByGraphicId;
     private getInstanceSelectorByGraphicId;
     private getBoxSelectorByGraphicId;
+    private updateGraphicOnMoving;
+    private calculateMoveHandle;
     private updateGraphicListOnMoving;
     private transLocation;
     private getScrollData;
@@ -78,20 +82,44 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     private removeGraphic;
     private updatePointerEvents;
     private getBoxInfoByGraphicInfo;
-    private drawSvgMouseupHandle;
-    private selectMouseupHandle;
-    private textMouseupHandle;
-    private eraserMouseupPcHandle;
-    private eraserMouseupMbHandle;
+    /** =================== 事件: common method start =================== */
+    private downCommonHandle;
+    /** =================== 事件: common method start =================== */
+    /** =================== 激光笔: Laser start =================== */
+    private drawLaserMoveHandle;
+    private drawLaserLeaveHandle;
+    private laserHiddenHandle;
+    private addLaserHandle;
+    private findLaserHandle;
+    /** =================== 激光笔: Laser end =================== */
+    /** =================== SVG图元: Pen、Line、Ellipse、Rect start =================== */
+    private drawSvgUpHandle;
+    private drawSvgDownHandle;
+    private drawSvgMoveHandle;
+    private drawSvgLeaveHandle;
+    /** =================== SVG图元: Pen、Line、Ellipse、Rect end =================== */
+    /** =================== 其他图元: Text start =================== */
+    private drawTextUpHandle;
+    /** =================== 其他图元: Text end =================== */
+    /** =================== 选择图元: Selector start =================== */
+    private drawSelectorDownHandle;
+    private drawSelectorMoveHandle;
+    private drawSelectorUpHandle;
+    private drawSelectorLeaveHandle;
+    /** =================== 选择图元: Selector end =================== */
+    /** =================== 擦除图元: Earser start =================== */
+    private drawEraserMovePcHandle;
+    private drawEraserUpPcHandle;
+    private drawEraserUpMbHandle;
+    /** =================== 擦除图元: Earser end =================== */
     private removeElement;
     private getElementChild;
-    private removeElementChild;
     private removeGraphicList;
     private clearSelected;
-    scrollToHandle(horizontalPercent: number, verticalPercent: number, notify: boolean): void;
+    scrollToHandle(hPercent: number, vPercent: number, step: number, notify: boolean): void;
     private emitScroll;
     private jumpPage;
-    private handlePageChangeListener;
+    private handleDocsviewEvent;
     private backAddHandle;
     private backRemoveHandle;
     private backMoveHandle;
@@ -100,6 +128,7 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     clearLocalHandle(): void;
     updateRemoteToLocal(graphicList: ProtoGraphic[], delGraphicIdList?: string[]): void;
     private updateToRemote;
+    private toggleDrag;
     enable(enable: boolean): boolean;
     isEnable(): boolean;
     clear(): void;
@@ -107,16 +136,12 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     getCurrentScrollPercent(): {
         horizontalPercent: number;
         verticalPercent: number;
+        direction: Direction;
     };
     undo(): void;
     redo(): void;
     getAspectRatio(): string;
-    getFileInfo(): {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    } | undefined;
+    getFileInfo(): FileInfo | null;
     getID(): string;
     getName(): string;
     getCreateTime(): number;
@@ -124,8 +149,8 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     getPageCount(): number;
     setBackgroundColor(color: string): boolean;
     getBackgroundColor(): string;
-    setToolType(type: ViewTool): boolean;
-    getToolType(): ViewTool;
+    setToolType(type: ViewTool | null): boolean;
+    getToolType(): ViewTool | null;
     setBrushColor(color: string): boolean;
     getBrushColor(): string;
     setBrushSize(thin: number): boolean;
@@ -134,6 +159,10 @@ export declare class WhiteboardViewMod extends WhiteboardView {
     getTextSize(): number;
     getPage(): number;
     setScrollMode(mode: ScrollMode): void;
-    previousPage(): void;
-    nextPage(): void;
+    setScaleFactor(zoom: number, x: number, y: number): void;
+    getScaleFactor(): {
+        zoom: number;
+        x: number;
+        y: number;
+    };
 }

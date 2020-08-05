@@ -3,6 +3,7 @@ export declare class WhiteboardViewEvent {
     downEventName: string;
     upEventName: string;
     moveEventName: string;
+    leaveEventName: string;
     eventList: {};
     constructor();
     bindEvent(name: string, handle: Function): void;

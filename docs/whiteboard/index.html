@@ -229,7 +229,7 @@
               <div class="input-group-prepend">
                 <label class="input-group-text" for="curPage"><strong class="text-gray-dark">当前页</strong></label>
               </div>
-              <input class="form-control d-inline" value="1" readonly style="width: 65%;" type="text" id="curPage"
+              <input class="form-control d-inline" readonly style="width: 65%;" type="text" id="curPage"
                 placeholder="当前页" />
             </div>
           </div>
@@ -294,15 +294,16 @@
       console.log("on viewAdd");
       console.log(wbView);
     });
-    zg.on("viewRemoved", (whiteboardID) => {
+    zg.on("viewRemoved", id => {
       console.log("on viewRemoved");
-      console.log(`whiteboardID: ${whiteboardID}`);
+      console.log(`id: ${id}`);
     });
     zg.on(
       "viewScroll",
-      (whiteboardID, horizontalPercent, verticalPercent, page) => {
+      res => {
+        const { id, horizontalPercent, verticalPercent, page } = res;
         console.log("on viewScroll");
-        console.log(whiteboardID);
+        console.log(id);
         console.log(horizontalPercent);
         console.log(verticalPercent);
         console.log(page);
@@ -538,19 +539,27 @@
     });
 
     $("#previousPage").click(async function () {
-      zgWbView.scroll((zgWbView.getPage() - 2) / zgWbView.getPageCount(), 0);
-      if (zgDocsView) {
-        const page = zgDocsView.getCurrentPage();
-        if (page > 1) zgDocsView.flipPage(page - 1);
+      const page = zgWbView.getPage();
+      const pageCount = zgWbView.getPageCount();
+      if (page > 1) {
+        const direction = zgWbView.getCurrentScrollPercent().direction;
+        // 水平
+        if (direction === 1) zgWbView.scroll((page - 2) / pageCount, 0);
+        // 垂直
+        else zgWbView.scroll(0, (page - 2) / pageCount);
       }
       document.getElementById('curPage').value = zgWbView.getPage();
     });
 
     $("#nextPage").click(async function () {
-      zgWbView.scroll(zgWbView.getPage() / zgWbView.getPageCount(), 0);
-      if (zgDocsView) {
-        const page = zgDocsView.getCurrentPage();
-        if (page < zgDocsView.getPageCount()) zgDocsView.flipPage(page + 1);
+      const page = zgWbView.getPage();
+      const pageCount = zgWbView.getPageCount();
+      if (page < pageCount) {
+        const direction = zgWbView.getCurrentScrollPercent().direction;
+        // 水平
+        if (direction === 1) zgWbView.scroll(page / pageCount, 0);
+        // 垂直
+        else zgWbView.scroll(0, page / pageCount);
       }
       document.getElementById('curPage').value = zgWbView.getPage();
     });

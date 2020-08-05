@@ -1,3 +1,4 @@
+import './index.css';
 import './polyfill.js';
 import { View } from './entities/viewEntity';
 import { WhiteboardServiceBase } from './services/base';
@@ -9,9 +10,9 @@ export declare class BaseManager {
     private modIdMapInstance;
     private fileInfoMap;
     private serviceHandle;
-    private whiteboardStore;
-    private whiteboardError;
-    constructor(serviceHandle: WhiteboardServiceBase, whiteboardError: WhiteboardError);
+    private store;
+    private error;
+    constructor(serviceHandle: WhiteboardServiceBase, error: WhiteboardError);
     private registerLoadfileListener;
     private registerPushCallbackHandle;
     private registerPullCallbackHandle;

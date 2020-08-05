@@ -11,6 +11,21 @@ export declare enum Direction {
     Horizontal = 1,
     Vertical = 2
 }
+export declare enum FileType {
+    PPT = 1,
+    DOC = 2,
+    ELS = 4,
+    PDF = 8,
+    IMG = 16,
+    TXT = 32,
+    PPTH5 = 512
+}
+export interface FileInfo {
+    fileID: string;
+    fileName: string;
+    authKey: string;
+    fileType: FileType;
+}
 export interface View {
     roomID: string;
     whiteboardID?: string;
@@ -18,21 +33,18 @@ export interface View {
     aspectWidth: number;
     aspectHeight: number;
     pageCount?: number;
-    fileInfo?: {
-        fileID: string;
-        fileName: string;
-        authKey: string;
-        fileType: number;
-    };
+    fileInfo?: FileInfo;
 }
 export declare enum ViewTool {
+    Drag = 0,
     Pen = 1,
     Text = 2,
     Line = 4,
     Rect = 8,
     Ellipse = 16,
     Selector = 32,
-    Eraser = 64
+    Eraser = 64,
+    Laser = 128
 }
 export declare enum ActionType {
     Single = 1,
@@ -56,6 +68,7 @@ export interface GraphicsData {
     action_seq?: number;
     action?: Action;
     action_type?: ActionType;
+    id_name?: string;
     type: ViewTool;
     size: number;
     color: string;
@@ -92,4 +105,19 @@ export interface PathData {
 export declare enum Platform {
     Pc = 1,
     Mobile = 2
+}
+export interface BindEvents {
+    mousemoveHandle: ((event: MouseEvent | TouchEvent) => void) | null;
+    mouseleaveHandle: ((event: MouseEvent | TouchEvent) => void) | null;
+    mouseupHandle: ((event: MouseEvent | TouchEvent) => void) | null;
+    mousedownHandle: ((event: MouseEvent | TouchEvent) => void) | null;
+}
+export declare enum DrawState {
+    Init = 1,
+    Down = 2,
+    Move = 3,
+    DownMove = 4,
+    Up = 5,
+    Leave = 6,
+    DownLeave = 7
 }

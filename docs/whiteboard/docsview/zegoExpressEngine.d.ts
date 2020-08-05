@@ -1,3 +1,4 @@
+import './view/index.css';
 import './view/polyfill';
 import { ZegoDocsView } from './view/views/viewMod';
 import { ZegoDocsViewConfig, CustomListener } from './view/entities';

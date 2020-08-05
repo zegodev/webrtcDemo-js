@@ -1,4 +1,3 @@
-import './view/assets/index.css';
 import { ZegoClient as ZegoWebrtc } from '../webrtc/sdk/webrtc/zego.client.web';
 export declare const PROTO_VERSION: any;
 export declare class ZegoClient extends ZegoWebrtc {
