@@ -12,17 +12,17 @@ whiteboardManager.getVersion(): string
 
 ```typescript
 whiteboardManager.createView(options: {
-    roomID: string,
-    name: string,
-    aspectWidth: number,
-    aspectHeight: number,
-    pageCount: number,
+    roomID: string;
+    name: string;
+    aspectWidth: number;
+    aspectHeight: number;
+    pageCount: number;
     fileInfo?: {
-        fileID: string,
-        fileName: string,
-        fileType: number,
-        authKey: string
-    }
+        fileID: string;
+        fileName: string;
+        fileType: number;
+        authKey: string;
+    };
 }): Promise<WhiteboardView>
 ```
 
@@ -80,7 +80,7 @@ whiteboardView.clear(): boolean
 #### 1.1.7 获取该白板view关联的文件信息
 
 ```typescript
-whiteboardView.getFileInfo(): {fileID: string, fileName: string, authKey: string, fileType: number} | null
+whiteboardView.getFileInfo(): {fileID: string; fileName: string; authKey: string; fileType: number;} | null
 ```
 
 #### 1.1.8 设置白板允许涂鸦权限
@@ -262,7 +262,7 @@ whiteboardManager.on('viewRemoved', (id: string) => {})
 #### 2.1.4 滚动view
 
 ```typescript
-whiteboardManager.on('viewScroll', (res: {id: string; horizontalPercent: number; verticalPercent: number; page: number; }) => {}) => {})
+whiteboardManager.on('viewScroll', (res: {id: string; horizontalPercent: number; verticalPercent: number; page: number; }) => {})
 ```
 
 | 字段                                  | 含义   |
