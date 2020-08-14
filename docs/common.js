@@ -248,7 +248,10 @@ function doPreviewPublish(config, streamID,video) {
         "videoQuality": quality * 1,
         "horizontal": true,
         "externalCapture": false,
-        "externalMediaStream": null
+        "externalMediaStream": null,
+        "noiseSuppression": $('#ANS').val() === '1',
+        "autoGainControl": $('#AGC').val() === '1',
+        "echoCancellation": $('#AEC').val() === '1',
     };
     previewConfig = $.extend(previewConfig, config);
     console.log('previewConfig', previewConfig);
@@ -355,6 +358,18 @@ function listen() {
 
         onKickOut: function (error) {
             console.error("onKickOut " + JSON.stringify(error));
+        },
+        onDeviceError:function(msg) {
+            console.log('设备异常')
+            console.log(msg)
+        },
+        OnAudioDeviceStateChanged:function(msg) {
+            console.log('音频设备变更')
+            console.log(msg)
+        },
+        OnVideoDeviceStateChanged:function(msg) {
+            console.log('视频设备变更')
+            console.log(msg)
         },
         onStreamUpdated: function (type, streamList) {
             if (type == 0) {

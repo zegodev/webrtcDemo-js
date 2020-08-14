@@ -68,7 +68,7 @@ $(function () {
             console.log(err);
         })
     });
-
+    
     $('#leaveRoom').click(function () {
         leaveRoom();
         $('#mixVideo')[0].src = ''
