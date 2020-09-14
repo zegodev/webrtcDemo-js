@@ -4,11 +4,12 @@ import { ZegoStreamCenterWeb } from './zego.streamCenter.web';
 import { audioMixUtil } from '../util/audioMixUtil';
 import { BaseCenter } from '../common/clientBase/index';
 import { MediaUtil } from '../util/mediaUtil';
-import { ZegoMediaElement, ZegoHTMLAudioElement } from '../../types/index';
+import { ZegoMediaElement, ZegoHTMLAudioElement, ZegoAudioContext } from '../../types/index';
 import { ZegoPublish } from './zego.publish';
 export declare class ZegoClient extends BaseCenter {
     streamCenter: ZegoStreamCenterWeb;
     audioMixing: audioMixUtil;
+    ac: ZegoAudioContext;
     constructor();
     static screenShotReady: boolean;
     static mediaRecorder: MediaRecorder;
@@ -32,8 +33,10 @@ export declare class ZegoClient extends BaseCenter {
     pauseEffect(streamid: string): void;
     resumeEffect(streamid: string): void;
     unloadEffect(effecId: number): boolean;
-    startMixingAudio(streamid: string, audio: ZegoHTMLAudioElement, replace: boolean): boolean;
-    stopMixingAudio(streamid: string): boolean;
+    startMixingAudio(streamID: string, audio: ZegoHTMLAudioElement, replace: boolean): boolean;
+    stopMixingAudio(streamID: string, audio?: Array<HTMLMediaElement>): boolean;
+    mixingBuffer(streamID: string, sourceID: string, arrayBuffer: ArrayBuffer, callBack?: Function): void;
+    stopMixingBuffer(streamID: string, source: Array<string>): boolean;
     setMixingAudioVolume(streamid: string, volume: number): boolean;
     getPublisher(streamid: any): ZegoPublish;
     startScreenShotChrome(callBack: (suc: boolean, stream: MediaStream, err?: string) => void): boolean;
@@ -49,7 +52,7 @@ export declare class ZegoClient extends BaseCenter {
         frameRate?: number;
         bitRate?: number;
     }, mediaSource: 'screen' | 'application' | 'window', audio: boolean, callBack: (suc: boolean, stream: MediaStream) => void): void;
-    stopScreenShot(): void;
+    stopScreenShot(stream: MediaStream): void;
     switchDevice(type: 'audio' | 'video', localVideo: HTMLMediaElement, deviceId: string, success: Function, error: Function): void;
     WebrtcOnPublishStateUpdateHandle(type: 0 | 1 | 2, streamid: string, error: {
         code: string;
@@ -68,7 +71,7 @@ export declare class ZegoClient extends BaseCenter {
         urls_https_flv: string;
         urls_https_m3u8: string;
     }): void;
-    onScreenSharingEnded(): void;
+    onScreenSharingEnded(stream: any): void;
     loginBodyData(): {
         'id_name': string;
         'nick_name': string;
@@ -86,6 +89,7 @@ export declare class ZegoClient extends BaseCenter {
     voiceChange(mult: number, streamid: string): boolean;
     voiceBack(streamid: string): void;
     setPublishStreamConstraints(streamID: string, constraints: MediaStreamConstraints, success: Function, error: Function): void;
+    setSoundLevelDelegate(bool: boolean, timeInMs?: number): void;
     static supportDetection(success: Function, error: Function): void;
     enumDevices(deviceInfoCallback: any, error: any): void;
     static enumDevices(deviceInfoCallback: any, error: any): void;

@@ -1,11 +1,13 @@
 import { Logger } from "./zego.logger";
-import { ERRO, PlayerInfo, StreamQuality } from "./zego.entity";
+import { ERRO, PlayerInfo, StreamQuality, PublishInfo } from "./zego.entity";
 import { StateCenter } from "./clientBase/stateCenter";
 export declare abstract class ZegoStreamCenter {
     playerList: {
         [index: string]: PlayerInfo;
     };
-    publisherList: {};
+    publisherList: {
+        [index: string]: PublishInfo;
+    };
     constructor(log: Logger, stateCenter: StateCenter);
     abstract stopPlayingStream(streamId: string): any;
     abstract reset(): any;
@@ -19,5 +21,23 @@ export declare abstract class ZegoStreamCenter {
     abstract onVideoSizeChanged(streamId: string, videoWidth: number, videoHeight: number): any;
     abstract onRemoteCameraStatusUpdate(streamID: string, status: number): any;
     abstract onRemoteMicStatusUpdate(streamID: string, status: number): any;
+    abstract onSoundLevelUpdate(soundLevelList: Array<{
+        streamID: string;
+        soundLevel: number;
+    }>): any;
+    abstract onDeviceError(msg: {
+        deviceName: string;
+        deviceType: string;
+        errorCode: number;
+    }): any;
+    abstract OnAudioDeviceStateChanged(msg: {
+        deviceType: string;
+        deviceInfo: any;
+        state: string;
+    }): any;
+    abstract OnVideoDeviceStateChanged(msg: {
+        deviceInfo: any;
+        state: string;
+    }): any;
     setSessionInfo(appid: number, userid: string, token: string, testEnvironment: boolean): void;
 }

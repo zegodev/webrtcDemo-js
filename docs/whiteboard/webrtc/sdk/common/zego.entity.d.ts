@@ -1,6 +1,7 @@
 import { ZegoSignal } from './zego.signal';
 import { ZegoPlayWeb } from '../webrtc/zego.play.web';
 import { ZegoVideoDecodeType } from '../../types/index';
+import { ZegoPublish } from '../webrtc/zego.publish';
 export declare const PROTO_VERSION: any;
 export declare const ROOMVERSION: any;
 export declare enum ENUM_LOG_LEVEL {
@@ -25,6 +26,14 @@ export interface Config {
     logUrl: string;
     audienceCreateRoom: boolean;
     remoteLogLevel: ENUM_LOG_LEVEL;
+}
+export interface Device {
+    deviceName: string;
+    deviceID: string;
+}
+export interface DeviceStates {
+    camera: number;
+    microphone: number;
 }
 export interface UsabilityDedection {
     webRtc: boolean;
@@ -360,8 +369,19 @@ export interface SignalInfo {
     tokenInfo: any;
     isTimeOut: boolean;
 }
+export interface PublishInfo {
+    localVideo: HTMLMediaElement;
+    publisher: ZegoPublish;
+    serverUrls: string[];
+    retryCount: number;
+    streamId: string;
+    playOption: PlayOption;
+    tryCountConnect: number;
+    countConnectTimer: any;
+}
 export interface PlayerInfo {
     player: ZegoPlayWeb;
+    streamId: string;
     remoteVideo: HTMLElement;
     audioOutput: string;
     signal: ZegoSignal;

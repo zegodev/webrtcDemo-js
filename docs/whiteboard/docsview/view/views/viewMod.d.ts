@@ -3,30 +3,36 @@ export declare class ZegoDocsView {
     private serviceHandle;
     private parent;
     private id;
+    private wbId;
     private docDom;
+    private renderDom;
+    private iframeDom;
+    private canvasArray;
     private drawMode;
     private viewInfo;
     private zoomInfo;
     private ppth5Info;
     private fileInfo;
-    private virtualPageCache;
-    private virtualPageAspecCache;
-    private virtualPageDrawCache;
+    private vpageImgCache;
+    private vpageAspecCache;
+    private vpageDrawCache;
     constructor(serviceHandle: ZegoDocsViewServiceBase, parent: string, viewID: string);
-    private getZoomDomId;
-    private getDocsViewDomId;
-    private getIFrameId;
-    private getCanvasId;
     private setParentWidthHeight;
     private setDocsViewDomOverflow;
     private setDocsViewDomTransform;
+    private getCanvasSplit;
+    private getCanvasHeight;
+    private getImgErrorAspec;
+    private clearImgError;
+    private drawImgError;
     private drawDividingLine;
+    private drawPPT;
+    private drawPDF;
     private drawImg;
-    private drawImgFile;
     private createDocsView;
     private hideOtherDocsView;
     private updateDocsViewLayout;
-    private creatCanvas;
+    private createCanvas;
     private drawCanvas;
     private drawHtml;
     private execScrollFileAndDraw;
@@ -34,7 +40,6 @@ export declare class ZegoDocsView {
     private onLoadFileCallback;
     private loadCurrentSheet;
     private init;
-    private getCanvasSplitTop;
     private handleScroll;
     private getScrollTopByPage;
     /**
@@ -45,8 +50,6 @@ export declare class ZegoDocsView {
      */
     private getPageByScrollTop;
     private getDocViewChild;
-    private getRenderView;
-    private getDocViewChildId;
     private postPageChangeMessage;
     private postZoomDragMessage;
     private postStepChangeMessage;
@@ -54,22 +57,32 @@ export declare class ZegoDocsView {
      * postMessage 和 iframe 通信，需要文件服务器支持跨域 Access-Control-Allow-Origin
      * @param action 调用 iframe 的方法
      * @param args 方法的参数
-     *
-     * gotoPage 页码从0开始
      */
     private postMessage2iframe;
     private handleWhiteboardEvent;
     private tryInitPageStep;
     private handleIframeMessage;
     private handleDragEvent;
+    private dragPDF;
+    private dragPPT;
     private getAllVirtualInPageRange;
     private startGetImageByVirtualPageList;
     private sortVirtualPageListRule;
     private getImageByVirtualPageList;
+    private checkActiveIframe;
     private getFile;
-    private setDragStyle;
-    private nextPage;
+    private execGotoPage;
+    private execMultiDocsGotoPage;
+    private syncWhiteboardPPTH5Queue;
+    private execSyncPPTH5Queue;
+    private execMultiDocsQueue;
+    private execQueueTimeout;
+    private gotoPage;
     private setSheetName;
+    private checkParamsPage;
+    private clearNeighboringCanvas;
+    private clearCanvasIfNeed;
+    private resetAllCanvas;
     /**
      * 加载文件
      */
@@ -109,6 +122,14 @@ export declare class ZegoDocsView {
      */
     getPageCount(): number;
     /**
+     * 获取 PPT 备注
+     */
+    getPPTNotes(page: number): string;
+    /**
+     * 获取缩略图
+     */
+    getThumbnailUrlList(): Array<string>;
+    /**
      * 获取纵向偏移百分比
      */
     getVerticalPercent(): number;
@@ -119,7 +140,7 @@ export declare class ZegoDocsView {
     /**
      *  跳转到目标页，从1开始
      */
-    flipPage(page: number, step?: number, notify?: boolean): void;
+    flipPage(page: number, step?: number): void;
     /**
      * 动画上一步，仅针对动态PPT
      */
@@ -135,8 +156,11 @@ export declare class ZegoDocsView {
     /**
      *  缩放
      */
-    setScaleFactor(zoom: number, x: number, y: number): void;
+    setScaleFactor(scaleFactor: number, scaleOffsetX?: number, scaleOffsetY?: number): void;
     getScaleFactor(): {
+        scaleFactor: number;
+        scaleOffsetX: number;
+        scaleOffsetY: number;
         zoom: number;
         x: number;
         y: number;

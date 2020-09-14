@@ -1,13 +1,17 @@
+export declare const calStandard: {
+    sizeWidth: number;
+    placeWidth: number;
+    minFontSize: number;
+    maxFontSize: number;
+    minLineWidth: number;
+    maxLineWidth: number;
+};
 export declare enum ScrollMode {
     Page = 0,
     Scroll = 1
 }
-export declare enum RenderMode {
-    Horizontal = 1,
-    Vertical = 2,
-    Center = 3
-}
 export declare enum Direction {
+    Center = 0,
     Horizontal = 1,
     Vertical = 2
 }
@@ -32,8 +36,34 @@ export interface View {
     name: string;
     aspectWidth: number;
     aspectHeight: number;
-    pageCount?: number;
+    pageCount: number;
     fileInfo?: FileInfo;
+}
+export interface ViewInfo {
+    isScroll: boolean;
+    isOriginScroll: boolean;
+    ticking: boolean;
+    direction: Direction;
+    viewWidth: number;
+    viewHeight: number;
+    viewportWidth: number;
+    viewportHeight: number;
+    offsetLeft: number;
+    offsetTop: number;
+    scrollTop: number;
+    scrollLeft: number;
+    scrollX: number;
+    scrollY: number;
+    page: number;
+    pageCount: number;
+    offsetPageX: number;
+    offsetPageY: number;
+    zoom: number;
+    zoomX: number;
+    zoomY: number;
+    zoomTX: number;
+    zoomTY: number;
+    draging: boolean;
 }
 export declare enum ViewTool {
     Drag = 0,
@@ -72,6 +102,7 @@ export interface GraphicsData {
     type: ViewTool;
     size: number;
     color: string;
+    attributes: string;
 }
 export interface ProtoGraphic extends GraphicsData {
     selected?: boolean;
@@ -80,6 +111,10 @@ export interface ProtoGraphic extends GraphicsData {
     fontSize?: number;
     bgColor?: string;
     oldData?: string;
+}
+export interface AttributesData {
+    bold: boolean;
+    italic: boolean;
 }
 export interface LineData {
     x1: number;
@@ -117,7 +152,8 @@ export declare enum DrawState {
     Down = 2,
     Move = 3,
     DownMove = 4,
-    Up = 5,
-    Leave = 6,
-    DownLeave = 7
+    DownMoveUp = 5,
+    DownNoMoveUp = 6,
+    Leave = 7,
+    DownLeave = 8
 }

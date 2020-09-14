@@ -1,1 +1,1 @@
-export declare const Logger: Console;
+export * from '../../docsview/view/Logger';

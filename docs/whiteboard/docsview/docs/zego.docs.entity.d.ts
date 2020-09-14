@@ -149,6 +149,7 @@ export interface LoadResult {
     notes?: string[];
     fileSize: number;
     fileHash: string;
+    thumbnails?: string[];
 }
 export interface ProgressCvtParams {
     file: File | string;

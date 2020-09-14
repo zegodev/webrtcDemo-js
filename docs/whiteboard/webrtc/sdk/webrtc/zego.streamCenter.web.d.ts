@@ -1,9 +1,10 @@
 import { ZegoDataReport } from '../common/zego.datareport';
 import { ZegoPreview } from './zego.preview';
-import { MediaStreamConstraints, PlayOption, SignalInfo, ChargeInfos } from '../common/zego.entity';
+import { MediaStreamConstraints, PlayOption, SignalInfo, ChargeInfos, DeviceStates } from '../common/zego.entity';
 import { ZegoStreamCenter } from '../common/ZegoStreamCenter';
 import { LoggerWeb } from './zego.logger.webrtc';
 import { StateCenter } from '../common/clientBase/stateCenter';
+import { ZegoAudioContext } from '../../types';
 export declare class ZegoStreamCenterWeb extends ZegoStreamCenter {
     logger: LoggerWeb;
     dataReport: ZegoDataReport;
@@ -21,11 +22,18 @@ export declare class ZegoStreamCenterWeb extends ZegoStreamCenter {
     signalList: {
         [index: string]: SignalInfo;
     };
+    videoDeviceName: string;
+    audioDeviceName: string;
+    deviceStates: DeviceStates;
     appid: number;
     userid: string;
     token: string;
     server: string;
-    constructor(log: LoggerWeb, stateCenter: StateCenter);
+    soundLevelDelegate: boolean;
+    soundLevelInterval: number;
+    soundLevelTimer: any;
+    ac: ZegoAudioContext;
+    constructor(log: LoggerWeb, stateCenter: StateCenter, ac: ZegoAudioContext);
     onSignalDisconnected(server: any): void;
     setQualityMonitorCycle(timeInMs: number): void;
     setSessionInfo(appid: number, userid: string, token: string, testEnvironment: boolean): void;
@@ -37,10 +45,12 @@ export declare class ZegoStreamCenterWeb extends ZegoStreamCenter {
     switchDevice(type: 'audio' | 'video', localVideo: HTMLMediaElement, deviceId: string, success: Function, error: Function): void;
     enableMicrophone(localVideo: HTMLElement, enable: boolean): boolean;
     enableCamera(localVideo: HTMLElement, enable: boolean): boolean;
+    recordDevices(localVideo: any): void;
     startPreview(localVideo: HTMLElement, mediaStreamConstraints: MediaStreamConstraints, success: Function, error: Function): boolean;
     stopPreview(localVideo: HTMLElement): boolean;
     setPublishStateStart(streamid: any, localVideo: any, playOption: PlayOption): boolean;
-    getTotalStreamId(streamid: any): any;
+    getTotalStreamId(streamid: string): string;
+    getBackStreamId(streamid: any): any;
     startPublishingStream(streamid: string, serverUrls: string[], preferPublishSourceType?: number): boolean;
     updateWaitingList(signalInfo: SignalInfo, isPublish: boolean, streamId: string, success: Function, error: Function): void;
     publishStream(streamid: any): void;
@@ -63,20 +73,46 @@ export declare class ZegoStreamCenterWeb extends ZegoStreamCenter {
     private removeStreamFromSignal;
     private stopSignalHeartbeat;
     private stopChargeInfosUpload;
+    private getPublisher;
     stopPlayingStream(streamid: any): void;
     reset(): void;
     checkMessageTimeout: () => void;
     getAllInUseUrl: () => any[];
     onDisconnectHandle: (server: any) => void;
     startSignalHeartbeat(): void;
+    checkSignalHeartbeat(): void;
     startChargeInfosUpload(): void;
     checkChargeInfos(): void;
-    checkSignalHeartbeat(): void;
+    startSoundLevel(): void;
+    checkSoundLevel(): void;
+    setSoundLevelDelegate(bool: boolean, timeInMs?: number): void;
+    stopSoundLevel(): void;
     checkPreview(localVideo: HTMLElement): ZegoPreview;
     removePreview(preview: ZegoPreview): void;
+    onDeviceError(msg: {
+        deviceName: string;
+        deviceType: string;
+        errorCode: number;
+    }): void;
+    OnAudioDeviceStateChanged(msg: {
+        deviceType: string;
+        deviceInfo: any;
+        state: string;
+    }): void;
+    OnVideoDeviceStateChanged(msg: {
+        deviceInfo: any;
+        state: string;
+    }): void;
     onPlayerStreamUrlUpdate(streamid: string, url: string, type: string): void;
     onVideoSizeChanged(streamId: string, videoWidth: number, videoHeight: number): void;
     onRemoteCameraStatusUpdate(streamID: string, status: number): void;
     onRemoteMicStatusUpdate(streamID: string, status: number): void;
+    onSoundLevelUpdate(soundLevelList: Array<{
+        streamID: string;
+        soundLevel: number;
+    }>): void;
     setPublishStreamConstraints(streamID: string, constraints: MediaStreamConstraints, success: Function, error: Function): void;
+    setVideoBitRate(sender: any, minBitRate: number, maxBitRate: number): boolean;
+    startMixingAudio(streamID: string, mediaList: Array<HTMLMediaElement>): boolean;
+    stopMixingAudio(streamID: string, audio?: Array<HTMLMediaElement>): boolean;
 }

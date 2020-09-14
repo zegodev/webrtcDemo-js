@@ -6,6 +6,7 @@ export declare class audioMixUtil {
     localStream: MediaStream;
     peerConnection: RTCPeerConnection | any;
     audioBuffer: AudioBuffer;
+    audioBufferList: Array<AudioBuffer>;
     loop: boolean;
     replace: boolean;
     buffSource: AudioBufferSourceNode;
@@ -16,15 +17,18 @@ export declare class audioMixUtil {
     pauseTimes: number;
     resumeOffset: number;
     isMixAudio: boolean;
+    isMixingBuffer: boolean;
     private streamSource;
     private gainNode;
     private mixAudio;
     private destination;
     private micTrack;
-    originTrack: MediaStreamTrack;
-    constructor(log: LoggerWeb);
+    constructor(log: LoggerWeb, ac: ZegoAudioContext);
     preloadEffect(effectUrl: string, callBack: Function): void;
     playEffect(playTime?: number, loop?: boolean, replace?: boolean, start?: Function, end?: Function): void;
+    mixingBuffer(ab: ArrayBuffer, callBack?: Function): void;
+    stopMingBuffer(): boolean;
+    playRealTimeEffect(ab: AudioBuffer): void;
     pauseEffect(): void;
     resumeEffect(): void;
     mixEffect(audioBuffer: AudioBuffer, callBack: Function): void;

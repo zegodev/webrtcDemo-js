@@ -4,33 +4,11 @@ export interface ReqHeader {
     sdk_version: number;
     id_name: string;
 }
-export declare enum Direction {
-    Center = 0,
-    Horizontal = 1,
-    Vertical = 2
-}
-export interface View {
-    roomID: string;
-    whiteboardID?: string;
-    name: string;
-    aspectWidth: number;
-    aspectHeight: number;
-    pageCount?: number;
-    fileInfo?: FileInfo;
-}
 export interface CustomListener {
     error: (errorData: ErrorData) => void;
     viewAdd: (whiteboardView: WhiteboardView) => void;
     viewRemoved: (whiteboardID: string) => void;
     viewScroll: (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => void;
-}
-export interface CalStandard {
-    placeWidth: number;
-    sizeWidth: number;
-    minFontSize: number;
-    maxFontSize: number;
-    minLineWidth: number;
-    maxLineWidth: number;
 }
 export interface ErrorData {
     code: number;
@@ -138,6 +116,8 @@ export interface PushProtoDraw {
     size: number;
     /** 图元颜色，rgba 值用 32 位数字表示 */
     color: number;
+    /** 扩展属性 */
+    attributes: string;
 }
 /** 创建新模块(/eduv1/create_mod) */
 export interface ProtoCreateMod {
@@ -386,6 +366,8 @@ export interface ProtoDraw {
     size: number;
     /** 图元颜色，rgba 值用 32 位数字表示 */
     color: number;
+    /** 扩展属性 */
+    attributes: string;
 }
 /**  清除图元(/eduv1/clear_graphics) */
 export interface ProtoClearGraphics {

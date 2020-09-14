@@ -1,4 +1,4 @@
-import { Config, MediaStreamConstraints } from '../common/zego.entity';
+import { Config, MediaStreamConstraints, ERRO } from '../common/zego.entity';
 import { Logger } from '../common/zego.logger';
 export declare class ClientUtil {
     static checkConfigParam(option: Config, logger: Logger): boolean;
@@ -16,6 +16,7 @@ export declare class ClientUtil {
     static actionSuccessCallback(fName: any, callbackList: {
         [index: string]: Function;
     }): Function;
+    static getDevices(deviceInfoCallback: Function, error: (err: ERRO) => void): void;
     /**
      错误管理
      */

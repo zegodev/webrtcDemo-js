@@ -1,5 +1,5 @@
-import { View, ErrorData, CustomListener } from '../entities/entity';
-import { ProtoGraphic, FileInfo } from '../entities/viewEntity';
+import { ErrorData, CustomListener } from '../entities/entity';
+import { View, ProtoGraphic, FileInfo } from '../entities/viewEntity';
 import { WhiteboardError } from '../entities/error';
 export declare abstract class WhiteboardServiceBase {
     platform: string;
@@ -25,7 +25,10 @@ export declare abstract class WhiteboardServiceBase {
     abstract getAspectRatio(whiteboardID: string): string;
     abstract setSize(whiteboardID: string, viewWidth: number, viewHeight: number): boolean;
     abstract setViewportSize(whiteboardID: string, viewportWidth: number, viewportHeight: number): void;
-    abstract undo(whiteboardID: string, success: (graphicList: ProtoGraphic[]) => void, error: (graphicList: ProtoGraphic[]) => void): void;
+    abstract undo(whiteboardID: string, success: <T = {
+        graphicList: ProtoGraphic[];
+        cmdSeq: number;
+    }>(data: T) => T, error: (graphicList: ProtoGraphic[]) => void): void;
     abstract redo(whiteboardID: string, success: (graphicList: ProtoGraphic[]) => void, error: (graphicList: ProtoGraphic[]) => void): void;
     abstract scroll(whiteboardID: string, horizontalPercent: number, verticalPercent: number, pptStep: number, success?: (whiteboardID: string) => void, error?: (whiteboardID: string, horizontalPercent: number, verticalPercent: number) => void): void;
     abstract loadCurrentGraphics(whiteboardID: string, horizontalPercent: number, verticalPercent: number): void;
