@@ -2,7 +2,7 @@
 
 ### 1、接口定义
 
-#### 1.1.1 获取SDK版本号
+#### 1.1.1 获取 SDK 版本号
 
 ```typescript
 whiteboardManager.getVersion(): string
@@ -26,23 +26,23 @@ whiteboardManager.createView(options: {
 }): Promise<WhiteboardView>
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| roomID                 | roomId       | 是                          |
-| name                 | 白板名称       | 是                          |
-| aspectWidth                 | 等比宽       | 是                          |
-| aspectHeight                 | 等比高       | 是                          |
-| pageCount                 | 白板页数       | 是                          |
-| fileInfo                 | 关联文件信息       | 否                          |
+| 字段         | 含义         | 是否必填 |
+| ------------ | ------------ | -------- |
+| roomID       | roomId       | 是       |
+| name         | 白板名称     | 是       |
+| aspectWidth  | 等比宽       | 是       |
+| aspectHeight | 等比高       | 是       |
+| pageCount    | 白板页数     | 是       |
+| fileInfo     | 关联文件信息 | 否       |
 
-fileInfo参数解释：
+fileInfo 参数解释：
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| fileID                 | 文件转换完成唯一ID       | 是                          |
-| fileName                 | 文件名称       | 是                          |
-| fileType                 | 文件类型       | 是                          |
-| authKey                 | 预留字段       | 否                          |
+| 字段     | 含义                | 是否必填 |
+| -------- | ------------------- | -------- |
+| fileID   | 文件转换完成唯一 ID | 是       |
+| fileName | 文件名称            | 是       |
+| fileType | 文件类型            | 是       |
+| authKey  | 预留字段            | 否       |
 
 #### 1.1.3 销毁白板
 
@@ -50,9 +50,9 @@ fileInfo参数解释：
 whiteboardManager.destroyView(whiteboardView: WhiteboardView): Promise<void>
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| whiteboardView                 | 白板view实例       | 是                          |
+| 字段           | 含义           | 是否必填 |
+| -------------- | -------------- | -------- |
+| whiteboardView | 白板 view 实例 | 是       |
 
 #### 1.1.4 添加白板到视图（渲染）
 
@@ -60,10 +60,10 @@ whiteboardManager.destroyView(whiteboardView: WhiteboardView): Promise<void>
 whiteboardManager.attachView(whiteboardView: WhiteboardView, parent: string): Promise<void>
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| whiteboardView                 | 白板view实例       | 是                          |
-| parent                 | 需要挂载的父容器id       | 是                          |
+| 字段           | 含义                | 是否必填 |
+| -------------- | ------------------- | -------- |
+| whiteboardView | 白板 view 实例      | 是       |
+| parent         | 需要挂载的父容器 id | 是       |
 
 #### 1.1.5 获取白板列表
 
@@ -71,13 +71,13 @@ whiteboardManager.attachView(whiteboardView: WhiteboardView, parent: string): Pr
 whiteboardManager.getViewList(): Promise<WhiteboardView[]>
 ```
 
-#### 1.1.6 清空白板view
+#### 1.1.6 清空白板 view
 
 ```typescript
 whiteboardView.clear(): boolean
 ```
 
-#### 1.1.7 获取该白板view关联的文件信息
+#### 1.1.7 获取该白板 view 关联的文件信息
 
 ```typescript
 whiteboardView.getFileInfo(): {fileID: string; fileName: string; authKey: string; fileType: number;} | null
@@ -95,7 +95,7 @@ whiteboardView.enable(enable: boolean): boolean
 whiteboardView.IsEnable(): boolean
 ```
 
-#### 1.1.10 设置白板背景色（color支持16进制、rgba）
+#### 1.1.10 设置白板背景色（color 支持 16 进制、rgba）
 
 ```typescript
 whiteboardView.setBackgroundColor(color: string): boolean
@@ -119,9 +119,9 @@ whiteboardView.getAspectRatio(): string
 whiteboardView.setToolType(type: ViewTool): boolean
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| type                 | 工具类型1:path 涂鸦，2:text 文本框，4:line 线段，8:rect 矩形，16:ellipse 椭圆，32: selector 选择，64: eraser 橡皮擦       | 是                          |
+| 字段 | 含义                                                                                                                 | 是否必填 |
+| ---- | -------------------------------------------------------------------------------------------------------------------- | -------- |
+| type | 工具类型 1:path 涂鸦，2:text 文本框，4:line 线段，8:rect 矩形，16:ellipse 椭圆，32: selector 选择，64: eraser 橡皮擦 | 是       |
 
 #### 1.1.14 获取正在使用的白板工具
 
@@ -147,9 +147,9 @@ whiteboardView.getBrushColor(): string
 whiteboardView.setBrushSize(thin: number): boolean
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| thin                 | 画笔粗细，取值1~100       | 是 |
+| 字段 | 含义                 | 是否必填 |
+| ---- | -------------------- | -------- |
+| thin | 画笔粗细，取值 1~100 | 是       |
 
 #### 1.1.18 获取画笔粗细
 
@@ -163,9 +163,9 @@ whiteboardView.getBrushSize(): number
 whiteboardView.setTextSize(thin: number): boolean
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| thin                 | 文本大小，取值12~100       | 是 |
+| 字段 | 含义                  | 是否必填 |
+| ---- | --------------------- | -------- |
+| thin | 文本大小，取值 12~100 | 是       |
 
 #### 1.1.20 获取文本大小
 
@@ -179,10 +179,10 @@ whiteboardView.getTextSize(): number
 whiteboardView.scroll(horizontalPercent: number, verticalPercent: number): boolean
 ```
 
-| 字段                                  | 含义   | 是否必填                   |
-| ----------------------------------------- | ------- | ----------------------------- |
-| horizontalPercent                 | 水平滚动百分比       | 否 |
-| verticalPercent                 | 垂直滚动百分比       | 否 |
+| 字段              | 含义           | 是否必填 |
+| ----------------- | -------------- | -------- |
+| horizontalPercent | 水平滚动百分比 | 否       |
+| verticalPercent   | 垂直滚动百分比 | 否       |
 
 #### 1.1.22 获取滚动百分比
 
@@ -202,13 +202,13 @@ whiteboardView.undo(): void
 whiteboardView.redo(): void
 ```
 
-#### 1.1.25 获取白板ID
+#### 1.1.25 获取白板 ID
 
 ```typescript
 whiteboardView.getID(): string
 ```
 
-#### 1.1.26 获取关联roomID
+#### 1.1.26 获取关联 roomID
 
 ```typescript
 whiteboardView.getRoomID(): string
@@ -220,7 +220,7 @@ whiteboardView.getRoomID(): string
 whiteboardView.getPageCount(): number
 ```
 
-#### 1.1.28 获取白板当前页码，从1开始
+#### 1.1.28 获取白板当前页码，从 1 开始
 
 ```typescript
 whiteboardView.getPage(): number
@@ -231,43 +231,52 @@ whiteboardView.getPage(): number
 #### 2.1.1 错误回调
 
 ```typescript
-whiteboardManager.on('error', (errorData: ErrorData) => {})
+whiteboardManager.on("error", (errorData: ErrorData) => {});
 ```
 
-| 字段                                  | 含义   |
-| ----------------------------------------- | ------- |
-| code                 | 错误码       |
-| msg                 | 错误描述       |
+| 字段 | 含义     |
+| ---- | -------- |
+| code | 错误码   |
+| msg  | 错误描述 |
 
-#### 2.1.2 创建view
+#### 2.1.2 创建 view
 
 ```typescript
-whiteboardManager.on('viewAdd', (whiteboardView: WhiteboardView) => {})
+whiteboardManager.on("viewAdd", (whiteboardView: WhiteboardView) => {});
 ```
 
-| 字段                                  | 含义   |
-| ----------------------------------------- | ------- |
-| whiteboardView                 | 白板view实例       |
+| 字段           | 含义           |
+| -------------- | -------------- |
+| whiteboardView | 白板 view 实例 |
 
-#### 2.1.3 销毁view
+#### 2.1.3 销毁 view
 
 ```typescript
-whiteboardManager.on('viewRemoved', (id: string) => {})
+whiteboardManager.on("viewRemoved", (id: string) => {});
 ```
 
-| 字段                                  | 含义   |
-| ----------------------------------------- | ------- |
-| id                 | 白板ID       |
+| 字段 | 含义    |
+| ---- | ------- |
+| id   | 白板 ID |
 
-#### 2.1.4 滚动view
+#### 2.1.4 滚动 view
 
 ```typescript
-whiteboardManager.on('viewScroll', (res: {id: string; horizontalPercent: number; verticalPercent: number; page: number; }) => {})
+whiteboardManager.on(
+  "viewScroll",
+  (res: {
+    id: string;
+    horizontalPercent: number;
+    verticalPercent: number;
+    page: number;
+  }) => {}
+);
 ```
 
-| 字段                                  | 含义   |
-| ----------------------------------------- | ------- |
-| id                 | 白板ID       |
-| horizontalPercent                 | 水平滚动百分比       |
-| verticalPercent                 | 垂直滚动百分比       |
-| page                 | 翻页模式时当前页码       |
+| 字段              | 含义                  |
+| ----------------- | --------------------- |
+| id                | 白板 ID               |
+| horizontalPercent | 水平滚动百分比        |
+| verticalPercent   | 垂直滚动百分比        |
+| page              | 翻页模式时当前页码    |
+| step              | 动态 PPT 当前动画步数 |
