@@ -3,7 +3,7 @@ import { VideoInfo, PlayOption, audioMixConfig } from '../common/zego.entity';
 import { ZegoSignal } from '../common/zego.signal';
 import { Logger } from '../common/zego.logger';
 import { audioMixUtil } from '../util/audioMixUtil';
-import { ZegoHTMLAudioElement, ZegoVideoDecodeType } from '../../types/index';
+import { ZegoVideoDecodeType, ZegoAudioContext } from '../../types/index';
 import { pitchUtil } from '../util/pitchUtil';
 import { ZegoStreamCenterWeb } from './zego.streamCenter.web';
 export declare class ZegoPublish {
@@ -28,17 +28,27 @@ export declare class ZegoPublish {
     qualityUploadInterval: number;
     qualityUploadLastTime: number;
     qualitySeq: number;
+    RTCRtpSender: RTCRtpSender;
     maxRetryCount: number;
     currentRetryCount: number;
     retryState: number;
     waitingServerTimerInterval: number;
     waitingServerTimer: any;
     videoInfo: VideoInfo;
+    localVideo: HTMLMediaElement;
+    streamGoogInfo: any;
     mediaStreamConfig: any;
     offerSeq: number;
     streamId: string;
     localStream: MediaStream;
     audioMixing: audioMixUtil;
+    audioMixList: Array<{
+        audioMix: audioMixUtil;
+        media: HTMLMediaElement;
+    }>;
+    arrayBufferMap: {
+        [index: string]: audioMixUtil;
+    };
     sessionSeq: number;
     peerConnection: RTCPeerConnection | any;
     qualityCount: number;
@@ -59,6 +69,10 @@ export declare class ZegoPublish {
     waittingConnectedTimer: any;
     waittingConnectedInerval: number;
     tryingNexitSignal: boolean;
+    soundLevel: number;
+    ac: ZegoAudioContext;
+    script: any;
+    mic: any;
     constructor(log: Logger, signal: ZegoSignal, dataReport: ZegoDataReport, qualityTimeInterval: number, streamCenter: ZegoStreamCenterWeb);
     private publishStateUpdateError;
     private resetPublish;
@@ -87,6 +101,8 @@ export declare class ZegoPublish {
     tryStartPublish(streamId: any): void;
     checkPublishConnectionFailedState(connectionState: any): void;
     setPublishQualityTimer(): void;
+    peerConnectionGetStats(supportStatsCallback: boolean): void;
+    getOldGoogStats(results: any): void;
     getPublishStats(results: any): void;
     uploadPublishQuality(publishData: any): void;
     stopPublish(): void;
@@ -96,10 +112,14 @@ export declare class ZegoPublish {
     playEffect(audioMixConfig: audioMixConfig, audioBuffer: AudioBuffer, start?: Function, end?: Function): void;
     pauseEffect(): void;
     resumeEffect(): void;
-    startMixingAudio(audio: ZegoHTMLAudioElement, replace: boolean): boolean;
-    stopMixingAudio(): boolean;
+    stopMixingBuffer(): boolean;
+    mixingBuffer(arrayBuffer: ArrayBuffer, callBack?: Function): void;
     voiceChange(mult: number): boolean;
     voiceBack(): void;
     publishSuccess(): void;
     tryNextSignal(error: any): void;
+    startSoundLevel(): void;
+    stopSoundLevel(): void;
+    startMixingAudio(mediaList: Array<HTMLMediaElement>): boolean;
+    stopMixingAudio(media?: Array<HTMLMediaElement>): boolean;
 }

@@ -45,6 +45,23 @@ export declare class ZegoStreamCenterWechat extends ZegoStreamCenter {
     onVideoSizeChanged(streamid: any): void;
     onRemoteCameraStatusUpdate(streamID: string, status: number): void;
     onRemoteMicStatusUpdate(streamID: string, status: number): void;
+    onSoundLevelUpdate(soundLevelList: Array<{
+        streamID: string;
+        soundLevel: number;
+    }>): void;
+    onDeviceError(msg: {
+        deviceName: string;
+        errorCode: number;
+    }): void;
+    OnAudioDeviceStateChanged(msg: {
+        deviceType: string;
+        deviceInfo: any;
+        state: string;
+    }): void;
+    OnVideoDeviceStateChanged(msg: {
+        deviceInfo: any;
+        state: string;
+    }): void;
     getReconnectLimit(sourceType: number): number;
     onPlayerStart(streamid: any, playerType: any): void;
     onPlayerStop(streamid: any, playerType: any, error: any): void;

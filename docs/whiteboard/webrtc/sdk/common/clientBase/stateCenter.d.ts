@@ -39,6 +39,9 @@ export declare class StateCenter {
         anchor_id_name: string;
         anchor_nick_name: string;
     };
+    deviceInfos: any;
+    deviceChangeTimer: any;
+    deviceStateOut: boolean;
     sendCommandMap: {};
     sendCommandList: LinkedList;
     sendDataMap: {};
@@ -59,7 +62,10 @@ export declare class StateCenter {
     datiTimeWindow: number;
     bigimTimeWindow: number;
     bigImMessageList: any[];
-    screenShotStream: MediaStream;
+    screenShotStreamList: {
+        stream: MediaStream;
+        type: number;
+    }[];
     tryLoginCount: number;
     tryLoginTimer: any;
     tryHeartbeatCount: number;

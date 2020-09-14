@@ -60,6 +60,24 @@ export declare abstract class BaseCenter extends Common {
     onPlayQualityUpdate(streamId: string, streamQuality: StreamQuality): void;
     onPublishStateUpdate(type: number, streamid: string, error: ERRO | number): void;
     onPublishQualityUpdate(streamId: string, streamQuality: StreamQuality): void;
+    onSoundLevelUpdate(soundLevelList: Array<{
+        streamID: string;
+        soundLevel: number;
+    }>): void;
+    onDeviceError(msg: {
+        deviceName: string;
+        deviceType: string;
+        errorCode: number;
+    }): void;
+    OnAudioDeviceStateChanged(msg: {
+        deviceType: string;
+        deviceInfo: any;
+        state: string;
+    }): void;
+    OnVideoDeviceStateChanged(msg: {
+        deviceInfo: any;
+        state: string;
+    }): void;
     /********
      *
      *

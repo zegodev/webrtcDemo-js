@@ -1,9 +1,6 @@
-import './index.css';
-import './polyfill.js';
 import { View } from './entities/viewEntity';
 import { WhiteboardServiceBase } from './services/base';
 import { WhiteboardView } from './views/base';
-import { WhiteboardViewMod } from './views/viewMod';
 import { CustomListener } from './entities/entity';
 import { WhiteboardError } from './entities/error';
 export declare class BaseManager {
@@ -19,16 +16,17 @@ export declare class BaseManager {
     private addModPushCallback;
     private removedModPushCallback;
     private scrollPushCallback;
-    private setFileInfo;
     private clearGraphicsPushCallback;
     private drawGraphicsPushCallback;
+    private setFileInfo;
     private deleteMapInstance;
     private getMapInstance;
     private setMapInstance;
     private activitedView;
     private checkAttachingParent;
     private checkCreatingView;
-    getActivitedView(): WhiteboardViewMod | null | undefined;
+    private getActivitedView;
+    clear(userID?: string): void;
     getViewList(): Promise<WhiteboardView[]>;
     createView(view: View): Promise<WhiteboardView>;
     destroyView(whiteboardView: WhiteboardView | null): Promise<void>;

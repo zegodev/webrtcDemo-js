@@ -27,4 +27,8 @@ export declare abstract class WhiteboardView {
     abstract getBrushSize(): number;
     abstract setTextSize(thin: number): boolean;
     abstract getTextSize(): number;
+    abstract setFontItalic(italic: boolean): boolean;
+    abstract isFontItalic(): boolean;
+    abstract setFontBold(bold: boolean): boolean;
+    abstract isFontBold(): boolean;
 }

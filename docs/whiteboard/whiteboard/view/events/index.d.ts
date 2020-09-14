@@ -1,11 +1,10 @@
+import { Platform } from '../entities/viewEntity';
 export declare class WhiteboardViewEvent {
-    platform: number;
+    platform: Platform;
     downEventName: string;
     upEventName: string;
     moveEventName: string;
     leaveEventName: string;
     eventList: {};
     constructor();
-    bindEvent(name: string, handle: Function): void;
-    removeEvent(name: string, handle: Function): void;
 }

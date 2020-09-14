@@ -41,6 +41,7 @@ export declare class ZegoPlayWeb {
     maxRetryCount: number;
     currentRetryCount: number;
     retryState: number;
+    streamGoogInfo: any;
     remoteVideo: any;
     remoteStream: MediaStream;
     streamId: string;
@@ -67,6 +68,10 @@ export declare class ZegoPlayWeb {
     streamStatus: any;
     gotStreamStatus: boolean;
     tryingNexitSignal: boolean;
+    ac: AudioContext | null;
+    soundLevel: number;
+    mic: any;
+    script: any;
     constructor(log: Logger, signal: ZegoSignal, dataReport: ZegoDataReport, qualityTimeInterval: number, streamCenter: ZegoStreamCenterWeb);
     setAudioDestination(audioOutput: string): boolean;
     startPlay(streamId: string, remoteVideo: HTMLElement, audioOutput?: string, playOption?: PlayOption): void;
@@ -89,6 +94,8 @@ export declare class ZegoPlayWeb {
     private clearPlayQualityTimer;
     private resetPlay;
     private setPlayQualityTimer;
+    peerConnectionGetStats(supportStatsCallback: boolean): void;
+    getOldGoogStats(results: any): void;
     private getPlayStats;
     private getNetQuality;
     private uploadPlayQuality;
@@ -107,4 +114,6 @@ export declare class ZegoPlayWeb {
     stopPlay(): void;
     onDisconnect(): void;
     tryNextSignal(error: any): void;
+    startSoundLevel(): void;
+    stopSoundLevel(): void;
 }
