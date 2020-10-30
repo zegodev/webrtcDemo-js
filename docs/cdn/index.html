@@ -1,100 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="../assets/bootstrap.min.css">
+        <style>
+            .bg-f2 {
+                background-color: #f8f9fa;
+            }
+            video {
+                width: 320px;
+                height: auto;
+            }
+            .videoRow {
+                margin-top: 30px;
+            }
+            #previewLabel {
+                display: block;
+                position: absolute;
+            }
+        </style>
+        <title>CDN</title>
+    </head>
 
-  <!--Bootstrap CSS-->
-  <link rel="stylesheet" href="../assets/bootstrap.min.css">
-  <style>
-    .bg-f2{
-      background-color: #f8f9fa;
-    }
-    video{
-            width: 320px;
-            height: auto;
-        }
-        .videoRow{
-            margin-top: 30px;
-        }
-        #previewLabel{
-            display: block;
-            position: absolute;
-        }
-    </style>
-  <title>cdn拉流</title>
-</head>
+    <body class="bg-f2">
+        <div class="container">
+            <div class="my-3 p-3 bg-white rounded box-shadow small">
+                <h6 class="border-bottom border-gray pb-2 mb-0">CDN</h6>
 
-<body class="bg-f2">
+                <div class="row" style="margin-top:1%">
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="audioList"
+                                    ><strong class="text-gray-dark audioDevices">音频设备</strong></label
+                                >
+                            </div>
+                            <select class="custom-select" id="audioList" style="width: 50%"> </select>
+                        </div>
+                    </div>
 
-  <div class="container">
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="videoList"
+                                    ><strong class="text-gray-dark videoDevices">视频设备</strong></label
+                                >
+                            </div>
+                            <select class="custom-select" id="videoList" style="width: 60%"> </select>
+                        </div>
+                    </div>
 
-    <div class="my-3 p-3 bg-white rounded box-shadow small">
+                    <div class="col-sm">
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="roomId"
+                                    ><strong class="text-gray-dark roomid">房间号</strong></label
+                                >
+                            </div>
+                            <input
+                                type="email"
+                                class="form-control d-inline"
+                                id="roomId"
+                                style="width: 60%"
+                                aria-describedby="emailHelp"
+                                placeholder="please enter room ID"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                  <!-- <div class="col-sm">
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="secret"
+                                ><strong class="text-gray-dark secret">secret</strong></label
+                            >
+                        </div>
+                        <input
+                            type="email"
+                            class="form-control d-inline"
+                            id="secret"
+                            style="width: 60%"
+                            aria-describedby="emailHelp"
+                            placeholder="please enter app secret"
+                        />
+                    </div>
+                  </div> -->
+                  <!-- <div class="col-sm">
+                    <div class="input-group input-group-sm mb-3">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="channelCount"><strong class="text-gray-dark channelCount">声道</strong></label>
+                      </div>
+                      <select class="custom-select" id="channelCount" style="width: 50%">
+                        <option value="1" class="channel1">默认</option>
+                        <option value="2" class="channel2">双声道</option>
+                      </select>
+                    </div>
+                  </div> -->
+                </div>
 
-      <h6 class="border-bottom border-gray pb-2 mb-0">CDN拉流</h6>
+                <div class="row">
+                    <div class="col-sm">
+                        <button type="button" id="createRoom" class="btn btn-primary btn-sm enterRoomPush">进入房间（推流）</button>
+                        <button type="button" id="openRoom" class="btn btn-primary btn-sm enterRoomPlay">进入房间（不推流）</button>
+                        <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm leaveRoom">退出</button>
+                        <button type="button" id="playCDN" class="btn btn-secondary btn-sm clickPlay">点击播放</button>
+                        <button type="button" id="cdnAddPush" class="btn btn-primary btn-sm addCdn">增加转推cdn</button>
+                        <button type="button" id="cdnDelPush" class="btn btn-primary btn-sm removeCdn" disabled>删除转推cdn</button>
+                        <button type="button" id="cdnPlay" class="btn btn-primary btn-sm cdnPlay" disabled>播放cdn</button>
+                    </div>
+                </div>
 
-      <div class="row" style="margin-top:1%">
-
-        <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="audioList"><strong class="text-gray-dark">音频设备</strong></label>
+                <div class="row videoRow">
+                    <div class="col-sm">
+                      <label id="previewLabel" class="text-white"></label>
+                      <video id="previewVideo" autoplay muted playsinline></video>
+                    </div>
+                    <div class="col-sm remoteCDNVideo">
+                      <label class="text-white" style="display: block; position: absolute; z-index: 999;">test</label>
+                      <video id="test" autoplay muted preload="auto"
+                      x-webkit-airplay="true"
+                      x5-video-player-type="h5-page"
+                      webkit-playsinline="true"
+                      playsinline></video>
+                    </div>
+                    <div class="col-sm remoteCDNVideo">
+                        <label class="text-white" style="display: block; position: absolute; z-index: 999;">test</label>
+                        <video id="cdn" autoplay muted preload="auto"
+                        x-webkit-airplay="true"
+                        x5-video-player-type="h5-page"
+                        webkit-playsinline="true"
+                        playsinline></video>
+                      </div>
+                  </div>
             </div>
-            <select class="custom-select" id="audioList" style="width: 60%">
-            </select>
-          </div>
         </div>
-
-        <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="videoList"><strong class="text-gray-dark">视频设备</strong></label>
-            </div>
-            <select class="custom-select" id="videoList" style="width: 60%">
-            </select>
-          </div>
-        </div>
-
-        <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
-            </div>
-            <input type="email" class="form-control d-inline" id="roomId" style="width: 60%" aria-describedby="emailHelp"
-              placeholder="请输入房间号">
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-sm">
-          <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间</button>
-          <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间(CDN拉流)</button>
-          <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
-          <button type="button" id="playCDN" class="btn btn-secondary btn-sm">点击播放</button>
-        </div>
-      </div>
-
-      <div class="row videoRow">
-        <div class="col-sm">
-          <label id="previewLabel" class="text-white"></label>
-          <video id="previewVideo" autoplay muted playsinline></video>
-        </div>
-        <div class="col-sm remoteVideo">
-          <label class="text-white" style="display: block; position: absolute; z-index: 999;">test</label>
-          <video id="test" autoplay muted preload="auto"
-          x-webkit-airplay="true"
-          x5-video-player-type="h5-page"
-          webkit-playsinline="true"
-          controls
-          playsinline></video>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-<script src="../assets/vconsole.min.js"></script>
+    </body>
+    <script src="../assets/vconsole.min.js"></script>
 <script>
   // init vConsole
   var vConsole = new VConsole();

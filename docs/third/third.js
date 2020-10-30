@@ -9,7 +9,7 @@ $('#externalCaptureV').click(function (){
 function loginSuccess(streamList, type) {
   var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
   var mediastream
-
+  // zg.setCustomSignalUrl(["wss://webrtc-stg.zego.im:443/ws?a=zegostg"])
   //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
   if (streamList.length >= maxNumber) {
     alert('房间太拥挤，换一个吧！');
@@ -47,19 +47,22 @@ function loginSuccess(streamList, type) {
      return;
   }
 
-  previewVideo.srcObject = mediastream
-  var config = {
-    externalCapture: true,
-    // width: 1280,
-    // height: 720,
-    // frameRate: 20,
-    // bitRate: 1000
+  if (type == 1) {
+    previewVideo.srcObject = mediastream
+    var config = {
+      externalCapture: true,
+      // width: 1280,
+      // height: 720,
+      // frameRate: 20,
+      // bitRate: 1000
+    }
+
+    // config.externalMediaStream = mediastream
+    // config.video = false;
+    // config.audio = false;
+    //开始预览本地视频
+    doPreviewPublish(config);
   }
-  // config.externalMediaStream = mediastream
-  // config.video = false;
-  // config.audio = false;
-  //开始预览本地视频
-  type === 1 && doPreviewPublish(config);
 
 }
 

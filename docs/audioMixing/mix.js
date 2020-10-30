@@ -48,7 +48,9 @@ $(function (){
     //   console.error("当前正在混其它音效,不要想鼓掌了");
     //   return;
     // }
-
+    //混单路音频
+    // zg.startMixingAudio(_config.idName, $('#applaud')[0],false);
+    //混多路音频 1.8.0版本及以上支持
     zg.startMixingAudio(_config.idName, [$('#applaud')[0], $('#station')[0]]);
 
     $('#applaud')[0].play();

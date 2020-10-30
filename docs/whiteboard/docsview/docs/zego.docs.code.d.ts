@@ -1,0 +1,36 @@
+export declare const ErrorCodeData: {
+    4: string;
+    32: string;
+    64: string;
+    128: string;
+    256: string;
+    512: string;
+    30001: string;
+    60002: string;
+    60011: string;
+    60012: string;
+    60013: string;
+    60014: string;
+    60015: string;
+    2000002: string;
+    2010003: string;
+    2030008: string;
+};
+export declare const ErrorCodeMap: {
+    4: number;
+    32: number;
+    64: number;
+    128: number;
+    256: number;
+    512: number;
+    30001: number;
+    60002: number;
+    60011: number;
+    60012: number;
+    60013: number;
+    60014: number;
+    60015: number;
+    2000002: number;
+    2010003: number;
+    2030008: number;
+};

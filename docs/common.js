@@ -24,6 +24,7 @@ var zg,
     useLocalStreamList = [],
     isPublish = true;
 var anchor_userid = '', anchro_username = '';
+var publishType
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
@@ -248,10 +249,15 @@ function doPreviewPublish(config, streamID,video) {
         "videoQuality": quality * 1,
         "horizontal": true,
         "externalCapture": false,
-        "externalMediaStream": null
+        "externalMediaStream": null,
+        "noiseSuppression": $('#ANS').val() === '1',
+        "autoGainControl": $('#AGC').val() === '1',
+        "echoCancellation": $('#AEC').val() === '1',
     };
     previewConfig = $.extend(previewConfig, config);
     console.log('previewConfig', previewConfig);
+    publishType = previewConfig.audio == false ? 'Video' : previewConfig.video == false ? 'Audio' : 'all';
+
     var result = zg.startPreview(video? video: previewVideo, previewConfig, function () {
         console.log('preview success');
         isPreviewed = true;
@@ -272,7 +278,8 @@ function doPreviewPublish(config, streamID,video) {
 //推流
 function publish(streamID, video) {
     var videoCodeType = $('#videoCodeType').val();
-    zg.startPublishingStream(streamID? streamID: _config.idName, video? video: previewVideo, null, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
+    extraInfo = JSON.stringify({playType: publishType});
+    zg.startPublishingStream(streamID? streamID: _config.idName, video? video: previewVideo, extraInfo, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
 
 }
 
@@ -355,6 +362,18 @@ function listen() {
 
         onKickOut: function (error) {
             console.error("onKickOut " + JSON.stringify(error));
+        },
+        onDeviceError:function(msg) {
+            console.log('设备异常')
+            console.log(msg)
+        },
+        OnAudioDeviceStateChanged:function(msg) {
+            console.log('音频设备变更')
+            console.log(msg)
+        },
+        OnVideoDeviceStateChanged:function(msg) {
+            console.log('视频设备变更')
+            console.log(msg)
         },
         onStreamUpdated: function (type, streamList) {
             if (type == 0) {

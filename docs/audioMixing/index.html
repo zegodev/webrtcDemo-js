@@ -98,7 +98,8 @@
 
         <div class="row videoRow">
             <div class="col-sm">
-                <audio src="../assets/applaud.mp3" id="applaud" controls muted loop></audio>
+                <!-- 解决资源跨域 crossOrigin="anonymous“ 资源服务器也必须设置可跨域-->
+                <audio src="https://storage.zego.im/demo/tonight.m4a" id="applaud" controls muted loop crossOrigin="anonymous"></audio>
                 <audio src="../assets/station.mp3" id="station" controls muted loop></audio>
                 <label id="previewLabel" class="text-white"></label>
                 <video id="previewVideo" autoplay muted playsinline controls></video>

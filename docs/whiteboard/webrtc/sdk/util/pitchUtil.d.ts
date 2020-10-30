@@ -1,0 +1,33 @@
+export declare class pitchUtil {
+    context: AudioContext;
+    input: GainNode;
+    output: GainNode;
+    shiftDownBuffer: AudioBuffer;
+    shiftUpBuffer: AudioBuffer;
+    mod1: AudioBufferSourceNode;
+    mod2: AudioBufferSourceNode;
+    mod3: AudioBufferSourceNode;
+    mod4: AudioBufferSourceNode;
+    mod1Gain: GainNode;
+    mod2Gain: GainNode;
+    mod3Gain: GainNode;
+    mod4Gain: GainNode;
+    modGain1: GainNode;
+    modGain2: GainNode;
+    fade1: AudioBufferSourceNode;
+    fade2: AudioBufferSourceNode;
+    fadeBuffer: AudioBuffer;
+    mix1: GainNode;
+    mix2: GainNode;
+    delay1: DelayNode;
+    delay2: DelayNode;
+    delayTime: number;
+    fadeTime: number;
+    startTime: number;
+    previousPitch: number;
+    constructor(context: AudioContext);
+    private createFadeBuffer;
+    private createDelayTimeBuffer;
+    private setDelay;
+    setPitchOffset(mult: any): void;
+}

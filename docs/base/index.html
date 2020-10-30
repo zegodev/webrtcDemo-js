@@ -101,6 +101,46 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
+              <label class="input-group-text" for="AEC"><strong class="text-gray-dark">回声消除</strong></label>
+            </div>
+            <select class="custom-select" id="AEC">
+              <option value="1" class="auto">是</option>
+              <option value="0" class="onlyVideo">否</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="AGC"><strong class="text-gray-dark">自动增益</strong></label>
+            </div>
+            <select class="custom-select" id="AGC">
+              <option value="1" class="auto">是</option>
+              <option value="0" class="onlyVideo">否</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="ANS"><strong class="text-gray-dark">噪声抑制</strong></label>
+            </div>
+            <select class="custom-select" id="ANS">
+              <option value="1" class="auto">是</option>
+              <option value="0" class="onlyVideo">否</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
               <label class="input-group-text" for="cdnUrl"><strong class="text-gray-dark">cdn地址</strong></label>
             </div>
             <input type="email" class="form-control d-inline" id="cdnUrl" aria-describedby="emailHelp"

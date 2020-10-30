@@ -62,20 +62,6 @@
         </div>
       </div>
       <div class="row" style="margin-top: 1%;">
-        <div class="col-sm-4">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="renderTypeList"><strong
-                  class="text-gray-dark">renderType</strong></label>
-            </div>
-            <select class="form-control d-inline" id="renderTypeList" style="width: 50%">
-              <option value="1">Vector 向量模式</option>
-              <option value="2">IMG 图片模式</option>
-              <option value="3">VectorAndIMG 向量和图片模式</option>
-              <option value="6">DynamicPPTH5 动态PPT模式</option>
-            </select>
-          </div>
-        </div>
         <div class="col-sm-1">
           <button type="button" onclick="uploadHandle()" id="upload" class="btn btn-primary btn-sm">上传</button>
         </div>
@@ -163,7 +149,7 @@
     }
     zegoDocs.upload({
       file: myFile,
-      renderType: Number(document.getElementById('renderTypeList').value),
+      renderType: 3,
       onProgress: data => {
         console.log(data);
       }

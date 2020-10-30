@@ -1,0 +1,36 @@
+import { View } from './entities/viewEntity';
+import { WhiteboardServiceBase } from './services/base';
+import { WhiteboardView } from './views/base';
+import { CustomListener } from './entities/entity';
+import { WhiteboardError } from './entities/error';
+export declare class BaseManager {
+    private modIdMapInstance;
+    private fileInfoMap;
+    private serviceHandle;
+    private store;
+    private error;
+    constructor(serviceHandle: WhiteboardServiceBase, error: WhiteboardError);
+    private registerLoadfileListener;
+    private registerPushCallbackHandle;
+    private registerPullCallbackHandle;
+    private addModPushCallback;
+    private removedModPushCallback;
+    private scrollPushCallback;
+    private clearGraphicsPushCallback;
+    private drawGraphicsPushCallback;
+    private setFileInfo;
+    private deleteMapInstance;
+    private getMapInstance;
+    private setMapInstance;
+    private activitedView;
+    private checkAttachingParent;
+    private checkCreatingView;
+    private getActivitedView;
+    clear(userID?: string): void;
+    getViewList(): Promise<WhiteboardView[]>;
+    createView(view: View): Promise<WhiteboardView>;
+    destroyView(whiteboardView: WhiteboardView | null): Promise<void>;
+    attachView(whiteboardView: WhiteboardView, parent: string): Promise<void>;
+    on<k extends keyof CustomListener>(event: k, callBack: CustomListener[k]): boolean;
+    off<k extends keyof CustomListener>(event: k, callBack: CustomListener[k]): boolean;
+}

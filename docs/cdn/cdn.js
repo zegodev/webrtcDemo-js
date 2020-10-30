@@ -1,271 +1,317 @@
-var videoElement = document.getElementById('test');
-var flvPlayer = null
-var ua = navigator.userAgent.toLowerCase();
-var isAndWechat = false;
+let flvPlayer = null;
+let cdnFlvPlayer = null;
+const ua = navigator.userAgent.toLowerCase();
+let isAndWechat = false;
+const videoElement = document.getElementById('test');
+const cdnVideoElement = document.getElementById('cdn');
+let isLogin = false;
+let playType = 'all';
 
+console.warn('ua', ua);
+// @ts-ignore
 if ((ua.indexOf('android') > -1 || ua.indexOf('linux') > -1) && ua.match(/MicroMessenger/i) == 'micromessenger') {
-  console.warn('当前浏览器为微信浏览器');
-  isAndWechat = true;
+    console.warn('当前浏览器为微信浏览器');
+    isAndWechat = true;
 }
 
-//覆盖common.js中的init
-function init() {
+loginSuccess = (streamList, type) => {
+  streamList.forEach(streamInfo => {
+    const streamID = streamInfo.stream_id;
+    const cdnUrl = filterStreamList(streamInfo);
 
-  zg = new ZegoClient();
-
-  _config.appid = 1739272706;
-
-  //内调测试用代码，客户请忽略  start
-  setConfig(zg);
-  //内调测试用代码，客户请忽略  end
-
-  zg.config(_config);
-  enumDevices();
-
-  listen()
-
-  zg.onStreamUpdated = function (type, streamList) {
-    var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4;
-
-    if (type == 0) {
-      //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
-      if (streamList.length >= maxNumber) {
-        alert('房间太拥挤，换一个吧！');
-        leaveRoom();
-        return;
-      }
-    }
-
-    useLocalStreamList = filterStreamList()
-
-    console.log(useLocalStreamList)
-
-    //获取当前浏览器类型
-    var browser = getBrowser();
-    var hasAudio = true
-    var playType
-
-    if (streamList) {
-      if (streamList[0] && streamList[0].extra_info && streamList[0].extra_info.length !== 0) {
-        try {
-          playType = JSON.parse(streamList[0].extra_info).playType
-        } catch (err) {
-          alert(err)
-        }
-      }
-    }
-
-    playType === 'Video' ? hasAudio = false : hasAudio = true
-
-    if (browser == "Safari" && !isAndWechat && useLocalStreamList.length !== 0) {
-
-      videoElement.src = useLocalStreamList[0];
-      //videoElement.load();
-      //videoElement.muted = false;
-
-    } else if (useLocalStreamList.length !== 0) {
-
-      var flvUrl = useLocalStreamList[0];
-      if (streamList)
-
-        //若支持flv.js
-        if (flvjs.isSupported()) {
-          flvPlayer = flvjs.createPlayer({
-            type: 'flv',
-            isLive: true,
-            url: flvUrl,
-            hasAudio: hasAudio
-          });
-          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
-            console.error('LOADING_COMPLETE')
-            flvPlayer.play();
-          })
-          flvPlayer.attachMediaElement(videoElement);
-          flvPlayer.load();
-          videoElement.muted = false;
-        }
-    }
-
-  }
-}
-
-//覆盖common.js中的loginSuccess
-function loginSuccess(streamList, type) {
-
-  var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
-
-  //限制房间最多人数，原因：视频软解码消耗cpu，浏览器之间能支撑的个数会有差异，太多会卡顿
-  if (streamList.length >= maxNumber) {
-    alert('房间太拥挤，换一个吧！');
-    leaveRoom();
-    return;
-  }
-
-  useLocalStreamList = filterStreamList()
-
-  console.log(useLocalStreamList)
-
-  if (type == 2) {
-    //获取当前浏览器类型
-    var browser = getBrowser();
-    var hasAudio = true
-    var playType
-
-    if (streamList) {
-      if (streamList[0] && streamList[0].extra_info && streamList[0].extra_info.length !== 0) {
-        try {
-          playType = JSON.parse(streamList[0].extra_info).playType
-        } catch (err) {
-          alert(err)
-        }
-      }
-    }
-
-
-    playType === 'Video' ? hasAudio = false : hasAudio = true
-
-    if (browser == "Safari" && !isAndWechat && useLocalStreamList.length !== 0) {
-
-      videoElement.src = useLocalStreamList[0];
-      //videoElement.load();
-      //videoElement.muted = false;
-
-    } else if (useLocalStreamList.length !== 0) {
-
-      var flvUrl = useLocalStreamList[0];
-      if (streamList)
-
-        //若支持flv.js
-        if (flvjs.isSupported()) {
-          flvPlayer = flvjs.createPlayer({
-            type: 'flv',
-            isLive: true,
-            url: flvUrl,
-            hasAudio: hasAudio
-          });
-          flvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
-            console.error('LOADING_COMPLETE')
-            flvPlayer.play();
-          })
-          flvPlayer.attachMediaElement(videoElement);
-          flvPlayer.load();
-          videoElement.muted = false;
-        }
-    } else {
-      alert("未找到流");
-    }
-
-  }
-
-  console.log(`login success`);
-  loginRoom = true;
-
-  type === 1 && doPreviewPublish()
-
-}
-
-function filterStreamList(streamId) {
-  var flv = {};
-  var hls = {};
-  var rtmp = {};
-
-  var streamListUrl = []
-  var index = 0
-
-  console.log(zg.stateCenter.streamList)
-
-  zg.stateCenter.streamList.forEach(function (item, ind) {
-    if (item.stream_id == streamId) index = ind
+    useLocalStreamList.push(streamInfo);
+    playStream(streamID, cdnUrl);
   })
 
-  for (var key in zg.stateCenter.streamList[index]) {
-    if (key == 'urls_flv' || key == 'urls_https_flv') {
-      flv[key] = zg.stateCenter.streamList[index][key]
-    }
-    if (key == 'urls_m3u8' || key == 'urls_https_m3u8') {
-      hls[key] = zg.stateCenter.streamList[index][key]
-    }
-    if (key == 'urls_rtmp') {
-      rtmp[key] = zg.stateCenter.streamList[index][key]
-    }
-  }
+  console.log(`login success`);
 
-  var pro = window.location.protocol
-  var browser = getBrowser()
+  loginRoom = true;
 
-  if (browser == 'Safari' && !isAndWechat) {
-    for (var key in hls) {
-      if (hls[key]) {
-        hls[key].forEach(function (item) {
-          if (item.indexOf(pro) !== -1) streamListUrl.push(item)
-          else if (pro == 'https:' && item.indexOf('https') === -1) {
-            streamListUrl.push(item.replace('http', 'https'))
-          }
-        })
-      }
+  //开始预览本地视频
+  type === 1 && doPreviewPublish();
+}
+$('#leaveRoom').unbind('click');
+$('#leaveRoom').click(function () {
+    if (typeof flvPlayer !== 'undefined') {
+        if (flvPlayer != null) {
+            flvPlayer.pause();
+            flvPlayer.unload();
+            flvPlayer.detachMediaElement();
+            flvPlayer.destroy();
+            flvPlayer = null;
+        }
     }
-  } else if (pro == 'http:') {
-    for (var key in flv) {
-      if (flv[key]) {
-        flv[key].forEach(function (item) {
-          if (item.indexOf('http') !== -1 || item.indexOf('https') !== -1) streamListUrl.push(item)
-        })
-      }
-    }
-  } else if (pro == 'https:') {
-    for (var key in flv) {
-      if (flv[key]) {
-        flv[key].forEach(function (item) {
-          if (item.indexOf('https') === -1) streamListUrl.push(item.replace('http', 'https'))
-          else if (item.indexOf(pro) !== -1) {
-            streamListUrl.push(item)
-          }
-        })
-      }
-    }
-  } else if (pro == 'rtmp:') {
-    for (var key in rtmp) {
-      if (rtmp[key]) {
-        rtmp[key].forEach(function (item) {
-          if (item.indexOf(pro) !== -1) streamListUrl.push(item)
-        })
-      }
-    }
-  }
 
-  return streamListUrl.filter(function (ele, index, self){return self.indexOf(ele) == index} )
+    leaveRoom();
+    isLogin = false;
+});
+
+function filterStreamList(streamInfo) {
+    const flv = {};
+    const hls = {};
+    const rtmp = {};
+
+    const streamListUrl = [];
+
+    // console.log(zg.stateCenter.streamList);
+
+    for (const key in streamInfo) {
+        if (key == 'urls_flv' || key == 'urls_https_flv') {
+            flv[key] = streamInfo[key] ? streamInfo[key][0] : '';
+        }
+        if (key == 'urls_hls' || key == 'urls_https_hls') {
+            hls[key] = streamInfo[key] ? streamInfo[key][0] : '';
+        }
+        if (key == 'urls_rtmp') {
+            rtmp[key] = streamInfo[key]? streamInfo[key][0] : '';
+        }
+    }
+
+    console.warn('flv', flv, hls, rtmp);
+    const pro = window.location.protocol;
+    const browser = getBrowser();
+
+    if (browser == 'Safari' && !isAndWechat) {
+        for (const key in hls) {
+            if (hls[key]) {
+                if (hls[key].indexOf(pro) !== -1) streamListUrl.push(hls[key]);
+                else if (pro == 'https:' && hls[key].indexOf('https') === -1) {
+                    streamListUrl.push(hls[key].replace('http', 'https'));
+                }
+            }
+        }
+    } else if (pro == 'http:') {
+        for (const key in flv) {
+            if (flv[key]) {
+                if (flv[key].indexOf('http') !== -1 || flv[key].indexOf('https') !== -1) streamListUrl.push(flv[key]);
+            }
+        }
+    } else if (pro == 'https:') {
+        for (const key in flv) {
+            if (flv[key]) {
+                if (flv[key].indexOf('https') === -1) streamListUrl.push(flv[key].replace('http', 'https'));
+                else if (flv[key].indexOf(pro) !== -1) {
+                    streamListUrl.push(flv[key]);
+                }
+            }
+        }
+    } else if (pro == 'rtmp:') {
+        for (const key in rtmp) {
+            if (rtmp[key]) {
+                if (rtmp[key].indexOf(pro) !== -1) streamListUrl.push(rtmp[key]);
+            }
+        }
+    }
+
+    return streamListUrl.filter(function (ele, index, self) {
+        return self.indexOf(ele) == index;
+    });
 }
 
-function leaveRoom() {
-  console.info('leave room  and close stream');
+function playStream(streamID, cdnUrl) {
+    const browser = getBrowser();
+    let hasAudio = true;
+    let hasVideo = true;
+    let playType;
 
-  if (isPreviewed) {
-    zg.stopPreview(previewVideo);
-    zg.stopPublishingStream(_config.idName);
-    isPreviewed = false;
-  }
+    const index = useLocalStreamList.findIndex(streamInfo => streamInfo.stream_id == streamID);
+    const streamInfo = useLocalStreamList[index];
 
-  for (var i = 0; i < useLocalStreamList.length; i++) {
-    zg.stopPlayingStream(useLocalStreamList[i].stream_id);
-  }
-
-  useLocalStreamList = [];
-
-  if (typeof flvPlayer !== "undefined") {
-    if (flvPlayer != null) {
-      flvPlayer.pause();
-      flvPlayer.unload();
-      flvPlayer.detachMediaElement();
-      flvPlayer.destroy();
-      flvPlayer = null;
+    if (streamInfo && streamInfo.extra_info && streamInfo.extra_info.length !== 0) {
+          try {
+              playType = JSON.parse(streamInfo.extra_info).playType;
+          } catch (err) {
+              alert(err);
+          }
     }
-  }
 
-  // $('.remoteVideo').html('');
-  zg.logout();
+    playType === 'Video' ? (hasAudio = false) : (hasAudio = true);
+    playType === 'Audio' ? (hasVideo = false) : (hasVideo = true);
+
+    if (browser == 'Safari' && !isAndWechat && cdnUrl.length !== 0) {
+        videoElement.src = cdnUrl[0];
+        //videoElement.load();
+        //videoElement.muted = false;
+    } else if (cdnUrl.length !== 0) {
+        const flvUrl = cdnUrl[0];
+        // const flvUrl = 'https://hdl-wsdemo.zego.im/livestream/test259.flv';
+          if (!flvPlayer && flvjs.isSupported()) {
+              //若支持flv.js
+              flvPlayer = flvjs.createPlayer({
+                  type: 'flv',
+                  isLive: true,
+                  url: flvUrl,
+                  hasAudio: hasAudio,
+                  hasVideo: hasVideo,
+              });
+              flvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
+                  console.error('LOADING_COMPLETE');
+                  flvPlayer.play();
+              });
+              flvPlayer.attachMediaElement(videoElement);
+              flvPlayer.load();
+              videoElement.muted = false;
+              videoElement.controls = true;
+
+              useLocalStreamList[index].player = flvPlayer;
+          }
+    }
 }
 
-$('#playCDN').click(function () {
-  flvPlayer.play()
-})
+function updateCdnStatus(state) {
+    const extra = { state, publishType };
+    playType = publishType;
+    zg.sendReliableMessage('cdn', JSON.stringify(extra), () => console.warn('updateCdnStatus suc'), err => console.error('updateCdnStatus err ', err));
+}
+$(() => {
+    zg.onStreamUpdated = (updateType, streamList) => {
+        // console.log('l', zg.stateCenter.streamList);
+        if (updateType == 0) {
+            streamList.forEach(streamInfo => {
+              const streamID = streamInfo.stream_id;
+              const cdnUrl = filterStreamList(streamInfo);
 
+              useLocalStreamList.push(streamInfo);
+              playStream(streamID, cdnUrl);
+            })
+        } else if (updateType == 1) {
+            for (let k = 0; k < useLocalStreamList.length; k++) {
+                for (let j = 0; j < streamList.length; j++) {
+                    if (useLocalStreamList[k].streamID === streamList[j].streamID) {
+                        console.info(useLocalStreamList[k].streamID + 'was devared');
+                        const player = useLocalStreamList[k].player
+                        if (player) {
+                                player.pause();
+                                player.unload();
+                                player.detachMediaElement();
+                                player.destroy();
+                                useLocalStreamList[k].player = null;
+                                if (flvPlayer == player) flvPlayer = null;
+                        }
+
+                        useLocalStreamList.splice(k--, 1);
+
+                        break;
+                    }
+                }
+            }
+        }
+    };
+
+    zg.onRecvReliableMessage = (type, seq, data) => {
+        if (type === 'cdn') {
+            const extraData = JSON.parse(data);
+            console.log(extraData);
+            if (extraData.state === 'add') {
+                playType = extraData.publishType;
+                ($('#cdnPlay')[0]).disabled = false;
+            } else if (extraData.state === 'delete') {
+                if (typeof cdnFlvPlayer !== 'undefined') {
+                    if (cdnFlvPlayer != null) {
+                        cdnFlvPlayer.pause();
+                        cdnFlvPlayer.unload();
+                        cdnFlvPlayer.detachMediaElement();
+                        cdnFlvPlayer.destroy();
+                        cdnFlvPlayer = null;
+                    }
+                }
+                ($('#cdnPlay')[0]).disabled = true;
+            }
+        }
+    };
+
+    $('#cdnAddPush').click(async () => {
+      zg.publishTarget( {
+        type: 'addpush',
+        streamId: _config.idName,
+        pushUrl: 'rtmp://wsdemo.zego.im/livestream/' + _config.idName,
+      }, () => {
+        console.warn('add push target success ' + 'rtmp://rtmp.wsdemo.zego.im/livestream/' + _config.idName);
+        updateCdnStatus('add');
+        ($('#cdnDelPush')[0]).disabled = false;
+        ($('#cdnPlay')[0]).disabled = false;
+      }, err => console.error(err));
+
+    });
+
+    $('#cdnDelPush').click(async () => {
+      zg.publishTarget( {
+        type: 'delpush',
+        streamId: _config.idName,
+        pushUrl: 'rtmp://wsdemo.zego.im/livestream/' + _config.idName,
+      }, () => {
+        console.warn('delte push target success ' + 'rtmp://rtmp.wsdemo.zego.im/livestream/' + _config.idName);
+        updateCdnStatus('delete');
+        ($('#cdnDelPush')[0]).disabled = true;
+        ($('#cdnPlay')[0]).disabled = true;
+      } , err => console.error(err));
+    });
+
+    $('#cdnPlay').click(() => {
+        if (!isLogin && !loginRoom) {
+            alert('please enter the room');
+            return;
+        }
+        const browser = getBrowser();
+        // if (browser == 'Safari' && !isAndWechat) {
+        //     cdnVideoElement.src = 'https://hls-wsdemo.zego.im/livestream/test259/playlist.m3u8';
+        //     cdnVideoElement.load();
+        //     cdnVideoElement.muted = false;
+        // } else
+        let hasVideo = true;
+        let hasAudio = true;
+        playType === 'Video' ? (hasAudio = false) : (hasAudio = true);
+        playType === 'Audio' ? (hasVideo = false) : (hasVideo = true);
+        if (flvjs.isSupported()) {
+            //若支持flv.js
+            if (cdnFlvPlayer != null) {
+              cdnFlvPlayer.pause();
+              cdnFlvPlayer.unload();
+              cdnFlvPlayer.detachMediaElement();
+              cdnFlvPlayer.destroy();
+              cdnFlvPlayer = null;
+            }
+            cdnFlvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                isLive: true,
+                url: 'https://hdl-wsdemo.zego.im/livestream/' + _config.idName + '.flv',
+                hasAudio: hasAudio,
+                hasVideo: hasVideo,
+            });
+            cdnFlvPlayer.on(flvjs.Events.LOADING_COMPLETE, function () {
+                console.error('LOADING_COMPLETE');
+                cdnFlvPlayer.play();
+            });
+            cdnFlvPlayer.attachMediaElement(cdnVideoElement);
+            cdnFlvPlayer.load();
+            cdnVideoElement.muted = false;
+            cdnVideoElement.controls = true;
+        }
+    });
+    $('#playCDN').click(() => {
+        flvPlayer && flvPlayer.play();
+    });
+    // $('#createRoom').unbind('click');
+    // $('#createRoom').click(async () => {
+    //     // let loginSuc = false;
+    //     const channelCount = parseInt($('#channelCount').val());
+    //     console.error('channelCount', channelCount);
+    //     try {
+    //         isLogin = await enterRoom();
+    //         isLogin && (await publish({ camera: { channelCount: channelCount } }));
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // });
+
+
+    // $('#secret').change(() => {
+    //     if ($('#secret').val() == '') {
+    //         ($('#cdnAddPush')[0]).disabled = true;
+    //         ($('#cdnDelPush')[0]).disabled = true;
+    //     } else {
+    //         ($('#cdnAddPush')[0]).disabled = false;
+    //         ($('#cdnDelPush')[0]).disabled = true;
+    //     }
+    // });
+});
