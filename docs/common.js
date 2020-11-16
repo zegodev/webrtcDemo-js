@@ -253,6 +253,7 @@ function doPreviewPublish(config, streamID,video) {
         "noiseSuppression": $('#ANS').val() === '1',
         "autoGainControl": $('#AGC').val() === '1',
         "echoCancellation": $('#AEC').val() === '1',
+        "audioBitRate": $('#audioBitRate').val() * 1,
     };
     previewConfig = $.extend(previewConfig, config);
     console.log('previewConfig', previewConfig);
@@ -536,6 +537,10 @@ function bindEvent() {
 
     $('#publishStream').click(function() {
       isPreviewed && zg.startPublishingStream(_config.idName, previewVideo);
+    })
+
+    $('#stopPublish').click(function() {
+      zg.stopPublishingStream(_config.idName);
     })
 
     //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要

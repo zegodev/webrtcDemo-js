@@ -101,6 +101,28 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
+              <label class="input-group-text" for="audioBitRate""><strong class="text-gray-dark">音频码率</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="audioBitRate"
+              aria-describedby="emailHelp" placeholder="音频码率，不能低过48000" value="48000">
+          </div>
+        </div>
+
+        <!-- <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="channelCount"><strong class="text-gray-dark">声道数</strong></label>
+            </div>
+            <select class="custom-select" id="channelCount">
+              <option value="1">1</option>
+              <option value="0">2</option>
+            </select>
+          </div>
+        </div> -->
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
               <label class="input-group-text" for="AEC"><strong class="text-gray-dark">回声消除</strong></label>
             </div>
             <select class="custom-select" id="AEC">
@@ -167,6 +189,7 @@
           <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间预览推流</button>
           <button type="button" id="createRoomNoPublish" class="btn btn-primary btn-sm">创建房间只预览</button>
           <button type="button" id="publishStream" class="btn btn-primary btn-sm">推流</button>
+          <button type="button" id="stopPublish" class="btn btn-primary btn-sm">停止推流</button>
           <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
           <button type="button" id="createRoomCdn" class="btn btn-primary btn-sm">创建房间(转推cdn)</button>
           <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
@@ -373,6 +396,7 @@
 
     useLocalStreamList = [];
     $('.remoteVideo').html('');
+    isPublish = true;
     zg.logout();
   }
 </script>
