@@ -53,9 +53,9 @@ function loginSuccess(streamList, type) {
     alert('浏览器暂不支持');
     return;
   }
-
+  let media =changeStream(mediastream);
+  previewVideo.srcObject = media
   if (type == 1) {
-    previewVideo.srcObject = mediastream
     var config = {
       externalCapture: true,
       channelCount: $('#channelCount').val() * 1,
@@ -99,3 +99,68 @@ function getVideo(ele) {
 }
 
 
+//判断浏览器版本  必须是谷歌88 版本
+function getChromeVersion() {
+  var arr = navigator.userAgent.split(' ');
+  var chromeVersion = '';
+  for (var i = 0; i < arr.length; i++) {
+    if (/chrome/i.test(arr[i]))
+      chromeVersion = arr[i]
+  }
+  if (chromeVersion) {
+    return Number(chromeVersion.split('/')[1].split('.')[0]);
+  } else {
+    return false;
+  }
+}
+function changeStream(source) {
+
+  var version = getChromeVersion();
+  if (version != 88) {
+    return source
+  }
+  let video = document.createElement("video");
+  let canvas = document.createElement("canvas");
+  video.setAttribute("style", "display:none");
+  canvas.setAttribute("style", "display:none");
+  video.setAttribute("muted", "");
+  video.muted = !0;
+  video.setAttribute("autoplay", "");
+  video.autoplay = !0;
+  video.setAttribute("playsinline", "");
+  document.body.append(video);
+  document.body.append(canvas);
+  video.srcObject = source;
+  video.oncanplay = function () {
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    video.play();
+    draw();
+  }
+
+  let media = canvas.captureStream(25);
+  let track = media.getVideoTracks()[0];
+  let ctx = canvas.getContext("2d");
+  let draw = function () {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // window.requestAnimationFrame(draw)
+    track.requestFrame && track.requestFrame();
+    video.srcObject = source;
+
+  }
+  let q = track.stop
+  track.stop = () => {
+    q.call(track);
+    draw();
+    video.remove();
+    canvas.width = 0;
+    canvas.remove();
+    video = canvas = null;
+  }
+  if (source instanceof MediaStream && source.getAudioTracks().length) {
+    let micro = source.getAudioTracks()[0];
+    media.addTrack(micro)
+  }
+  return media
+
+}
