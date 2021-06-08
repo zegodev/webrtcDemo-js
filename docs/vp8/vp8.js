@@ -466,7 +466,7 @@ function leaveRoom() {
     }
 
     for (var i = 0; i < playStreamList.length; i++) {
-        zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+        zg.stopPlayingStream(playStreamList[i]);
     }
 
     useLocalStreamList = [];

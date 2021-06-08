@@ -1,9 +1,4 @@
-
 var localMedia
-
-$('#selectLocalVideo').click(function () {
-
-})
 
 $('#externalCaptureV').click(function () {
   $('#externerVideo')[0].play();
@@ -11,7 +6,12 @@ $('#externalCaptureV').click(function () {
   openRoom($('#roomId').val(), 1)
 })
 
-
+$('#changVideoUrl').click(function () {
+  if( $('#videoUrl').val()){
+    $('#externerVideo')[0].src=$('#videoUrl').val();
+    $('#externerVideo')[0].play();
+  }
+})
 
 function loginSuccess(streamList, type) {
   var maxNumber = ($('#maxPullNamber') && $('#maxPullNamber').val()) || 4
@@ -53,28 +53,20 @@ function loginSuccess(streamList, type) {
     alert('浏览器暂不支持');
     return;
   }
-  let media =changeStream(mediastream);
+let media =changeStream(mediastream);
   previewVideo.srcObject = media
-  if (type == 1) {
-    var config = {
-      externalCapture: true,
-      channelCount: $('#channelCount').val() * 1,
-      // width: 1280,
-      // height: 720,
-      // frameRate: 20,
-      // bitRate: 1000
-      // config.externalMediaStream = mediastream
-      // config.video = false;
-      // config.audio = false;
-    }
-
-    //需等第三方音视频加载后才能进行预览推流
-    previewVideo.oncanplay = () => {
-      //开始预览本地视频
-      doPreviewPublish(config);
-    }
-
+  var config = {
+    externalCapture: true,
+    // width: 1280,
+    // height: 720,
+    // frameRate: 20,
+    // bitRate: 1000
   }
+  // config.externalMediaStream = mediastream
+  // config.video = false;
+  // config.audio = false;
+  //开始预览本地视频
+  type === 1 && doPreviewPublish(config);
 
 }
 
@@ -91,14 +83,6 @@ function preloadVideo(url) {
   }
   xhr.send();
 }
-
-function getVideo(ele) {
-  const video = ele.files[0];
-  const url = URL.createObjectURL(video);
-  $('#externerVideo')[0].src = url;
-}
-
-
 //判断浏览器版本  必须是谷歌88 版本
 function getChromeVersion() {
   var arr = navigator.userAgent.split(' ');
