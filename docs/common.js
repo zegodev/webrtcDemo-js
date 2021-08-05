@@ -494,6 +494,7 @@ function bindEvent() {
     init();
 
     $('#createRoom').click(function () {
+        isPublish = true
         $('#signalUrl').val() && zg.setCustomSignalUrl($('#signalUrl').val())
         zg.setUserStateUpdate(true);
         openRoom($('#roomId').val(), 1);
