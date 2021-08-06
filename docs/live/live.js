@@ -9,7 +9,10 @@ function init() {
   //内调测试用代码，客户请忽略  end
 
 
-  zg.config(_config);
+  zg.config({
+    ..._config,
+    audienceCreateRoom: false
+  });
   enumDevices();
 
   // 监听sdk回掉
