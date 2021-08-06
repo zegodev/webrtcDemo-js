@@ -38,7 +38,9 @@ function listenChild() {
     onRecvJoinLiveRequest: function (requestId, from_userid, from_username, roomid) {
       console.log('onRecvJoinLiveRequest', requestId, from_userid, from_username, roomid);
       $('#exampleModalLabel').text("收到id为" + requestId + "的连麦请求")
-      $('#liveConfirm').click();
+      if ($("#exampleModal").css("display") === "none") {
+        $('#liveConfirm').click();
+      }
       $('#liveAgree').on('click', function () {
         respondJoinLive(true, requestId, from_userid)
       })
@@ -50,7 +52,9 @@ function listenChild() {
     onRecvInviteJoinLiveRequest: function (requestId, from_userid, from_username, roomid) {
       console.log('onRecvInviteJoinLiveRequest', requestId, from_userid, from_username, roomid);
       $('#exampleModalLabel').text("收到id为" + requestId + "的连麦请求")
-      $('#liveConfirm').click();
+      if ($("#exampleModal").css("display") === "none") {
+        $('#liveConfirm').click();
+      }
       $('#liveAgree').on('click', function () {
         doPreviewPublish()
       })
