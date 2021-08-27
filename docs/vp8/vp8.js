@@ -16,7 +16,7 @@ var zg,
         cgi_token: '',
         roomlist: '',
         signal: '',
-        token: "https://wsliveroom-demo.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
+        token: "https://wsliveroom-alpha.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
     },
 
     loginRoom = false,
@@ -466,7 +466,7 @@ function leaveRoom() {
     }
 
     for (var i = 0; i < playStreamList.length; i++) {
-        zg.stopPlayingStream(useLocalStreamList[i].stream_id);
+        zg.stopPlayingStream(playStreamList[i]);
     }
 
     useLocalStreamList = [];
@@ -521,7 +521,7 @@ function setConfig(zg) {
         zg.setCustomSignalUrl(_otherConfig.signal);
     }
 
-    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token') {
+    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-alpha.zego.im:8282/token') {
         $.get(_otherConfig.cgi_token, function (cgi_token) {
             _otherConfig.cgi_token = cgi_token.data;
             console.log(_otherConfig.cgi_token);

@@ -106,41 +106,7 @@ $(function (){
 
   $('#leaveMixRoom').click(function () {
     isMixingAudio && zg.stopMixingAudio(_config.idName);
-    isMixingAudio && $('#stopMixingBuffer').click();
     isMixingAudio = false;
     leaveRoom();
   });
-
-  $('#mixingBuffer').click(function () {
-    let xhr  = new XMLHttpRequest();
-
-    xhr.open('GET', '../assets/tonight.m4a', true);
-    xhr.responseType = 'arraybuffer';
-    xhr.onload =  () => {
-
-      if(xhr.status == 200 || xhr.status == 304) {
-
-        let buffer = xhr.response;
-        zg.mixingBuffer(_config.idName, "1", buffer, err => {
-          if (err) {
-            console.error(err);
-          } else {
-            console.warn("real time effect success");
-            isMixingAudio = true;
-          }
-        });
-      } else {
-        console.error(err)
-      }
-
-    }
-
-    xhr.send();
-
-  })
-
-  $('#stopMixingBuffer').click(function () {
-    zg.stopMixingBuffer(_config.idName, null);
-    isMixingAudio = false;
-  })
 })

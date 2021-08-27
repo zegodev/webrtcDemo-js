@@ -49,7 +49,7 @@ $(function () {
               }
           });
 
-          (getBrowser() === 'Chrome' || getBrowser() === 'Safari') && !bool && zg.startScreenSharing({
+          getBrowser() === 'Chrome' && !bool && zg.startScreenSharing({
             width: width < 320? 320: $('#screenWidth').val() * 1,
             height: height < 240? 240: $('#screenHeight').val() * 1,
             frameRate: $('#screenFrameRate').val() * 1

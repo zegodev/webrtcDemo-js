@@ -72,7 +72,8 @@
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
-              <label class="input-group-text" for="playMode"><strong class="text-gray-dark playMode">拉流模式</strong></label>
+              <label class="input-group-text" for="playMode"><strong
+                  class="text-gray-dark playMode">拉流模式</strong></label>
             </div>
             <select class="custom-select" id="playMode">
               <option value="auto" class="auto">默认（自动）</option>
@@ -89,36 +90,14 @@
             <div class="input-group-prepend">
               <label class="input-group-text" for="roomId"><strong class="text-gray-dark">房间号</strong></label>
             </div>
-            <input type="email" class="form-control d-inline" id="roomId"
-              aria-describedby="emailHelp" placeholder="请输入房间号">
+            <input type="email" class="form-control d-inline" id="roomId" aria-describedby="emailHelp"
+              placeholder="请输入房间号">
           </div>
         </div>
 
       </div>
 
       <div class="row">
-
-        <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="audioBitRate""><strong class="text-gray-dark">音频码率</strong></label>
-            </div>
-            <input type="email" class="form-control d-inline" id="audioBitRate"
-              aria-describedby="emailHelp" placeholder="音频码率，不能低过48000" value="48000">
-          </div>
-        </div>
-
-        <!-- <div class="col-sm">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="channelCount"><strong class="text-gray-dark">声道数</strong></label>
-            </div>
-            <select class="custom-select" id="channelCount">
-              <option value="1">1</option>
-              <option value="0">2</option>
-            </select>
-          </div>
-        </div> -->
 
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
@@ -171,7 +150,30 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="roomRetryTime"><strong class="text-gray-dark">房间最大重试时间</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="roomRetryTime" aria-describedby="emailHelp"
+              placeholder="请输入房间最大重试时间(s)"">
+          </div>
+        </div>
+
+        <div class="col-sm">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <label class="input-group-text" for="streamRetryTime"><strong class="text-gray-dark">推拉流最大重试时间</strong></label>
+            </div>
+            <input type="email" class="form-control d-inline" id="streamRetryTime" aria-describedby="emailHelp"
+              placeholder="请输入推拉流最大重试时间(s)">
+          </div>
+        </div>
+      </div> -->
+
+      <!-- <div class="row">
 
         <div class="col-sm">
           <div class="input-group input-group-sm mb-3">
@@ -182,14 +184,13 @@
               placeholder="请输入信令服务器地址,开发者请忽略">
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="row">
         <div class="col-sm">
           <button type="button" id="createRoom" class="btn btn-primary btn-sm">创建房间预览推流</button>
           <button type="button" id="createRoomNoPublish" class="btn btn-primary btn-sm">创建房间只预览</button>
           <button type="button" id="publishStream" class="btn btn-primary btn-sm">推流</button>
-          <button type="button" id="stopPublish" class="btn btn-primary btn-sm">停止推流</button>
           <button type="button" id="openRoom" class="btn btn-primary btn-sm">进入房间</button>
           <button type="button" id="createRoomCdn" class="btn btn-primary btn-sm">创建房间(转推cdn)</button>
           <button type="button" id="leaveRoom" class="btn btn-secondary btn-sm">退出</button>
@@ -212,10 +213,10 @@
         </div>
       </div>
 
-      <div class="row videoRow">
+      <div class="row videoRow" id="createRoom">
         <div class="col-sm">
           <label id="previewLabel" class="text-white"></label>
-          <video id="previewVideo" autoplay muted playsinline controls></video>
+          <video id="previewVideo" autoplay muted playsinline></video>
         </div>
         <div class="col-sm remoteVideo">
           <!-- <video  autoplay muted playsinline></video> -->
@@ -349,7 +350,7 @@
         alert('请先获取pcm数据')
         return
       }
-      ac = window.AudioContext ? window.AudioContext: webkitAudioContext;
+      ac = window.AudioContext ? window.AudioContext : webkitAudioContext;
       mediaUtil.mic.disconnect(mediaUtil.script)
       mediaUtil.script.disconnect(ac.destination)
       pcmBuffer = []
@@ -361,7 +362,8 @@
   //推流
   function publish() {
     zg.startPublishingStream(_config.idName, previewVideo, null, {
-      cdnUrl: $('#cdnUrl').val() || ''
+      cdnUrl: $('#cdnUrl').val() || '',
+      videoDecodeType: videoCodeType ? videoCodeType : 'H264'
     });
   }
 
@@ -396,7 +398,6 @@
 
     useLocalStreamList = [];
     $('.remoteVideo').html('');
-    isPublish = true;
     zg.logout();
   }
 </script>

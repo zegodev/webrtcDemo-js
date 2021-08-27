@@ -9,13 +9,15 @@ var zg,
         logLevel: 0,
         logUrl: "",
         remoteLogLevel: 0,
-        audienceCreateRoom: true
+        audienceCreateRoom: true,
+        roomRetryTime: 300,
+        streamRetryTime: 300
     },
     _otherConfig = {
         cgi_token: '',
         roomlist: '',
         signal: '',
-        token: "https://wsliveroom-demo.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
+        token: "https://wsliveroom-alpha.zego.im:8282/token"//"https://wsliveroom"+appid+"-api.zego.im:8282/token",
     },
     loginRoom = false,
     previewVideo,
@@ -24,7 +26,7 @@ var zg,
     useLocalStreamList = [],
     isPublish = true;
 var anchor_userid = '', anchro_username = '';
-var publishType
+var videoCodeType;
 
 $(function () {
     console.log('sdk version is', ZegoClient.getCurrentVersion());
@@ -150,7 +152,7 @@ function openRoom(roomId, type) {
 
     //get token   生产环境下获取token方式
     if (!appSigin) {
-        $.get(_otherConfig.token, {app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token},
+        $.get(_otherConfig.token, { app_id: _config.appid, id_name: _config.idName, cgi_token: _otherConfig.cgi_token },
             function (token) {
                 if (!token) {
                     alert('get token failed')
@@ -238,7 +240,7 @@ function loginSuccess(streamList, type) {
 }
 
 //预览
-function doPreviewPublish(config, streamID,video) {
+function doPreviewPublish(config, streamID, video) {
     var quality = ($('#videoQuality') && $('#videoQuality').val()) || 2;
 
     var previewConfig = {
@@ -253,13 +255,10 @@ function doPreviewPublish(config, streamID,video) {
         "noiseSuppression": $('#ANS').val() === '1',
         "autoGainControl": $('#AGC').val() === '1',
         "echoCancellation": $('#AEC').val() === '1',
-        "audioBitRate": $('#audioBitRate').val() * 1,
     };
     previewConfig = $.extend(previewConfig, config);
     console.log('previewConfig', previewConfig);
-    publishType = previewConfig.audio == false ? 'Video' : previewConfig.video == false ? 'Audio' : 'all';
-
-    var result = zg.startPreview(video? video: previewVideo, previewConfig, function () {
+    var result = zg.startPreview(video ? video : previewVideo, previewConfig, function () {
         console.log('preview success');
         isPreviewed = true;
         !video && $('#previewLabel').html(_config.nickName);
@@ -278,15 +277,14 @@ function doPreviewPublish(config, streamID,video) {
 
 //推流
 function publish(streamID, video) {
-    var videoCodeType = $('#videoCodeType').val();
-    extraInfo = JSON.stringify({playType: publishType});
-    zg.startPublishingStream(streamID? streamID: _config.idName, video? video: previewVideo, extraInfo, {videoDecodeType: videoCodeType ? videoCodeType : 'H264'});
+    var videoCodeType = $('#videoCodeType').val() || videoCodeType;
+    zg.startPublishingStream(streamID ? streamID : _config.idName, video ? video : previewVideo, null, { videoDecodeType: videoCodeType ? videoCodeType : 'H264' });
 
 }
 
 function play(streamId, video) {
-    var playVideoCodeType = $('#videoPlayCodeType').val()
-    var result = zg.startPlayingStream(streamId, video, null, {videoDecodeType: playVideoCodeType ? playVideoCodeType : 'H264', playType: $('#playMode').val()});
+    var playVideoCodeType = $('#videoPlayCodeType').val() || videoCodeType;
+    var result = zg.startPlayingStream(streamId, video, null, { videoDecodeType: playVideoCodeType ? playVideoCodeType : 'H264', playType: $('#playMode').val() });
 
     video.muted = false;
     if (!result) {
@@ -304,7 +302,7 @@ function listen() {
             if (type == 0) {
                 console.info('play  success');
             } else if (type == 2) {
-                console.info('play retry');
+                console.warn('play retry ' + streamid);
             } else {
 
                 console.error("play error " + error.msg);
@@ -328,7 +326,7 @@ function listen() {
             if (type == 0) {
                 console.info(' publish  success');
             } else if (type == 2) {
-                console.info(' publish  retry');
+                console.warn(' publish  retry ' + streamid);
             } else {
                 console.error('publish error ' + error.msg);
                 var _msg = error.msg;
@@ -364,15 +362,15 @@ function listen() {
         onKickOut: function (error) {
             console.error("onKickOut " + JSON.stringify(error));
         },
-        onDeviceError:function(msg) {
+        onDeviceError: function (msg) {
             console.log('设备异常')
             console.log(msg)
         },
-        OnAudioDeviceStateChanged:function(msg) {
+        OnAudioDeviceStateChanged: function (msg) {
             console.log('音频设备变更')
             console.log(msg)
         },
-        OnVideoDeviceStateChanged:function(msg) {
+        OnVideoDeviceStateChanged: function (msg) {
             console.log('视频设备变更')
             console.log(msg)
         },
@@ -411,21 +409,27 @@ function listen() {
 
         },
 
-        onScreenSharingEnded: function() {
+        onScreenSharingEnded: function () {
             console.warn('screen sharing end')
         },
 
-        onSoundLevelUpdate(result) {
-          result.forEach(stream => {
-            console.warn(stream.streamID, Math.round(stream.soundLevel), stream.type)
-          })
-        },
+        // onSoundLevelUpdate(result) {
+        //   // result.forEach(stream => {
+        //   //   console.warn(stream.streamID, Math.round(stream.soundLevel), stream.type)
+        //   // })
+        // },
 
         onRemoteCameraStatusUpdate(streamID, status) {
-          console.warn(streamID, 'camera status: ' + status);
+            console.warn(streamID, 'camera status: ' + status);
         },
         onRemoteMicStatusUpdate(streamID, status) {
-          console.warn(streamID, 'mic status: ' + status);
+            console.warn(streamID, 'mic status: ' + status);
+        },
+        onTempBroken() {
+            console.error('小伙子你网络不对劲');
+        },
+        onReconnect() {
+            console.warn('房间重连成功');
         }
     };
 
@@ -490,6 +494,7 @@ function bindEvent() {
     init();
 
     $('#createRoom').click(function () {
+        isPublish = true
         $('#signalUrl').val() && zg.setCustomSignalUrl($('#signalUrl').val())
         zg.setUserStateUpdate(true);
         openRoom($('#roomId').val(), 1);
@@ -525,22 +530,18 @@ function bindEvent() {
         openRoom($('#roomId').val(), 1);
     })
 
-    $('#toggleCamera').click(function() {
+    $('#toggleCamera').click(function () {
         zg.enableCamera(previewVideo, $(this).hasClass('disabled'));
         $(this).toggleClass('disabled');
     });
 
-    $('#toggleSpeaker').click(function() {
+    $('#toggleSpeaker').click(function () {
         zg.enableMicrophone(previewVideo, $(this).hasClass('disabled'));
         $(this).toggleClass('disabled');
     });
 
-    $('#publishStream').click(function() {
-      isPreviewed && zg.startPublishingStream(_config.idName, previewVideo);
-    })
-
-    $('#stopPublish').click(function() {
-      zg.stopPublishingStream(_config.idName);
+    $('#publishStream').click(function () {
+        isPreviewed && zg.startPublishingStream(_config.idName, previewVideo);
     })
 
     //防止，暴力退出（关闭或刷新页面）--最新版本已经内部集成 不再需要
@@ -579,8 +580,12 @@ function setConfig(zg) {
 
             if (value && _config.hasOwnProperty(key)) {
                 _config[key] = decodeURIComponent(value);
+                _config.roomRetryTime = _config.roomRetryTime * 1;
+                _config.streamRetryTime = _config.streamRetryTime * 1;
             } else if (value && _otherConfig.hasOwnProperty(key)) {
                 _otherConfig[key] = decodeURIComponent(value);
+            } else if (key == 'codeType') {
+                videoCodeType = value;
             }
         });
     }
@@ -597,7 +602,7 @@ function setConfig(zg) {
         zg.setCustomSignalUrl(_otherConfig.signal);
     }
 
-    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-demo.zego.im:8282/token') {
+    if (_otherConfig.cgi_token && _otherConfig.token == 'https://wsliveroom-alpha.zego.im:8282/token') {
         $.get(_otherConfig.cgi_token, function (cgi_token) {
             _otherConfig.cgi_token = cgi_token.data;
             console.log(_otherConfig.cgi_token);
